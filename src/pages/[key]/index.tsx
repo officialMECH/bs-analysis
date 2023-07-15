@@ -1,9 +1,11 @@
+import { Center } from "$/components";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 
 export default function Overview() {
 	const { key } = useParams("/:key");
 	const { state } = useDataset(key);
+
 	if (!state.name) {
 		return (
 			<main>
@@ -15,11 +17,15 @@ export default function Overview() {
 	}
 	return (
 		<main>
-			<h1 style={{ display: "flex", justifyContent: "space-between" }}>
+			<Center as="h1">
 				<span>{state.name}</span>
-				<span style={{ color: "gray" }}>{state.data.length}</span>
-			</h1>
+			</Center>
 			<hr />
+			<Center>
+				<a href={`${key}/data`}>
+					<button>Dataset</button>
+				</a>
+			</Center>
 		</main>
 	);
 }

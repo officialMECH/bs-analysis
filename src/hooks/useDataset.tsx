@@ -1,5 +1,5 @@
 import { IDataset, PayloadAction } from "$/types";
-import { Reducer, useReducer } from "react";
+import { Reducer, useMemo, useReducer } from "react";
 
 type Actions = PayloadAction<{ id: string; contents: string }, "UPDATE">;
 
@@ -27,7 +27,7 @@ export default function useDataset(tid?: string) {
 	const target = tid ? localStorage.getItem(tid) : null;
 
 	return {
-		state: target ? (JSON.parse(target) as IDataset) : state,
+		state: useMemo(() => (target ? (JSON.parse(target) as IDataset) : state), [state, target]),
 		dispatch,
 	};
 }
