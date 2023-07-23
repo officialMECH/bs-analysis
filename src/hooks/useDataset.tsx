@@ -1,4 +1,4 @@
-import { IDataset, PayloadAction } from "$/types";
+import { IDataset, PayloadAction, schemas } from "$/types";
 import { Reducer, useMemo, useReducer } from "react";
 
 type Actions = PayloadAction<{ id: string; contents: string }, "UPDATE">;
@@ -12,7 +12,14 @@ export default function useDataset(tid?: string) {
 					const dataset = JSON.parse(contents) as IDataset;
 					// flatten data records to array (used in legacy format)
 					const data = Object.values(dataset.data).flat();
-					localStorage.setItem(id, JSON.stringify({ name: dataset.name, data }));
+					const valid = data.filter((entry, index) => {
+						const result = schemas.data.safeParse(entry);
+						if (!result.success) {
+							result.error.issues.forEach((issue) => console.error(`[${index}].${issue.path.toString()} | ${issue.message}`));
+						}
+						return result.success || import.meta.env.DEV;
+					});
+					localStorage.setItem(id, JSON.stringify({ name: dataset.name, data: valid }));
 					return state;
 				}
 				default: {

@@ -5,8 +5,7 @@ interface Props extends ComponentProps<"div"> {
 	direction?: "column" | "row";
 }
 
-export default function Center({ children, as = "div", direction, style, ...delegated }: Props) {
-	const As = as;
+export default function Center({ children, as: As = "div", direction, style, ...delegated }: Props) {
 	const justifyContent = direction !== "column" ? "center" : undefined;
 	const alignItems = direction !== "row" ? "center" : undefined;
 	return (

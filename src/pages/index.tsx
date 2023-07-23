@@ -29,16 +29,20 @@ export default function App() {
 			<h1 className={styles.title}>Beat Saber Map Analysis</h1>
 			<hr />
 			<Spacer size={0.5} center direction="column">
-				{import.meta.env.DEV && <button onClick={handleImportClick}>Import Dataset</button>}
-				<input type="file" id="file" ref={input} style={{ display: "none" }} onChange={handleImportChange} />
-				<small>
-					<strong>{datasets.length > 0 ? "Datasets" : "No Datasets Available"}</strong>
+				<div>
+					<button onClick={handleImportClick}>Import Dataset</button>
+					<input type="file" id="file" ref={input} style={{ display: "none" }} onChange={handleImportChange} />
+				</div>
+				<div>
+					<h2 style={{ margin: 0 }}>{datasets.length > 0 ? "Datasets" : "No Datasets Available"}</h2>
 					<Spacer center direction="row">
 						{datasets.map((key) => (
-							<a href={key}>{key}</a>
+							<a key={key} href={key}>
+								{key}
+							</a>
 						))}
 					</Spacer>
-				</small>
+				</div>
 			</Spacer>
 		</main>
 	);

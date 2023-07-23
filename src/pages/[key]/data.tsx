@@ -1,4 +1,5 @@
 import { Spacer, Table, columns, icons } from "$/components";
+import { createLevelIndex } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { IData } from "$/types";
@@ -10,6 +11,7 @@ export default function Data() {
 	const { state } = useDataset(key);
 
 	const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
+		id: import.meta.env.DEV,
 		pack: false,
 		released: false,
 		bombNotes: false,
@@ -33,7 +35,10 @@ export default function Data() {
 	});
 
 	const table = useReactTable<IData>({
-		data: state.data,
+		data: state.data.sort((a, b) => {
+			if (a.released && b.released) return Date.parse(a.released.toString()) - Date.parse(b.released.toString());
+			return 0;
+		}),
 		columns: columns,
 		state: { columnVisibility },
 		defaultColumn: {
@@ -41,6 +46,7 @@ export default function Data() {
 			minSize: 4,
 			maxSize: 12,
 		},
+		getRowId: (row, index) => (row.id ? `${row.id}/${createLevelIndex(row)}` : index.toString()),
 		onColumnVisibilityChange: setColumnVisibility,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),

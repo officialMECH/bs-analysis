@@ -19,5 +19,5 @@ export function formatDuration(x: number) {
 			.padStart(2, "0")
 	);
 	const seconds = x - hours * 3600 - Number((minutes * 60).toString().padStart(2, "0"));
-	return `${hours > 0 ? `${hours}:` : ""}${minutes}:${seconds}`;
+	return `${hours > 0 ? `${hours}:` : ""}${minutes > 9 ? `${String(minutes).padStart(2, "0")}` : minutes}:${String(seconds).padStart(2, "0")}`;
 }

@@ -8,8 +8,7 @@ interface Props extends ComponentProps<"div"> {
 	size?: number;
 }
 
-export default function Spacer({ children, as = "div", direction, size = 1, center, style, ...delegated }: Props) {
-	const As = as;
+export default function Spacer({ children, as: As = "div", direction, size = 1, center, style, ...delegated }: Props) {
 	const justifyContent = center && direction !== "column" ? "center" : undefined;
 	const alignItems = center && direction !== "row" ? "center" : undefined;
 	return (
