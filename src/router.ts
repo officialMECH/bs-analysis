@@ -7,10 +7,12 @@ export type Path =
   | `/`
   | `/:key`
   | `/:key/data`
+  | `/:key/level/:sid/:bid`
 
 export type Params = {
   '/:key': { key: string }
   '/:key/data': { key: string }
+  '/:key/level/:sid/:bid': { key: string; sid: string; bid: string }
 }
 
 export type ModalPath = never

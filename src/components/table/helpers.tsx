@@ -9,8 +9,8 @@ const helper = createColumnHelper<IData>();
 export const columns = [
 	helper.accessor((r) => r.title, {
 		id: "id",
-		size: 1,
-		header: (c) => <Cell column={c.column}>Index</Cell>,
+		size: 6,
+		header: (c) => <Cell column={c.column}>ID</Cell>,
 		cell: (c) => (
 			<Cell column={c.column} wrapper={"pre"} style={{ color: c.row.original.id ? "gray" : "red" }}>
 				{c.row.id}
@@ -19,12 +19,12 @@ export const columns = [
 	}),
 	helper.accessor((r) => r.title, {
 		id: "title",
-		size: 8,
+		size: 12,
 		header: (c) => <Cell column={c.column}>Title</Cell>,
 		cell: (c) => {
 			const value = c.getValue();
 			return (
-				<Cell column={c.column} wrapper={value ? "span" : "pre"} style={{ color: value ? undefined : "gray" }}>
+				<Cell column={c.column} href={`./level/${c.row.id}`} wrapper={value ? "span" : "pre"} style={{ color: value ? undefined : "gray" }}>
 					{value}
 				</Cell>
 			);
@@ -75,7 +75,7 @@ export const columns = [
 			const value = c.getValue();
 			const valid = Object.values(schemas.characteristic.Values).includes(value);
 			return (
-				<Cell column={c.column} wrapper={value && valid ? "span" : "pre"} style={{ backgroundColor: valid ? "#404040" : undefined, color: value && valid ? undefined : "red" }}>
+				<Cell column={c.column} wrapper={value && valid ? "strong" : "pre"} style={{ backgroundColor: valid ? "#404040" : undefined, color: value && valid ? undefined : "red" }}>
 					{!value ? "MISSING" : !valid ? "INVALID" : value}
 				</Cell>
 			);
@@ -89,7 +89,7 @@ export const columns = [
 			const value = c.getValue();
 			const valid = Object.values(schemas.difficulty.Values).includes(value);
 			return (
-				<Cell column={c.column} wrapper={value && valid ? "span" : "pre"} style={{ backgroundColor: value && valid ? DIFFICULTY_COLORS[value] : undefined, color: value && valid ? undefined : "red" }}>
+				<Cell column={c.column} wrapper={value && valid ? "strong" : "pre"} style={{ backgroundColor: value && valid ? DIFFICULTY_COLORS[value] : undefined, color: value && valid ? undefined : "red" }}>
 					{!value ? "MISSING" : !valid ? "INVALID" : value}
 				</Cell>
 			);
