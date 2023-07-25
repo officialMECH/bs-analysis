@@ -11,20 +11,20 @@ export function nps({ colorNotes, length }: Pick<IData, "colorNotes" | "length">
 }
 
 export function hjd({ bpm, jumpSpeed, jumpOffset }: Pick<IData, "bpm" | "jumpSpeed" | "jumpOffset">) {
-	if (!bpm || !jumpSpeed || !jumpOffset) return undefined;
+	if (!bpm || !jumpSpeed) return undefined;
 	const num = 60 / bpm;
 	let hjd = HJD_START;
 	while (jumpSpeed * num * hjd > HJ_MAX) hjd /= 2;
 	if (hjd < 1) hjd = 1;
-	return Math.max(hjd + jumpOffset, HJD_MIN);
+	return Math.max(hjd + (jumpOffset ?? 0), HJD_MIN);
 }
 
 export function jd({ bpm, jumpSpeed, jumpOffset }: Pick<IData, "bpm" | "jumpSpeed" | "jumpOffset">) {
-	if (!bpm || !jumpSpeed || !jumpOffset) return undefined;
+	if (!bpm || !jumpSpeed) return undefined;
 	return jumpSpeed * (60 / bpm) * hjd({ bpm, jumpSpeed, jumpOffset })! * 2;
 }
 
 export function rt({ bpm, jumpSpeed, jumpOffset }: Pick<IData, "bpm" | "jumpSpeed" | "jumpOffset">) {
-	if (!bpm || !jumpSpeed || !jumpOffset) return undefined;
+	if (!bpm || !jumpSpeed) return undefined;
 	return (60 / bpm) * hjd({ bpm, jumpSpeed, jumpOffset })!;
 }
