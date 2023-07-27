@@ -19,7 +19,7 @@ export default function useDataset(tid?: string) {
 						}
 						return result.success || import.meta.env.DEV;
 					});
-					localStorage.setItem(id, JSON.stringify({ name: dataset.name, data: valid }));
+					localStorage.setItem(id, JSON.stringify({ name: dataset.name, data: valid.sort((a, b) => (a.released && b.released ? a.released.valueOf() - b.released.valueOf() : 0)) }));
 					return state;
 				}
 				default: {

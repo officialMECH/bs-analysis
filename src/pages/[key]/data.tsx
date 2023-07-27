@@ -35,10 +35,7 @@ export default function Data() {
 	});
 
 	const table = useReactTable<IData>({
-		data: state.data.sort((a, b) => {
-			if (a.released && b.released) return Date.parse(a.released.toString()) - Date.parse(b.released.toString());
-			return 0;
-		}),
+		data: state.data,
 		columns: columns,
 		state: { columnVisibility },
 		defaultColumn: {

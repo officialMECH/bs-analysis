@@ -7,17 +7,9 @@ export function importDuration(value: string) {
 	return (seconds ?? 0) + (minutes ?? 0) * 60 + (hours ?? 0) * 3600 + (milliseconds ? Number(milliseconds.padEnd(3, "0") ?? 0) / 1000 : 0);
 }
 
-export function formatDuration(x: number) {
-	const hours = Number(
-		Math.floor(x / 3600)
-			.toString()
-			.padStart(2, "0")
-	);
-	const minutes = Number(
-		Math.floor((x - hours * 3600) / 60)
-			.toString()
-			.padStart(2, "0")
-	);
-	const seconds = x - hours * 3600 - Number((minutes * 60).toString().padStart(2, "0"));
-	return `${hours > 0 ? `${hours}:` : ""}${minutes > 9 ? `${String(minutes).padStart(2, "0")}` : minutes}:${String(seconds).padStart(2, "0")}`;
+export function formatDuration(x: number, precision = 0) {
+	const hours = Math.floor(x / 3600);
+	const minutes = Math.floor((x % 3600) / 60);
+	const seconds = Number(x % 60).toFixed(precision);
+	return [hours, minutes > 9 ? minutes : hours ? String(minutes).padStart(2, "0") : minutes || "0", Number(seconds) > 9 ? seconds : String(seconds).padStart(2, "0")].filter(Boolean).join(":");
 }
