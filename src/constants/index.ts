@@ -7,3 +7,8 @@ export const DIFFICULTY_COLORS: Record<Difficulty, string> = {
 	Expert: "#A52A2A",
 	"Expert+": "#663399",
 };
+export const MAPPER_COLORS = {
+	mapper: "mediumseagreen",
+	lighter: "mediumorchid",
+	hybrid: "mediumslateblue",
+};

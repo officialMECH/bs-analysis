@@ -1,3 +1,4 @@
+import { units } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { Table } from "@tanstack/react-table";
 import { Spacer } from "../containers";
@@ -29,7 +30,7 @@ export default function Pagination<T>({ id, table }: Props<T>) {
 				<strong>
 					{table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
 				</strong>
-				<input type="number" defaultValue={table.getState().pagination.pageIndex + 1} onChange={(e) => table.setPageIndex(e.target.value ? Number(e.target.value) - 1 : 0)} style={{ width: "3rem" }} />
+				<input type="number" defaultValue={table.getState().pagination.pageIndex + 1} onChange={(e) => table.setPageIndex(e.target.value ? Number(e.target.value) - 1 : 0)} style={{ width: units.rem(3) }} />
 				<select value={table.getState().pagination.pageSize} onChange={(e) => table.setPageSize(Number(e.target.value))}>
 					{[10, 25, 50, 100, 500, "All"].map((pageSize) => (
 						<option key={pageSize} value={typeof pageSize === "string" ? state.data.length : pageSize}>

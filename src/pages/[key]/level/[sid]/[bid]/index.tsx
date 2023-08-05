@@ -1,6 +1,6 @@
 import { Badge, Spacer } from "$/components";
-import { DIFFICULTY_COLORS } from "$/constants";
-import { resolveLevelIndex } from "$/helpers";
+import { DIFFICULTY_COLORS, MAPPER_COLORS } from "$/constants";
+import { resolveLevelIndex, units } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { IData } from "$/types";
@@ -17,8 +17,11 @@ export default function Level() {
 	function mappers(data: Pick<IData, "mappers" | "lighters">) {
 		const values = [...(data.mappers ?? []), ...(data.lighters ?? [])].filter(predicates.unique);
 		return values.map((mapper, i) => {
-			if (i === values.length - 1) return <a style={{ color: "lime", fontWeight: "bold" }}>{mapper}</a>;
-			return <span>{<a style={{ color: "lime", fontWeight: "bold" }}>{mapper}</a>}, </span>;
+			const isMapper = data.mappers && data.mappers.includes(mapper);
+			const isLighter = data.lighters && data.lighters.includes(mapper);
+			const color = isMapper && !isLighter ? MAPPER_COLORS.mapper : isLighter && !isMapper ? MAPPER_COLORS.lighter : MAPPER_COLORS.hybrid;
+			if (i === values.length - 1) return <a style={{ color, fontWeight: "bold" }}>{mapper}</a>;
+			return <span>{<a style={{ color, fontWeight: "bold" }}>{mapper}</a>}, </span>;
 		}, null);
 	}
 
@@ -33,14 +36,14 @@ export default function Level() {
 	}
 	return (
 		<main>
-			<h1 className="hide-scroll" style={{ display: "flex", alignItems: "center", gap: "4rem", justifyContent: "space-between", whiteSpace: "nowrap", overflowX: "scroll" }}>
+			<h1 className="hide-webkit" style={{ display: "flex", alignItems: "center", gap: units.rem(4), justifyContent: "space-between", whiteSpace: "nowrap", overflowX: "scroll" }}>
 				<Spacer direction="row">
 					{data.title}
 					<div>
 						<Badge>{data.characteristic}</Badge>
 						<Badge color={DIFFICULTY_COLORS[data.difficulty]}>{data.difficulty}</Badge>
 					</div>
-					{(data.mappers || data.lighters) && mappers.length > 0 && <span>[{mappers(data)}]</span>}
+					{(data.mappers || data.lighters) && mappers.length > 0 && <span style={{ color: "lightgray" }}>[{mappers(data)}]</span>}
 				</Spacer>
 			</h1>
 			<hr />

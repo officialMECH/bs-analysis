@@ -12,7 +12,7 @@ interface Props extends ComponentProps<"a"> {
 
 export default function Cell({ column, href, as: As = "div", wrapper: Wrapper = "span", children, style }: Props) {
 	return (
-		<As className={"hide-scroll"} style={{ width: units.rem(column.getSize()), whiteSpace: "nowrap", overflowX: "scroll", ...style }}>
+		<As className={"hide-webkit"} style={{ width: units.rem(column.getSize()), whiteSpace: "nowrap", overflowX: "scroll", ...style }}>
 			{href ? (
 				<a href={href}>
 					<Wrapper>{children}</Wrapper>

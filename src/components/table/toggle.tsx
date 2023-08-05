@@ -1,3 +1,4 @@
+import { params, units } from "$/helpers";
 import { Table } from "@tanstack/react-table";
 import { ReactNode } from "react";
 import { Spacer } from "../containers";
@@ -11,7 +12,7 @@ interface Props<T> {
 export default function Toggle<T>({ table, icons = {} }: Props<T>) {
 	return (
 		<Spacer direction="column">
-			<Spacer size={0.5} center style={{ flexWrap: "wrap", padding: "1rem", backgroundColor: "#333" }}>
+			<Spacer size={0.5} center style={{ flexWrap: "wrap", padding: params(units.rem(1)), backgroundColor: "#333" }}>
 				{table.getAllLeafColumns().map((c) => {
 					if (c.id === "id" && !import.meta.env.DEV) return null;
 					return (
