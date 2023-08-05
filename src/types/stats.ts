@@ -2,6 +2,7 @@ import { z } from "zod";
 import shared from "./shared";
 
 const stats = z.object({ total: z.number().min(0) });
+
 const data = z.object({
 	id: z.string(),
 	title: z.string().optional(),
@@ -30,14 +31,24 @@ const data = z.object({
 	mappers: z.array(z.string()).optional(),
 	lighters: z.array(z.string()).optional(),
 });
+const format = z.union([data.array(), z.record(data)]);
+const dataset = z.object({
+	data: format,
+	name: z.string().optional(),
+	description: z.string().optional(),
+	contributors: z.string().array().optional(),
+	updated: z.coerce.date().optional(),
+});
 
 export type IStats<T = unknown> = z.infer<typeof stats> & Partial<T>;
 export type IProperty<K extends string | number, T = unknown> = Record<K, IStats<T>>;
 
 export type IData = z.infer<typeof data>;
-export type IDataset = { name: string | null; data: IData[] };
+export type IDataset<T extends z.infer<typeof format>> = Omit<z.infer<typeof dataset>, "data"> & { data: T };
 
 export default {
 	stats,
 	data,
+	format,
+	dataset,
 };

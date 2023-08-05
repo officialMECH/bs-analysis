@@ -1,17 +1,17 @@
-import { IDataset, PayloadAction, schemas } from "$/types";
+import { IData, IDataset, PayloadAction, schemas } from "$/types";
 import { Reducer, useMemo, useReducer } from "react";
+import { z } from "zod";
 
-type Actions = PayloadAction<{ id: string; contents: string }, "UPDATE">;
+type Actions = PayloadAction<{ id: string; dataset: IDataset<z.infer<typeof schemas.format>> }, "UPDATE">;
 
 export default function useDataset(tid?: string) {
-	const [state, dispatch] = useReducer<Reducer<IDataset, Actions>>(
+	const [state, dispatch] = useReducer<Reducer<IDataset<IData[]>, Actions>>(
 		(state, action) => {
 			switch (action.type) {
 				case "UPDATE": {
-					const { id, contents } = action.payload;
-					const dataset = JSON.parse(contents) as IDataset;
+					const { id, dataset } = action.payload;
 					// flatten data records to array (used in legacy format)
-					const data = Object.values(dataset.data).flat();
+					const data = Object.values(dataset.data);
 					const valid = data.filter((entry, index) => {
 						const result = schemas.data.safeParse(entry);
 						if (!result.success) {
@@ -19,22 +19,22 @@ export default function useDataset(tid?: string) {
 						}
 						return result.success || import.meta.env.DEV;
 					});
-					localStorage.setItem(id, JSON.stringify({ name: dataset.name, data: valid.sort((a, b) => (a.released && b.released ? a.released.valueOf() - b.released.valueOf() : 0)) }));
+					localStorage.setItem(id, JSON.stringify({ ...dataset, data: valid }));
 					return state;
 				}
 				default: {
-					return { name: null, data: [] };
+					return { data: [] };
 				}
 			}
 		},
-		{ name: null, data: [] }
+		{ data: [] }
 	);
 
 	// fetch target dataset from localStorage
 	const target = tid ? localStorage.getItem(tid) : null;
 
 	return {
-		state: useMemo(() => (target ? (JSON.parse(target) as IDataset) : state), [state, target]),
+		state: useMemo(() => (target ? (JSON.parse(target) as IDataset<IData[]>) : state), [state, target]),
 		dispatch,
 	};
 }

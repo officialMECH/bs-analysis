@@ -22,7 +22,7 @@ export default function Level() {
 		}, null);
 	}
 
-	if (!data) {
+	if (!localStorage.getItem(key) || !data) {
 		return (
 			<main>
 				<h1>Not Found</h1>
@@ -40,7 +40,7 @@ export default function Level() {
 						<Badge>{data.characteristic}</Badge>
 						<Badge color={DIFFICULTY_COLORS[data.difficulty]}>{data.difficulty}</Badge>
 					</div>
-					<span>[{mappers(data)}]</span>
+					{(data.mappers || data.lighters) && mappers.length > 0 && <span>[{mappers(data)}]</span>}
 				</Spacer>
 			</h1>
 			<hr />
