@@ -3,16 +3,18 @@ import { createLevelIndex } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { IData } from "$/types";
-import { SortingState, getCoreRowModel, getFacetedUniqueValues, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import { ColumnFiltersState, SortingState, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useState } from "react";
 
 export default function Data() {
 	const { key } = useParams("/:key");
 	const { state } = useDataset(key);
+
 	const [sorting, setSorting] = useState<SortingState>([
 		{ id: "released", desc: false },
 		{ id: "title", desc: false },
 	]);
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
 		id: import.meta.env.DEV,
@@ -41,9 +43,8 @@ export default function Data() {
 	const table = useReactTable<IData>({
 		data: state.data,
 		columns: columns,
-		state: { columnVisibility, sorting },
+		state: { columnVisibility, sorting, columnFilters },
 		defaultColumn: {
-			size: 4,
 			minSize: 4,
 			maxSize: 12,
 		},
@@ -52,8 +53,10 @@ export default function Data() {
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
 		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
 		debugTable: import.meta.env.DEV,
 	});
 
