@@ -1,6 +1,7 @@
 import { Spacer, Table, columns, icons } from "$/components";
+import Layouts from "$/components/layouts";
 import { createLevelIndex } from "$/helpers";
-import { useDataset } from "$/hooks";
+import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
 import { IData } from "$/types";
 import { ColumnFiltersState, SortingState, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
@@ -8,7 +9,8 @@ import { useState } from "react";
 
 export default function Data() {
 	const { key } = useParams("/:key");
-	const { state } = useDataset(key);
+	const { state: dataset } = useDataset(key);
+	useTitle(dataset ? `Dataset: ${dataset?.name ?? key}` : "Unknown Dataset");
 
 	const [sorting, setSorting] = useState<SortingState>([
 		{ id: "released", desc: false },
@@ -41,7 +43,7 @@ export default function Data() {
 	});
 
 	const table = useReactTable<IData>({
-		data: state.data,
+		data: dataset?.data ?? [],
 		columns: columns,
 		state: { columnVisibility, sorting, columnFilters },
 		defaultColumn: {
@@ -60,28 +62,21 @@ export default function Data() {
 		debugTable: import.meta.env.DEV,
 	});
 
-	if (!localStorage.getItem(key)) {
+	if (!dataset) {
 		return (
-			<main>
-				<h1>Not Found</h1>
-				<hr />
+			<Layouts.Content title={{ left: "Unknown Dataset" }}>
 				<p>This dataset is not available.</p>
-			</main>
+			</Layouts.Content>
 		);
 	}
 	return (
-		<main>
-			<h1 style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-				<span style={{ color: state.name ? "unset" : "gray" }}>{state.name ?? key}</span>
-				<span style={{ color: "gray" }}>{state.data.length}</span>
-			</h1>
-			<hr />
+		<Layouts.Content title={{ left: <span>{dataset.name ?? key}</span>, right: <span style={{ color: "gray" }}>{dataset.data.length}</span> }}>
 			<Spacer size={1} direction="column">
 				<Table.Toggle table={table} icons={icons}></Table.Toggle>
 				<Table.Pagination id={key} table={table}></Table.Pagination>
 				<Table.Table table={table}></Table.Table>
 				{import.meta.env.DEV && <Table.Debug table={table} enabled={false}></Table.Debug>}
 			</Spacer>
-		</main>
+		</Layouts.Content>
 	);
 }

@@ -1,10 +1,14 @@
-import { Center, Spacer } from "$/components";
-import { useDataset } from "$/hooks";
+import { Layouts, Spacer } from "$/components";
+import Icon from "$/components/icon";
+import { colors } from "$/constants";
+import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
+import { Fragment } from "react";
 
 export default function Overview() {
 	const { key } = useParams("/:key");
-	const { state } = useDataset(key);
+	const { state: dataset, dispatch } = useDataset(key);
+	useTitle(dataset ? `Overview: ${dataset?.name ?? key}` : "Unknown Dataset");
 
 	function contributors(values: string[]) {
 		return values.map((name, i) => {
@@ -13,41 +17,48 @@ export default function Overview() {
 		}, null);
 	}
 
-	if (!localStorage.getItem(key)) {
+	function handleDelete() {
+		if (!confirm("Are you sure you want to delete this dataset?")) return;
+		dispatch({ type: "DELETE", payload: { id: key } });
+	}
+
+	if (!dataset) {
 		return (
-			<main>
-				<h1>Not Found</h1>
-				<hr />
+			<Layouts.Content title={{ left: "Unknown Dataset" }}>
 				<p>This dataset is not available.</p>
-			</main>
+			</Layouts.Content>
+		);
+	}
+
+	function Icons() {
+		return (
+			<Fragment>
+				<Icon as={"a"} href={`/${key}/data`}>
+					<i title="Dataset" className="fa-solid fa-table"></i>
+				</Icon>
+				<Icon as={"button"} tabIndex={0} className="unstyled" onClick={handleDelete} style={{ color: colors.error, cursor: "pointer" }}>
+					<i title="Delete" className="fa-solid fa-trash"></i>
+				</Icon>
+			</Fragment>
 		);
 	}
 	return (
-		<main>
-			<Center as="h1" style={{ justifyContent: "space-between" }}>
-				<span style={{ color: state.name ? "unset" : "gray" }}>{state.name ?? key}</span>
-				<Spacer direction="row">
-					<a href={`${key}/data`}>
-						<i title="Dataset" className="fa-solid fa-table"></i>
-					</a>
-				</Spacer>
-			</Center>
-			<hr />
-			<p style={{ whiteSpace: "pre-line" }}>{state.description}</p>
+		<Layouts.Content title={{ left: <span>{dataset.name ?? key}</span>, right: <Icons /> }}>
+			{dataset.description && <p style={{ whiteSpace: "pre-line" }}>{dataset.description}</p>}
 			<Spacer size={2} direction="row">
-				{state.updated && (
+				{dataset.updated && (
 					<Spacer size={0} direction="column">
 						<strong>Last Updated</strong>
-						<small>{new Date(state.updated).toLocaleString()}</small>
+						<small>{new Date(dataset.updated).toLocaleString()}</small>
 					</Spacer>
 				)}
-				{state.contributors && (
+				{dataset.contributors && (
 					<Spacer size={0} direction="column">
 						<strong>Contributors</strong>
-						<small>{contributors(state.contributors)}</small>
+						<small>{contributors(dataset.contributors)}</small>
 					</Spacer>
 				)}
 			</Spacer>
-		</main>
+		</Layouts.Content>
 	);
 }

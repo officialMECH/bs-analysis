@@ -1,4 +1,4 @@
-import { DIFFICULTY_COLORS } from "$/constants";
+import { colors } from "$/constants";
 import { createLevelIndex, formatDuration, hjd, jd, nps, rt } from "$/helpers";
 import { IData, schemas } from "$/types";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -92,7 +92,7 @@ export const columns = [
 			const value = c.getValue();
 			const valid = Object.values(schemas.difficulty.Values).includes(value);
 			return (
-				<Cell column={c.column} wrapper={value && valid ? "strong" : "pre"} style={{ backgroundColor: value && valid ? DIFFICULTY_COLORS[value] : undefined, color: value && valid ? undefined : "red" }}>
+				<Cell column={c.column} wrapper={value && valid ? "strong" : "pre"} style={{ backgroundColor: value && valid ? colors.difficulty[value] : undefined, color: value && valid ? undefined : "red" }}>
 					{!value ? "MISSING" : !valid ? "INVALID" : value}
 				</Cell>
 			);

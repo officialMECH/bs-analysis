@@ -9,7 +9,7 @@ interface Props<T> {
 }
 
 export default function Pagination<T>({ id, table }: Props<T>) {
-	const { state } = useDataset(id);
+	const { state: dataset } = useDataset(id);
 	return (
 		<Spacer size={0.5} direction="column" center>
 			<Spacer size={0.5} direction="row" center>
@@ -33,7 +33,7 @@ export default function Pagination<T>({ id, table }: Props<T>) {
 				<input type="number" defaultValue={table.getState().pagination.pageIndex + 1} onChange={(e) => table.setPageIndex(e.target.value ? Number(e.target.value) - 1 : 0)} style={{ width: units.rem(3) }} />
 				<select value={table.getState().pagination.pageSize} onChange={(e) => table.setPageSize(Number(e.target.value))}>
 					{[10, 25, 50, 100, 500, "All"].map((pageSize) => (
-						<option key={pageSize} value={typeof pageSize === "string" ? state.data.length : pageSize}>
+						<option key={pageSize} value={typeof pageSize === "string" ? dataset!.data.length : pageSize}>
 							Show {pageSize}
 						</option>
 					))}

@@ -1,14 +1,17 @@
-import { params, units } from "$/helpers";
-import { ComponentProps } from "react";
+import { units } from "$/helpers";
+import { Polymorphic } from "$/types";
+import { join } from "$/utils";
+import { ElementType } from "react";
 
-interface Props extends ComponentProps<"span"> {
+interface Props {
 	color?: string;
 }
 
-export default function Badge({ color = "#404040", children, style, ...delegated }: Props) {
+export default function Badge<T extends ElementType>({ color, href, children, style, ...delegated }: Polymorphic<T, Props>) {
+	const Wrapper = href ? "a" : "span";
 	return (
-		<span style={{ ...style, padding: params(units.rem(0.25), units.rem(1)), fontWeight: "bold", backgroundColor: color }} {...delegated}>
+		<Wrapper className={join("badge")} href={href} style={{ padding: join(units.rem(0.25), units.rem(1)), fontWeight: "bold", backgroundColor: color ?? undefined, ...style }} {...delegated}>
 			{children}
-		</span>
+		</Wrapper>
 	);
 }

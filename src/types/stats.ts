@@ -36,6 +36,7 @@ const dataset = z.object({
 	data: format,
 	name: z.string().optional(),
 	description: z.string().optional(),
+	color: z.string().optional(),
 	contributors: z.string().array().optional(),
 	updated: z.coerce.date().optional(),
 });
@@ -44,11 +45,6 @@ export type IStats<T = unknown> = z.infer<typeof stats> & Partial<T>;
 export type IProperty<K extends string | number, T = unknown> = Record<K, IStats<T>>;
 
 export type IData = z.infer<typeof data>;
-export type IDataset<T extends z.infer<typeof format>> = Omit<z.infer<typeof dataset>, "data"> & { data: T };
+export type IDataset<T = z.infer<typeof format>> = Omit<z.infer<typeof dataset>, "data"> & { data: T };
 
-export default {
-	stats,
-	data,
-	format,
-	dataset,
-};
+export default { stats, data, format, dataset };

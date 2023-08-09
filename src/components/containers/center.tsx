@@ -1,11 +1,12 @@
-import { ComponentProps, ElementType } from "react";
+import { Polymorphic } from "$/types";
+import { ElementType } from "react";
 
-interface Props extends ComponentProps<"div"> {
-	as?: ElementType;
+interface Props {
 	direction?: "column" | "row";
 }
 
-export default function Center({ children, as: As = "div", direction, style, ...delegated }: Props) {
+export default function Center<T extends ElementType>({ as, children, direction, style, ...delegated }: Polymorphic<T, Props>) {
+	const As = as ?? "div";
 	const justifyContent = direction !== "column" ? "center" : undefined;
 	const alignItems = direction !== "row" ? "center" : undefined;
 	return (

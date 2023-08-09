@@ -1,4 +1,5 @@
-import { params, units } from "$/helpers";
+import { units } from "$/helpers";
+import { join } from "$/utils";
 import { Column, Table } from "@tanstack/react-table";
 import { ComponentProps, Fragment } from "react";
 
@@ -16,8 +17,8 @@ export default function Filter<T, V>({ column, table }: Props<T, V>) {
 		const value = column.getFilterValue() as [number, number] | undefined;
 		return (
 			<Fragment>
-				<Input className={params("hide-webkit", "center")} type="number" value={value?.[0]} onChange={(event) => column.setFilterValue((current: [number, number]) => [event.target.value, current?.[1]])} placeholder={`Min`} />
-				<Input className={params("hide-webkit", "center")} type="number" value={value?.[1]} onChange={(event) => column.setFilterValue((current: [number, number]) => [current?.[0], event.target.value])} placeholder={`Max`} />
+				<Input className={join("hide-webkit", "center")} type="number" value={value?.[0]} onChange={(event) => column.setFilterValue((current: [number, number]) => [event.target.value, current?.[1]])} placeholder={`Min`} />
+				<Input className={join("hide-webkit", "center")} type="number" value={value?.[1]} onChange={(event) => column.setFilterValue((current: [number, number]) => [current?.[0], event.target.value])} placeholder={`Max`} />
 			</Fragment>
 		);
 	}

@@ -1,4 +1,6 @@
-import { params, units } from "$/helpers";
+import { colors } from "$/constants";
+import { units } from "$/helpers";
+import { join } from "$/utils";
 import { Table } from "@tanstack/react-table";
 import { ReactNode } from "react";
 import { Spacer } from "../containers";
@@ -12,12 +14,12 @@ interface Props<T> {
 export default function Toggle<T>({ table, icons = {} }: Props<T>) {
 	return (
 		<Spacer direction="column">
-			<Spacer size={0.5} center style={{ flexWrap: "wrap", padding: params(units.rem(1)), backgroundColor: "#333" }}>
+			<Spacer size={0.5} center style={{ flexWrap: "wrap", padding: join(units.rem(1)), backgroundColor: "#333" }}>
 				{table.getAllLeafColumns().map((c) => {
 					if (c.id === "id" && !import.meta.env.DEV) return null;
 					return (
 						<div key={c.id} className={styles.toggle}>
-							<label title={c.id} htmlFor={c.id} style={{ backgroundColor: c.getIsVisible() ? "green" : "#555" }}>
+							<label title={c.id} htmlFor={c.id} style={{ backgroundColor: c.getIsVisible() ? colors.accent : "#555" }}>
 								{icons[c.id] ?? c.id}
 							</label>
 							<input type="checkbox" id={c.id} checked={c.getIsVisible()} onChange={c.getToggleVisibilityHandler()}></input>
