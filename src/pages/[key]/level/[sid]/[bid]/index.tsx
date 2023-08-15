@@ -43,7 +43,7 @@ export default function Level() {
 					<Badge>{data.characteristic}</Badge>
 					<Badge color={colors.difficulty[data.difficulty]}>{data.difficulty}</Badge>
 				</div>
-				{(data.mappers || data.lighters) && mappers.length > 0 && <span style={{ color: "lightgray" }}>[{mappers(data)}]</span>}
+				{(data.mappers || data.lighters) && mappers.length > 0 && <span style={{ color: "gray" }}>[{mappers(data)}]</span>}
 			</Fragment>
 		);
 	};

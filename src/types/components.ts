@@ -1,9 +1,8 @@
-import { ComponentPropsWithRef, ComponentPropsWithoutRef, ElementType } from "react";
+import { ComponentPropsWithoutRef, ElementType } from "react";
+
+type Merge<E extends object, O extends object> = O & Omit<E, keyof O>;
 
 type As<T extends ElementType> = { as?: T };
+type Derived<T extends ElementType, P extends object> = Merge<ComponentPropsWithoutRef<T>, P>;
 
-type Derived<T extends ElementType> = ComponentPropsWithoutRef<T>;
-type DerivedRef<T extends ElementType> = ComponentPropsWithRef<T>["ref"];
-
-export type Polymorphic<T extends ElementType, Props = object> = As<T> & Props & Omit<Derived<T>, keyof Props | keyof As<T>>;
-export type PolymorphicWithRef<T extends ElementType, Props = object> = As<T> & Props & DerivedRef<T> & Omit<Derived<T>, keyof Props | keyof As<T> | keyof DerivedRef<T>>;
+export type Polymorphic<T extends ElementType, P = object> = Derived<T, P & As<T>>;

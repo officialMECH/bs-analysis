@@ -78,7 +78,7 @@ pre {
 }
 
 span.badge {
-	background-color: #404040;
+	background-color: rgba(64, 64, 64, 0.25);
 }
 
 @media (prefers-color-scheme: light) {

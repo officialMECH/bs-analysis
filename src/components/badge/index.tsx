@@ -5,6 +5,7 @@ import { ElementType } from "react";
 
 interface Props {
 	color?: string;
+	href?: string;
 }
 
 export default function Badge<T extends ElementType>({ color, href, children, style, ...delegated }: Polymorphic<T, Props>) {

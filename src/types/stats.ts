@@ -2,12 +2,13 @@ import { z } from "zod";
 import shared from "./shared";
 
 const stats = z.object({ total: z.number().min(0) });
+const date = z.coerce.date().transform((date) => date?.toISOString());
 
 const data = z.object({
 	id: z.string(),
 	title: z.string().optional(),
 	pack: z.string().optional(),
-	released: z.coerce.date().optional(),
+	released: date.optional(),
 	bpm: z.number().min(10).max(1000).optional(),
 	length: z.number().min(0).optional(),
 	characteristic: shared.characteristic,
@@ -33,12 +34,12 @@ const data = z.object({
 });
 const format = z.union([data.array(), z.record(data)]);
 const dataset = z.object({
-	data: format,
 	name: z.string().optional(),
 	description: z.string().optional(),
 	color: z.string().optional(),
 	contributors: z.string().array().optional(),
-	updated: z.coerce.date().optional(),
+	updated: date.optional(),
+	data: format,
 });
 
 export type IStats<T = unknown> = z.infer<typeof stats> & Partial<T>;
