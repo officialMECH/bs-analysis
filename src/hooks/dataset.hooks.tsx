@@ -5,7 +5,7 @@ export function useDatasets() {
 	const { state, dispatch } = useContext(StorageContext);
 	return { state, dispatch };
 }
-export function useDataset(id: string) {
+export function useDataset(key: string) {
 	const { state, dispatch } = useContext(StorageContext);
-	return { state: state[id], dispatch };
+	return { state: state[key], dispatch };
 }

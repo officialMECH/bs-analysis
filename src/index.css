@@ -20,25 +20,23 @@
 }
 
 a {
-	font-weight: 500;
+	font-weight: inherit;
 	color: #646cff;
 	text-decoration: inherit;
 }
-
 a.badge {
 	background-color: #646cff;
 }
 
 body {
 	margin: 2rem;
-	min-width: 320px;
 }
 
 button {
 	border-radius: 8px;
 	border: 1px solid transparent;
 	padding: 0.5em 1em;
-	font-size: 1em;
+	font-size: inherit;
 	font-weight: 500;
 	font-family: inherit;
 	background-color: #1a1a1a;
@@ -48,11 +46,6 @@ button {
 button:hover {
 	border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
-	outline: 4px auto white;
-}
-
 button.unstyled {
 	background: inherit;
 	color: inherit;
@@ -62,10 +55,32 @@ button.unstyled {
 	cursor: inherit;
 	outline: inherit;
 }
-
 button.unstyled:focus {
 	outline: 1px auto white;
 	border-radius: 0;
+}
+
+details summary {
+	background-color: rgba(64, 64, 64, 0.25);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+}
+details summary > * {
+	margin: 0;
+	padding: 0.5rem 1rem;
+}
+details section {
+	margin: 1rem;
+}
+details summary::after {
+	content: "▶";
+	padding: 0 1rem;
+}
+details[open] summary::after {
+	content: "▼";
+	padding: 0 1rem;
 }
 
 hr {
@@ -75,6 +90,23 @@ hr {
 pre {
 	margin: 0;
 	font-size: 1rem;
+}
+
+select.nav {
+	border-radius: 8px;
+	border: 1px solid transparent;
+	padding: 0 1em;
+	font-size: inherit;
+	font-weight: 500;
+	font-family: inherit;
+	cursor: pointer;
+	transition: border-color 0.25s;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+select.nav:hover {
+	border-color: #646cff;
 }
 
 span.badge {

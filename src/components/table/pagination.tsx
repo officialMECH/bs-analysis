@@ -11,8 +11,8 @@ interface Props<T> {
 export default function Pagination<T>({ id, table }: Props<T>) {
 	const { state: dataset } = useDataset(id);
 	return (
-		<Spacer size={0.5} direction="column" center>
-			<Spacer size={0.5} direction="row" center>
+		<Spacer as={"div"} size={0.5} direction="column" center>
+			<Spacer as={"div"} size={0.5} direction="row" center>
 				<button onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
 					<i className="fa-solid fa-angles-left"></i>
 				</button>
@@ -26,10 +26,7 @@ export default function Pagination<T>({ id, table }: Props<T>) {
 					<i className="fa-solid fa-angles-right"></i>
 				</button>
 			</Spacer>
-			<Spacer size={0.5} direction="row" center>
-				<strong>
-					{table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-				</strong>
+			<Spacer as={"div"} size={0.5} direction="row" center>
 				<input type="number" defaultValue={table.getState().pagination.pageIndex + 1} onChange={(e) => table.setPageIndex(e.target.value ? Number(e.target.value) - 1 : 0)} style={{ width: units.rem(3) }} />
 				<select value={table.getState().pagination.pageSize} onChange={(e) => table.setPageSize(Number(e.target.value))}>
 					{[10, 25, 50, 100, 500, "All"].map((pageSize) => (
@@ -39,6 +36,9 @@ export default function Pagination<T>({ id, table }: Props<T>) {
 					))}
 				</select>
 			</Spacer>
+			<small style={{ fontWeight: "bold" }}>
+				{table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+			</small>
 		</Spacer>
 	);
 }

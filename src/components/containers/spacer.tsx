@@ -8,7 +8,7 @@ interface Props {
 	size?: number;
 }
 
-export default function Spacer<T extends ElementType = "div">({ as, children, direction, center, size = 1, style, ...delegated }: Polymorphic<T, Props>) {
+export default function Spacer<T extends ElementType>({ as, children, direction, center, size = 1, style, ...delegated }: Polymorphic<T, Props>) {
 	const As = as ?? "div";
 	const justifyContent = center && direction !== "column" ? "center" : undefined;
 	const alignItems = center && direction !== "row" ? "center" : undefined;

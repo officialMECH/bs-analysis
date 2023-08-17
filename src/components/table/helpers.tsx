@@ -61,7 +61,7 @@ export const columns = [
 		cell: (c) => {
 			const value = c.getValue();
 			const valid = Object.values(schemas.difficulty.Values).includes(value);
-			return <AccessorCell {...c} wrapper={value && valid ? "strong" : "pre"} transform={(value) => (!value ? "MISSING" : !valid ? "INVALID" : value)} style={{ backgroundColor: value && valid ? colors.difficulty[value] : undefined, color: value && valid ? undefined : colors.error }} />;
+			return <AccessorCell {...c} wrapper={value && valid ? "strong" : "pre"} transform={(value) => (!value ? "MISSING" : !valid ? "INVALID" : value)} style={{ backgroundColor: value && valid ? colors.difficulty(0.5)[value] : undefined, color: value && valid ? undefined : colors.error }} />;
 		},
 	}),
 	helper.accessor((r) => nps(r), {

@@ -1,11 +1,10 @@
-import { Badge, Layouts } from "$/components";
+import { Badge, Spacer, Templates } from "$/components";
 import { colors } from "$/constants";
 import { resolveLevelIndex } from "$/helpers";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
 import { IData } from "$/types";
 import { predicates } from "$/utils";
-import { Fragment } from "react";
 
 export default function Level() {
 	const { key, sid, bid } = useParams("/:key/level/:sid/:bid");
@@ -29,23 +28,23 @@ export default function Level() {
 
 	if (!data) {
 		return (
-			<Layouts.Content title={{ left: "Unknown Level" }} nav={false}>
+			<Templates.Content title={"Unknown Level"} nav={false}>
 				<p>This level is not available.</p>
-			</Layouts.Content>
+			</Templates.Content>
 		);
 	}
 
 	const Title = () => {
 		return (
-			<Fragment>
+			<Spacer as={"div"} direction="row">
 				{data.title}
 				<div>
 					<Badge>{data.characteristic}</Badge>
-					<Badge color={colors.difficulty[data.difficulty]}>{data.difficulty}</Badge>
+					<Badge color={colors.difficulty(0.5)[data.difficulty]}>{data.difficulty}</Badge>
 				</div>
 				{(data.mappers || data.lighters) && mappers.length > 0 && <span style={{ color: "gray" }}>[{mappers(data)}]</span>}
-			</Fragment>
+			</Spacer>
 		);
 	};
-	return <Layouts.Content title={{ left: <Title /> }} nav={false}></Layouts.Content>;
+	return <Templates.Content title={<Title />} nav={false}></Templates.Content>;
 }

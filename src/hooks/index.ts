@@ -1,2 +1,3 @@
 export * from "./dataset.hooks";
-export * from "./title.hooks";
+export { default as useMediaQuery } from "./media.hooks";
+export { default as useTitle } from "./title.hooks";

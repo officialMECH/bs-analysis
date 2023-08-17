@@ -4,7 +4,7 @@ import { Dispatch, PropsWithChildren, Reducer, createContext, useReducer } from 
 
 type T = IDataset<IData[]> | undefined;
 type State = Record<string, T>;
-type Actions = PayloadAction<{ id: string; dataset: IDataset }, "UPDATE"> | PayloadAction<{ id: string }, "DELETE">;
+type Actions = PayloadAction<{ id: string; dataset: IDataset }, "UPDATE"> | PayloadAction<{ id: string }, "DELETE"> | PayloadAction<{ id: string }, "DOWNLOAD">;
 
 const reducer: Reducer<State, Actions> = (state, action) => {
 	switch (action.type) {

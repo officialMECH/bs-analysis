@@ -9,7 +9,7 @@ interface Props<T> {
 
 export default function Table<T>({ table }: Props<T>) {
 	return (
-		<Center>
+		<Center as={"div"}>
 			<div className={wrappers.table} style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
 				<table style={{ width: table.getCenterTotalSize() }}>
 					<thead>
@@ -20,7 +20,7 @@ export default function Table<T>({ table }: Props<T>) {
 										<th key={header.id} colSpan={header.colSpan} style={{ width: "inherit", textAlign: "center" }}>
 											{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 											{header.column.getCanFilter() && (
-												<Center direction="row">
+												<Center as={"div"} direction="row">
 													<Filter column={header.column} table={table}></Filter>
 												</Center>
 											)}
