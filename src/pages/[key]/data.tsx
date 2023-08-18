@@ -18,7 +18,7 @@ export default function Data() {
 	}
 	return (
 		<Templates.Content title={<Title />} controls>
-			{dataset && <Templates.Table id={key} data={dataset.data} />}
+			{dataset ? <Templates.Table id={key} data={dataset.data} /> : "This dataset is not available."}
 		</Templates.Content>
 	);
 }

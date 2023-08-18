@@ -17,7 +17,7 @@ export default function Actions({ id, exists, children }: PropsWithChildren<Prop
 	function handleOverwrite(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files) return;
-		parsers.file(files[0], (id, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset } }));
+		parsers.file(files[0], (_, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset } }));
 	}
 	function handleDownload() {
 		const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
@@ -29,7 +29,7 @@ export default function Actions({ id, exists, children }: PropsWithChildren<Prop
 	}
 
 	return (
-		<Spacer as={"div"} size={2} direction="row">
+		<Spacer as={"div"} direction="row">
 			<Icon as={"button"} tabIndex={0} onClick={() => input.current?.click()} style={{ color: colors.accent }}>
 				<i title="Overwrite" className="fa-solid fa-file-import"></i>
 			</Icon>

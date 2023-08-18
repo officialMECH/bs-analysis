@@ -34,7 +34,7 @@ export default function Nav({ controls }: Props) {
 
 	return (
 		<Spacer as={"nav"} direction="row" className={join("hide-webkit", "horizontal-scroll")} style={{ padding: units.rem(0.125), justifyContent: "space-between" }}>
-			<Spacer as={"div"} direction="row">
+			<Spacer as={"div"} size={0.5} direction="row">
 				<Icon as={"a"} href={`/`} style={{ fontSize: units.rem(1.5) }}>
 					<i title="Home" className="fa-solid fa-home"></i>
 				</Icon>
