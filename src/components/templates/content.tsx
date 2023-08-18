@@ -8,9 +8,10 @@ interface Props {
 	title: ReactNode;
 	center?: boolean;
 	nav?: boolean;
+	controls?: boolean;
 }
 
-export default function Content({ title, center, nav = true, children }: PropsWithChildren<Props>) {
+export default function Content({ title, center, nav = true, controls, children }: PropsWithChildren<Props>) {
 	return (
 		<main>
 			<Spacer as={"h1"} size={2} style={{ textAlign: center ? "center" : undefined, padding: join(units.rem(0.125)), justifyContent: center ? "center" : "space-between" }} className={join("hide-webkit", !center && "horizontal-scroll")}>
@@ -19,7 +20,7 @@ export default function Content({ title, center, nav = true, children }: PropsWi
 			<hr />
 			{nav && (
 				<Fragment>
-					<Nav />
+					<Nav controls={controls} />
 					<hr />
 				</Fragment>
 			)}

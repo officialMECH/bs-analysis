@@ -28,7 +28,7 @@ export default function Level() {
 
 	if (!data) {
 		return (
-			<Templates.Content title={"Unknown Level"} nav={false}>
+			<Templates.Content title={"Unknown Level"}>
 				<p>This level is not available.</p>
 			</Templates.Content>
 		);
@@ -46,5 +46,5 @@ export default function Level() {
 			</Spacer>
 		);
 	};
-	return <Templates.Content title={<Title />} nav={false}></Templates.Content>;
+	return <Templates.Content title={<Title />}></Templates.Content>;
 }

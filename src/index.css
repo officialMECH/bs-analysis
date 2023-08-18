@@ -95,7 +95,7 @@ pre {
 select.nav {
 	border-radius: 8px;
 	border: 1px solid transparent;
-	padding: 0 1em;
+	padding: 0.25em 1em;
 	font-size: inherit;
 	font-weight: 500;
 	font-family: inherit;

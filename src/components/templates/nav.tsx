@@ -1,13 +1,16 @@
 import { colors } from "$/constants";
-import { units } from "$/helpers";
+import { parsers, units } from "$/helpers";
 import { useDatasets } from "$/hooks";
 import { Path, useNavigate } from "$/router";
-import { schemas } from "$/types";
 import { join } from "$/utils";
 import { ChangeEvent, Fragment, useRef, useState } from "react";
 import { Icon, Spacer } from "../containers";
 
-export default function Nav() {
+interface Props {
+	controls?: boolean;
+}
+
+export default function Nav({ controls }: Props) {
 	const param = location.pathname.split("/")[1];
 	const [current, setCurrent] = useState<string>(param);
 	const navigate = useNavigate();
@@ -25,53 +28,45 @@ export default function Nav() {
 		const files = event.target.files;
 		if (!files) return;
 		for (let i = 0; i < files.length; i++) {
-			const file = files[i];
-			const id = file.name.split(".")[0];
-			const raw = file.text();
-			void raw.then((contents) => {
-				const result = schemas.dataset.safeParse(JSON.parse(contents));
-				if (!result.success) {
-					result.error.issues.forEach((issue) => console.error(`${issue.path.toString()} | ${issue.message}`));
-				} else {
-					dispatch({ type: "UPDATE", payload: { id, dataset: result.data } });
-				}
-			});
+			parsers.file(files[i], (id, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset } }));
 		}
 	}
 
 	return (
-		<Spacer as={"nav"} direction="row" className={join("hide-webkit", "horizontal-scroll")} style={{ justifyContent: "space-between" }}>
+		<Spacer as={"nav"} direction="row" className={join("hide-webkit", "horizontal-scroll")} style={{ padding: units.rem(0.125), justifyContent: "space-between" }}>
 			<Spacer as={"div"} direction="row">
-				<Icon as={"a"} href={`/`} style={{ padding: units.rem(0.25), fontSize: units.rem(1.25) }}>
+				<Icon as={"a"} href={`/`} style={{ fontSize: units.rem(1.5) }}>
 					<i title="Home" className="fa-solid fa-home"></i>
 				</Icon>
-				<select className="nav" value={current} onChange={handleChangeKey}>
-					{!state[param] && <option value={undefined} />}
-					{keys.map((key) => {
-						const dataset = state[key];
-						return (
-							<option key={key} value={key} style={{ backgroundColor: dataset?.color ?? undefined }}>
-								{dataset?.name ?? key}
-							</option>
-						);
-					})}
-				</select>
-				{state[param] && (
-					<Fragment>
-						<Icon as={"a"} href={`/${current}`} style={{ padding: units.rem(0.25), fontSize: units.rem(1.25) }}>
-							<i title="Overview" className="fa-solid fa-circle-info"></i>
-						</Icon>
-						<Icon as={"a"} href={`/${current}/data`} style={{ padding: units.rem(0.25), fontSize: units.rem(1.25) }}>
-							<i title="Dataset" className="fa-solid fa-table"></i>
-						</Icon>
-					</Fragment>
+				{controls && keys.length > 0 && (
+					<select className="nav" value={current} onChange={handleChangeKey}>
+						{!state[param] && <option value={undefined} />}
+						{keys.map((key) => {
+							const dataset = state[key];
+							return (
+								<option key={key} value={key} style={{ backgroundColor: dataset?.color ?? undefined }}>
+									{dataset?.name ?? key}
+								</option>
+							);
+						})}
+					</select>
 				)}
+				<Icon as={"a"} href={`/${current}`} style={{ fontSize: units.rem(1.5) }}>
+					<i title="Overview" className="fa-solid fa-circle-info"></i>
+				</Icon>
+				<Icon as={"a"} href={`/${current}/data`} style={{ fontSize: units.rem(1.5) }}>
+					<i title="Dataset" className="fa-solid fa-table"></i>
+				</Icon>
 			</Spacer>
 			<Spacer as={"div"} direction="row">
-				<Icon as={"button"} onClick={() => input.current?.click()} style={{ padding: units.rem(0.25), fontSize: units.rem(1.5), color: colors.accent }}>
-					<i title="Import Datasets" className="fa-solid fa-upload"></i>
-				</Icon>
-				<input ref={input} type="file" id="file" style={{ display: "none" }} onChange={handleImport} multiple />
+				{controls && (
+					<Fragment>
+						<Icon as={"button"} onClick={() => input.current?.click()} style={{ fontSize: units.rem(1.5), color: colors.accent }}>
+							<i title="Import Datasets" className="fa-solid fa-upload"></i>
+						</Icon>
+						<input ref={input} type="file" id="file" style={{ display: "none" }} onChange={handleImport} multiple />
+					</Fragment>
+				)}
 			</Spacer>
 		</Spacer>
 	);

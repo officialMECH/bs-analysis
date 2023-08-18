@@ -19,7 +19,7 @@ export default function Overview() {
 		);
 	}
 	return (
-		<Templates.Content title={<Title />}>
+		<Templates.Content title={<Title />} controls>
 			<Spacer as={"div"} size={2} direction="column">
 				{dataset ? (
 					<Fragment>

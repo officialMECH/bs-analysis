@@ -16,5 +16,9 @@ export default function Data() {
 			</Fragment>
 		);
 	}
-	return <Templates.Content title={<Title />}>{dataset && <Templates.Table id={key} data={dataset.data} />}</Templates.Content>;
+	return (
+		<Templates.Content title={<Title />} controls>
+			{dataset && <Templates.Table id={key} data={dataset.data} />}
+		</Templates.Content>
+	);
 }
