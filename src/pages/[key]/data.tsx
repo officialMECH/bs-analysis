@@ -6,12 +6,12 @@ import { Fragment } from "react";
 export default function Data() {
 	const { key } = useParams("/:key");
 	const { state: dataset } = useDataset(key);
-	useTitle(dataset ? `Dataset: ${dataset?.name ?? key}` : "Unknown Dataset");
+	useTitle(dataset ? `Data: ${dataset?.name ?? key}` : "Unknown Dataset");
 
 	function Title() {
 		return (
 			<Fragment>
-				<span>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
+				<span style={{ color: dataset && dataset.name ? undefined : "gray" }}>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
 				<Templates.Actions id={key} exists={!!dataset}></Templates.Actions>
 			</Fragment>
 		);

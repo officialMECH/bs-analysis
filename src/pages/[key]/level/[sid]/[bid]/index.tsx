@@ -5,6 +5,7 @@ import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
 import { IData } from "$/types";
 import { predicates } from "$/utils";
+import { Fragment } from "react";
 
 export default function Level() {
 	const { key, sid, bid } = useParams("/:key/level/:sid/:bid");
@@ -26,25 +27,31 @@ export default function Level() {
 		}, null);
 	}
 
-	if (!data) {
-		return (
-			<Templates.Content title={"Unknown Level"}>
-				<p>This level is not available.</p>
-			</Templates.Content>
-		);
-	}
-
 	const Title = () => {
 		return (
 			<Spacer as={"div"} direction="row">
-				{data.title}
-				<div>
-					<Badge>{data.characteristic}</Badge>
-					<Badge color={colors.difficulty(0.5)[data.difficulty]}>{data.difficulty}</Badge>
-				</div>
-				{(data.mappers || data.lighters) && mappers.length > 0 && <span style={{ color: "gray" }}>[{mappers(data)}]</span>}
+				<span style={{ color: data && data.title ? undefined : "gray" }}>{data ? data.title ?? data.id : "Unknown Level"}</span>
+				{data && (
+					<Fragment>
+						<div>
+							<Badge>{data.characteristic}</Badge>
+							<Badge color={colors.difficulty(0.5)[data.difficulty]}>{data.difficulty}</Badge>
+						</div>
+						{(data.mappers || data.lighters) && mappers.length > 0 && <span style={{ color: "gray" }}>[{mappers(data)}]</span>}
+					</Fragment>
+				)}
 			</Spacer>
 		);
 	};
-	return <Templates.Content title={<Title />}></Templates.Content>;
+	return (
+		<Templates.Content title={<Title />}>
+			{data ? (
+				<Spacer as={"div"} size={2} direction="column">
+					<br />
+				</Spacer>
+			) : (
+				"This level is not available."
+			)}
+		</Templates.Content>
+	);
 }

@@ -1,11 +1,11 @@
-import { IData, IStats } from "$/types";
+import { IData, IEntity } from "$/types";
 import { importDuration } from "./duration.helpers";
 
 const HJD_START = 4;
 const HJD_MIN = 0.25;
 const HJ_MAX = 17.999;
 
-export function count(group: IStats | undefined) {
+export function count(group: IEntity | undefined) {
 	return group ? group.total : 0;
 }
 

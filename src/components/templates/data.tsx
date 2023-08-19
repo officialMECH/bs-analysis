@@ -1,6 +1,6 @@
 import { Spacer, Table, columns, icons } from "$/components";
-import { createLevelIndex } from "$/helpers";
-import { IData } from "$/types";
+import { createLevelIndex, sort } from "$/helpers";
+import { Characteristic, Difficulty, IData } from "$/types";
 import { ColumnFiltersState, SortingState, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useState } from "react";
 
@@ -12,12 +12,15 @@ interface Props {
 export default function Data({ id, data }: Props) {
 	const [sorting, setSorting] = useState<SortingState>([
 		{ id: "released", desc: false },
-		{ id: "title", desc: false },
+		{ id: "id", desc: false },
+		{ id: "characteristic", desc: false },
+		{ id: "difficulty", desc: false },
 	]);
+
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
-		id: import.meta.env.DEV,
+		id: false,
 		pack: false,
 		released: false,
 		bombNotes: false,
@@ -45,8 +48,20 @@ export default function Data({ id, data }: Props) {
 		columns: columns,
 		state: { columnVisibility, sorting, columnFilters },
 		defaultColumn: {
-			minSize: 4,
+			minSize: 2,
 			maxSize: 12,
+		},
+		sortingFns: {
+			characteristic: (rowA, rowB) => {
+				const a = rowA.getValue<Characteristic>("characteristic");
+				const b = rowB.getValue<Characteristic>("characteristic");
+				return sort.characteristic(a, b);
+			},
+			difficulty: (rowA, rowB) => {
+				const a = rowA.getValue<Difficulty>("difficulty");
+				const b = rowB.getValue<Difficulty>("difficulty");
+				return sort.difficulty(a, b);
+			},
 		},
 		getRowId: (row, index) => (row.id ? `${row.id}/${createLevelIndex(row)}` : index.toString()),
 		onColumnVisibilityChange: setColumnVisibility,

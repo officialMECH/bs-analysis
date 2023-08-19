@@ -1,8 +1,9 @@
 import { colors } from "$/constants";
-import { parsers } from "$/helpers";
+import { createLevelIndex, parsers, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
+import { IData } from "$/types";
 import saveAs from "file-saver";
-import { ChangeEvent, Fragment, PropsWithChildren, useRef } from "react";
+import { ChangeEvent, Fragment, MouseEvent, PropsWithChildren, useRef } from "react";
 import { Icon, Spacer } from "../containers";
 
 interface Props {
@@ -19,9 +20,21 @@ export default function Actions({ id, exists, children }: PropsWithChildren<Prop
 		if (!files) return;
 		parsers.file(files[0], (_, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset } }));
 	}
-	function handleDownload() {
-		const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-		saveAs(blob, `${id}.json`);
+	function handleDownload(event: MouseEvent<HTMLButtonElement>) {
+		if (!state) return;
+		let data: IData[] | Record<string, IData> = state.data;
+		if (event.shiftKey) {
+			data = data.sort((a, b) => sort.level(a, b));
+			data = data.sort((a, b) => sort.string(a.id, b.id));
+			data = data.sort((a, b) => (a.released && b.released ? sort.released(a.released, b.released) : 0));
+			data = state.data.reduce((record, value) => {
+				return { ...record, [`${value.id}/${createLevelIndex(value)}`]: value };
+			}, {});
+		}
+		parsers.raw({ id, object: { ...state, data } }, (id, dataset) => {
+			const blob = new Blob([JSON.stringify(dataset, null, 2)], { type: "application/json" });
+			saveAs(blob, `${id}.json`);
+		});
 	}
 	function handleDelete() {
 		if (!confirm("Are you sure you want to delete this dataset?")) return;

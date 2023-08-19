@@ -10,14 +10,19 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 	switch (action.type) {
 		case "UPDATE": {
 			const { id, dataset } = action.payload;
-			// flatten data records to array (used in legacy format)
 			const data = Object.values(dataset.data);
-			const valid = data.filter((entry, index) => {
+			const valid = data.filter((entry, index, array) => {
 				const result = schemas.data.safeParse(entry);
 				if (!result.success) {
-					result.error.issues.forEach((issue) => console.error(`[${index}].${issue.path.toString()} | ${issue.message}`));
+					console.error(result.error);
 				}
-				return result.success || import.meta.env.DEV;
+				const match = array.find((x, i) => i > index && x.id === entry.id && x.characteristic === entry.characteristic && x.difficulty === entry.difficulty);
+				// if duplicate data exists, forward all data into the latest entry and remove earlier instances
+				if (result.success && match) {
+					array[array.indexOf(match)] = { ...result.data, ...match };
+					return false;
+				}
+				return result.success;
 			});
 			localStorage.setItem(id, JSON.stringify({ ...dataset, data: valid }));
 			return { ...state, [id]: { ...dataset, data: valid } };

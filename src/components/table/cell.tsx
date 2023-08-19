@@ -1,31 +1,30 @@
 import { units } from "$/helpers";
 import { IData, Polymorphic } from "$/types";
+import { join } from "$/utils";
 import { CellContext } from "@tanstack/react-table";
-import { ElementType } from "react";
+import { ElementType, Fragment, PropsWithChildren } from "react";
 
-type CellProps<D, V> = Pick<CellContext<D, V>, "column"> & { wrapper?: ElementType; width?: number; href?: string };
+type CellProps<D, V> = Pick<CellContext<D, V>, "column"> & { wrapper?: ElementType; href?: string };
 type AccessorCellProps<D, V> = CellProps<D, V> & Pick<CellContext<D, V>, "getValue"> & { transform?: (raw: V | undefined) => unknown };
 
-export function Cell<D extends IData, V, T extends ElementType = "div">({ as, href, wrapper: Wrapper = "span", column, style, children }: Polymorphic<T, CellProps<D, V>>) {
-	const As = as ?? "div";
+export function Cell<D extends IData, V, T extends ElementType = "span">({ as, href, column, style, children }: Polymorphic<T, CellProps<D, V>>) {
+	const Wrapper = as ?? "span";
+	const Parent = <T extends PropsWithChildren>({ children, ...delegated }: T) => (href ? <a {...delegated}>{children}</a> : <Fragment>{children}</Fragment>);
 	return (
-		<As className={"hide-webkit"} style={{ width: units.rem(column.getSize()), whiteSpace: "nowrap", overflowX: "scroll", ...style }}>
-			{href ? (
-				<a href={href}>
-					<Wrapper>{children}</Wrapper>
-				</a>
-			) : (
+		<Parent href={href}>
+			<div className={join("hide-webkit", "horizontal-scroll")} style={{ width: units.rem(column.getSize()), ...style }}>
 				<Wrapper>{children}</Wrapper>
-			)}
-		</As>
+			</div>
+		</Parent>
 	);
 }
 
-export function AccessorCell<D extends IData, V, T extends ElementType = "div">({ getValue, transform, as: wrapper, ...delegated }: Polymorphic<T, AccessorCellProps<D, V>>) {
+export function AccessorCell<D extends IData, V, T extends ElementType = "span">({ getValue, transform, as: wrapper, children, ...delegated }: Polymorphic<T, AccessorCellProps<D, V>>) {
 	const value = getValue();
 	return (
 		<Cell as={wrapper as ElementType} {...delegated}>
 			{transform ? transform(value) : value}
+			{children}
 		</Cell>
 	);
 }

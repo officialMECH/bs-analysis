@@ -1,6 +1,7 @@
 import { units } from "$/helpers";
 
 export const icons = {
+	link: <i className="fa-solid fa-external-link" />,
 	title: <i className="fa-solid fa-t" />,
 	pack: <i className="fa-solid fa-folder-open" />,
 	bpm: <img src="/images/metronome.png" style={{ width: units.rem(1) }} />,
