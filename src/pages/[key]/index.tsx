@@ -1,6 +1,6 @@
 import { Spacer, Templates } from "$/components";
-import { formatters, units } from "$/helpers";
-import { useDataset, useMediaQuery, useTitle } from "$/hooks";
+import { formatters } from "$/helpers";
+import { useDataset, useMobile, useTitle } from "$/hooks";
 import { useParams } from "$/router";
 import { Fragment } from "react";
 
@@ -8,7 +8,7 @@ export default function Overview() {
 	const { key } = useParams("/:key");
 	const { state: dataset } = useDataset(key);
 	useTitle(dataset ? `${dataset?.name ?? key}` : "Unknown Dataset");
-	const mobile = useMediaQuery(`max-width: ${units.px(480)}`);
+	const mobile = useMobile();
 
 	function Title() {
 		return (

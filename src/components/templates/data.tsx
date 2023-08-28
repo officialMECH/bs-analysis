@@ -80,7 +80,6 @@ export default function Data({ id, data }: Props) {
 			<Table.Toggle table={table} icons={icons}></Table.Toggle>
 			<Table.Pagination id={id} table={table}></Table.Pagination>
 			<Table.Table table={table}></Table.Table>
-			{import.meta.env.DEV && <Table.Debug table={table} enabled={false}></Table.Debug>}
 		</Spacer>
 	);
 }

@@ -5,6 +5,7 @@ export const metadata = {
 };
 
 export const colors = {
+	neutral: (opacity = 1) => `hsla(0, 0%, 50%, ${opacity})`,
 	accent: "#287ED4",
 	error: "#c03030",
 	difficulty: (opacity = 1) => {

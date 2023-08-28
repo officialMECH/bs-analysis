@@ -64,7 +64,7 @@ export default function Nav({ controls }: Props) {
 						<Icon as={"button"} onClick={() => input.current?.click()} style={{ fontSize: units.rem(1.5), color: colors.accent }}>
 							<i title="Import Datasets" className="fa-solid fa-upload"></i>
 						</Icon>
-						<input ref={input} type="file" id="file" style={{ display: "none" }} onChange={handleImport} multiple />
+						<input ref={input} type="file" id="file" accept="application/json" style={{ display: "none" }} onChange={handleImport} multiple />
 					</Fragment>
 				)}
 			</Spacer>

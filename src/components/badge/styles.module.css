@@ -1,0 +1,11 @@
+.badge {
+	padding: 0.25rem 1rem;
+	font-weight: bold;
+}
+
+span.badge {
+	background-color: hsla(0, 0%, 50%, 0.25);
+}
+a.badge {
+	background-color: #646cff;
+}

@@ -46,7 +46,7 @@ export default function Actions({ id, exists, children }: PropsWithChildren<Prop
 			<Icon as={"button"} tabIndex={0} onClick={() => input.current?.click()} style={{ color: colors.accent }}>
 				<i title="Overwrite" className="fa-solid fa-file-import"></i>
 			</Icon>
-			<input type="file" id="file" ref={input} style={{ display: "none" }} onChange={handleOverwrite} />
+			<input ref={input} type="file" id="file" accept="application/json" style={{ display: "none" }} onChange={handleOverwrite} />
 			{exists && (
 				<Fragment>
 					<Icon as={"button"} tabIndex={0} onClick={handleDownload} style={{ color: colors.accent }}>

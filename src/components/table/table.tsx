@@ -1,7 +1,6 @@
 import { Table as ITable, flexRender } from "@tanstack/react-table";
 import { Center } from "../containers";
 import Filter from "./filter";
-import wrappers from "./style.module.css";
 
 interface Props<T> {
 	table: ITable<T>;
@@ -10,7 +9,7 @@ interface Props<T> {
 export default function Table<T>({ table }: Props<T>) {
 	return (
 		<Center as={"div"}>
-			<div className={wrappers.table} style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
+			<div style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
 				<table style={{ width: table.getCenterTotalSize() }}>
 					<thead>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -50,7 +49,7 @@ export default function Table<T>({ table }: Props<T>) {
 							<tr key={group.id}>
 								{group.headers.map((footer) => {
 									return (
-										<td key={footer.id} colSpan={footer.colSpan} style={{ width: "inherit", textAlign: "center", color: "#888" }}>
+										<td key={footer.id} colSpan={footer.colSpan} style={{ backgroundColor: "inherit", width: "inherit", textAlign: "center", color: "inherit" }}>
 											{footer.isPlaceholder ? null : flexRender(footer.column.columnDef.footer, footer.getContext())}
 										</td>
 									);

@@ -11,7 +11,7 @@ export const columns = [
 	helper.display({
 		id: "link",
 		size: size.sm,
-		header: (c) => <Cell {...c}>Link</Cell>,
+		header: (c) => <Cell {...c}>Level</Cell>,
 		cell: (c) => (
 			<Cell href={`./level/${c.row.id}`} {...c}>
 				<i className="fa-solid fa-external-link"></i>
@@ -21,6 +21,7 @@ export const columns = [
 	helper.accessor((r) => r.id, {
 		id: "id",
 		size: size.md,
+		filterFn: "equals",
 		header: (c) => <Cell {...c}>ID</Cell>,
 		cell: (c) => <AccessorCell {...c} as={"pre"} style={{ color: c.row.original.id ? "gray" : colors.error }} />,
 	}),
@@ -33,6 +34,7 @@ export const columns = [
 	helper.accessor((r) => r.pack, {
 		id: "pack",
 		size: size.md,
+		filterFn: "equals",
 		header: (c) => <Cell {...c}>Pack</Cell>,
 		cell: (c) => <AccessorCell {...c} />,
 	}),
@@ -57,19 +59,19 @@ export const columns = [
 	helper.accessor((r) => r.characteristic, {
 		id: "characteristic",
 		size: size.md,
-		// @ts-ignore
+		filterFn: "equals",
 		sortingFn: "characteristic",
 		header: (c) => <Cell {...c}>Characteristic</Cell>,
 		cell: (c) => {
 			const value = c.getValue<Characteristic>();
 			const valid = Object.values(schemas.characteristic.Values).includes(value);
-			return <AccessorCell {...c} as={value && valid ? "strong" : "pre"} transform={(value) => (!value ? "MISSING" : !valid ? "INVALID" : value)} style={{ backgroundColor: valid ? "rgba(64, 64, 64, 0.25)" : undefined, color: value && valid ? undefined : colors.error }} />;
+			return <AccessorCell {...c} as={value && valid ? "strong" : "pre"} transform={(value) => (!value ? "MISSING" : !valid ? "INVALID" : value)} style={{ backgroundColor: valid ? colors.neutral(0.25) : undefined, color: value && valid ? undefined : colors.error }} />;
 		},
 	}),
 	helper.accessor((r) => r.difficulty, {
 		id: "difficulty",
 		size: size.md,
-		// @ts-ignore
+		filterFn: "equals",
 		sortingFn: "difficulty",
 		header: (c) => <Cell {...c}>Difficulty</Cell>,
 		cell: (c) => {
