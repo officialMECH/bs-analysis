@@ -1,6 +1,6 @@
-import { colors } from "$/constants";
 import { formatDuration, formatters, hjd, jd, nps, rt } from "$/helpers";
-import { Characteristic, Difficulty, IData, schemas } from "$/types";
+import { token } from "$/styles/tokens";
+import { IData, schemas } from "$/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AccessorCell, Cell } from "./cell";
 
@@ -23,7 +23,7 @@ export const columns = [
 		size: size.md,
 		filterFn: "equals",
 		header: (c) => <Cell {...c}>ID</Cell>,
-		cell: (c) => <AccessorCell {...c} as={"pre"} style={{ color: c.row.original.id ? "gray" : colors.error }} />,
+		cell: (c) => <AccessorCell {...c} as={"pre"} color={() => token("colors.subtext")} />,
 	}),
 	helper.accessor((r) => r.title, {
 		id: "title",
@@ -62,11 +62,7 @@ export const columns = [
 		filterFn: "equals",
 		sortingFn: "characteristic",
 		header: (c) => <Cell {...c}>Characteristic</Cell>,
-		cell: (c) => {
-			const value = c.getValue<Characteristic>();
-			const valid = Object.values(schemas.characteristic.Values).includes(value);
-			return <AccessorCell {...c} as={value && valid ? "strong" : "pre"} transform={(value) => (!value ? "MISSING" : !valid ? "INVALID" : value)} style={{ backgroundColor: valid ? colors.neutral(0.25) : undefined, color: value && valid ? undefined : colors.error }} />;
-		},
+		cell: (c) => <AccessorCell {...c} as={"strong"} background={() => token(`colors.container`)} validate={(value) => !!value && Object.values(schemas.characteristic.Values).includes(value)} transform={(value, valid) => (!value ? "MISSING" : !valid ? "INVALID" : value)} />,
 	}),
 	helper.accessor((r) => r.difficulty, {
 		id: "difficulty",
@@ -74,11 +70,7 @@ export const columns = [
 		filterFn: "equals",
 		sortingFn: "difficulty",
 		header: (c) => <Cell {...c}>Difficulty</Cell>,
-		cell: (c) => {
-			const value = c.getValue<Difficulty>();
-			const valid = Object.values(schemas.difficulty.Values).includes(value);
-			return <AccessorCell {...c} as={value && valid ? "strong" : "pre"} transform={(value) => (!value ? "MISSING" : !valid ? "INVALID" : value)} style={{ backgroundColor: value && valid ? colors.difficulty(0.5)[value] : undefined, color: value && valid ? undefined : colors.error }} />;
-		},
+		cell: (c) => <AccessorCell {...c} as={"strong"} background={(value) => token(`colors.difficulty.${value}`)} validate={(value) => !!value && Object.values(schemas.difficulty.Values).includes(value)} transform={(value, valid) => (!value ? "MISSING" : !valid ? "INVALID" : value)} />,
 	}),
 	helper.accessor((r) => nps(r), {
 		id: "nps",

@@ -1,30 +1,46 @@
-import { units } from "$/helpers";
-import { join } from "$/utils";
+import { cva } from "$/styles/css";
+import { hstack, scrollable, vstack } from "$/styles/patterns";
 import { Fragment, PropsWithChildren, ReactNode } from "react";
-import { Spacer } from "../containers";
 import Nav from "./nav";
 
 interface Props {
 	title: ReactNode;
-	center?: boolean;
-	nav?: boolean;
-	controls?: boolean;
+	layout?: "home" | "basic" | "data" | "level";
 }
 
-export default function Content({ title, center, nav = true, controls, children }: PropsWithChildren<Props>) {
+export default function Content({ title: text, layout, children }: PropsWithChildren<Props>) {
 	return (
 		<main>
-			<Spacer as={"h1"} size={2} style={{ textAlign: center ? "center" : undefined, padding: join(units.rem(0.125)), justifyContent: center ? "center" : "space-between" }} className={join("hide-webkit", !center && "horizontal-scroll")}>
-				{title}
-			</Spacer>
+			<h1 className={styles.title({ center: layout === "home" })}>{text}</h1>
 			<hr />
-			{nav && (
+			{layout && (
 				<Fragment>
-					<Nav controls={controls} />
+					<Nav layout={layout} />
 					<hr />
 				</Fragment>
 			)}
-			{children}
+			<div className={styles.content}>{children}</div>
 		</main>
 	);
 }
+
+const styles = {
+	title: cva({
+		base: scrollable.raw({
+			direction: "horizontal",
+			hideScrollbar: true,
+			padding: 0.5,
+			whiteSpace: "nowrap",
+			fontSize: "3xl",
+		}),
+		variants: {
+			center: {
+				true: hstack.raw({ justifyContent: "center", textAlign: "center", whiteSpace: "normal" }),
+				false: hstack.raw({ gap: 8, justifyContent: "space-between" }),
+			},
+		},
+	}),
+	content: vstack({
+		alignItems: "start",
+	}),
+};

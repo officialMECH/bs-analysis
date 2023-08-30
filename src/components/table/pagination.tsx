@@ -1,7 +1,7 @@
-import { units } from "$/helpers";
 import { useDataset } from "$/hooks";
+import { css } from "$/styles/css";
+import { hstack, vstack } from "$/styles/patterns";
 import { Table } from "@tanstack/react-table";
-import { Spacer } from "../containers";
 
 interface Props<T> {
 	id: string;
@@ -11,8 +11,8 @@ interface Props<T> {
 export default function Pagination<T>({ id, table }: Props<T>) {
 	const { state: dataset } = useDataset(id);
 	return (
-		<Spacer as={"div"} size={0.5} direction="column" center>
-			<Spacer as={"div"} size={0.5} direction="row" center>
+		<div className={styles.column}>
+			<div className={styles.row}>
 				<button onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
 					<i className="fa-solid fa-angles-left"></i>
 				</button>
@@ -25,9 +25,9 @@ export default function Pagination<T>({ id, table }: Props<T>) {
 				<button onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
 					<i className="fa-solid fa-angles-right"></i>
 				</button>
-			</Spacer>
-			<Spacer as={"div"} size={0.5} direction="row" center>
-				<input type="number" defaultValue={table.getState().pagination.pageIndex + 1} onChange={(e) => table.setPageIndex(e.target.value ? Number(e.target.value) - 1 : 0)} style={{ width: units.rem(3) }} />
+			</div>
+			<div className={styles.row}>
+				<input type="number" min={1} max={table.getPageCount()} defaultValue={table.getState().pagination.pageIndex + 1} onChange={(e) => table.setPageIndex(e.target.value ? Number(e.target.value) - 1 : 0)} />
 				<select value={table.getState().pagination.pageSize} onChange={(e) => table.setPageSize(Number(e.target.value))}>
 					{[10, 25, 50, 100, 500, "All"].map((pageSize) => (
 						<option key={pageSize} value={typeof pageSize === "string" ? dataset!.data.length : pageSize}>
@@ -35,10 +35,16 @@ export default function Pagination<T>({ id, table }: Props<T>) {
 						</option>
 					))}
 				</select>
-			</Spacer>
-			<small style={{ fontWeight: "bold" }}>
+			</div>
+			<small className={styles.small}>
 				{table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
 			</small>
-		</Spacer>
+		</div>
 	);
 }
+
+const styles = {
+	column: vstack({}),
+	row: hstack({}),
+	small: css({ fontWeight: "bold" }),
+};

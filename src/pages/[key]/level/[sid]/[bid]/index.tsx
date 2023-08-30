@@ -1,13 +1,15 @@
-import { Badge, Spacer, Templates } from "$/components";
-import { colors } from "$/constants";
+import { Badge, Templates } from "$/components";
 import { resolveLevelIndex } from "$/helpers";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
+import { css, cva } from "$/styles/css";
+import { hstack } from "$/styles/patterns";
+import { token } from "$/styles/tokens";
 import { IData } from "$/types";
 import { predicates } from "$/utils";
 import { Fragment } from "react";
 
-export default function Level() {
+export default function Page() {
 	const { key, sid, bid } = useParams("/:key/level/:sid/:bid");
 	const { state: dataset } = useDataset(key);
 	const data = dataset?.data.find((d) => {
@@ -21,37 +23,64 @@ export default function Level() {
 		return values.map((mapper, i) => {
 			const isMapper = data.mappers && data.mappers.includes(mapper);
 			const isLighter = data.lighters && data.lighters.includes(mapper);
-			const color = isMapper && !isLighter ? colors.mapper.mapper : isLighter && !isMapper ? colors.mapper.lighter : colors.mapper.hybrid;
-			if (i === values.length - 1) return <a style={{ color, fontWeight: "bold" }}>{mapper}</a>;
-			return <span>{<a style={{ color, fontWeight: "bold" }}>{mapper}</a>}, </span>;
+			const type = isMapper && !isLighter ? "mapper" : isLighter && !isMapper ? "lighter" : "hybrid";
+			const Name = <a className={styles.mappers.name({ type })}>{mapper}</a>;
+			if (i === values.length - 1) return Name;
+			return <span>{Name}, </span>;
 		}, null);
 	}
 
-	const Title = () => {
+	function Title() {
 		return (
-			<Spacer as={"div"} direction="row">
-				<span style={{ color: data && data.title ? undefined : "gray" }}>{data ? data.title ?? data.id : "Unknown Level"}</span>
+			<div className={styles.title.wrapper}>
+				<span className={styles.title.name({ exists: !!data?.title })}>{data ? data.title ?? data.id : "Unknown Level"}</span>
 				{data && (
 					<Fragment>
-						<div>
-							<Badge>{data.characteristic}</Badge>
-							<Badge color={colors.difficulty(0.5)[data.difficulty]}>{data.difficulty}</Badge>
+						<div className={styles.level}>
+							<Badge as={"div"}>{data.characteristic}</Badge>
+							<Badge as={"div"} color={token(`colors.difficulty.${data.difficulty}`)}>
+								{data.difficulty}
+							</Badge>
 						</div>
-						{(data.mappers || data.lighters) && mappers.length > 0 && <span style={{ color: "gray" }}>[{mappers(data)}]</span>}
+						{(data.mappers || data.lighters) && mappers.length > 0 && <span className={styles.mappers.list}>[{mappers(data)}]</span>}
 					</Fragment>
 				)}
-			</Spacer>
+			</div>
 		);
-	};
+	}
 	return (
-		<Templates.Content title={<Title />}>
-			{data ? (
-				<Spacer as={"div"} size={2} direction="column">
-					<br />
-				</Spacer>
-			) : (
-				"This level is not available."
-			)}
+		<Templates.Content title={<Title />} layout={"level"}>
+			{data ? <br /> : "This level is not available."}
 		</Templates.Content>
 	);
 }
+
+const styles = {
+	title: {
+		wrapper: hstack({ gap: 4 }),
+		name: cva({
+			variants: {
+				exists: {
+					true: { color: "text" },
+					false: { color: "subtext" },
+				},
+			},
+		}),
+	},
+	level: hstack({ gap: 0 }),
+	mappers: {
+		list: css({ color: "subtext" }),
+		name: cva({
+			base: {
+				fontWeight: "bold",
+			},
+			variants: {
+				type: {
+					mapper: { color: "green.500" },
+					lighter: { color: "fuchsia.500" },
+					hybrid: { color: "violet.500" },
+				},
+			},
+		}),
+	},
+};

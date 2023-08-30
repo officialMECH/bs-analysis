@@ -1,6 +1,7 @@
 import { Templates } from "$/components";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
+import { cva } from "$/styles/css";
 import { Fragment } from "react";
 
 export default function Data() {
@@ -11,14 +12,25 @@ export default function Data() {
 	function Title() {
 		return (
 			<Fragment>
-				<span style={{ color: dataset && dataset.name ? undefined : "gray" }}>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
+				<span className={styles.name({ exists: !!dataset?.name })}>{dataset ? dataset.name ?? key : "Unknown Level"}</span>
 				<Templates.Actions id={key} exists={!!dataset}></Templates.Actions>
 			</Fragment>
 		);
 	}
 	return (
-		<Templates.Content title={<Title />} controls>
+		<Templates.Content title={<Title />} layout={"data"}>
 			{dataset ? <Templates.Table id={key} data={dataset.data} /> : "This dataset is not available."}
 		</Templates.Content>
 	);
 }
+
+const styles = {
+	name: cva({
+		variants: {
+			exists: {
+				true: { color: "text" },
+				false: { color: "subtext" },
+			},
+		},
+	}),
+};

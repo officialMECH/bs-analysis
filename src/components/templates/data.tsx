@@ -1,5 +1,6 @@
-import { Spacer, Table, columns, icons } from "$/components";
+import { Table, columns, icons } from "$/components";
 import { createLevelIndex, sort } from "$/helpers";
+import { vstack } from "$/styles/patterns";
 import { Characteristic, Difficulty, IData } from "$/types";
 import { ColumnFiltersState, SortingState, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useState } from "react";
@@ -76,10 +77,14 @@ export default function Data({ id, data }: Props) {
 	});
 
 	return (
-		<Spacer as={"div"} direction="column">
+		<div className={styles.column}>
 			<Table.Toggle table={table} icons={icons}></Table.Toggle>
 			<Table.Pagination id={id} table={table}></Table.Pagination>
 			<Table.Table table={table}></Table.Table>
-		</Spacer>
+		</div>
 	);
 }
+
+const styles = {
+	column: vstack({ gap: 4, width: "full" }),
+};

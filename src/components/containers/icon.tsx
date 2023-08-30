@@ -1,16 +1,19 @@
-import { units } from "$/helpers";
-import { Polymorphic } from "$/types";
+import { poly } from "$/helpers";
+import { css } from "$/styles/css";
 import { join } from "$/utils";
-import { ElementType, Fragment } from "react";
-import { Center } from "../containers";
+import { HTMLPolymorphicProps } from "@polymorphic-factory/react";
+import { ElementType } from "react";
 
-export default function Icon<T extends ElementType>({ as: wrapper, children, style, ...delegated }: Polymorphic<T>) {
-	const unstyle = wrapper === "button";
+export default function Icon<T extends ElementType>({ as, children, className, ...delegated }: HTMLPolymorphicProps<T>) {
+	const As = poly(as ?? "span");
 	return (
-		<Fragment>
-			<Center as={wrapper as "span"} className={join(unstyle && "unstyled")} style={{ padding: join(0, units.em(0.25)), cursor: unstyle && "pointer", ...style }} {...delegated}>
-				{children}
-			</Center>
-		</Fragment>
+		<As tabIndex={0} className={join(wrapper, className)} {...delegated}>
+			{children}
+		</As>
 	);
 }
+
+const wrapper = css({
+	paddingX: 2,
+	cursor: "pointer",
+});

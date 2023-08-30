@@ -1,17 +1,19 @@
-import { colors } from "$/constants";
 import { createLevelIndex, parsers, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
+import { cva } from "$/styles/css";
+import { hstack } from "$/styles/patterns";
 import { IData } from "$/types";
 import saveAs from "file-saver";
 import { ChangeEvent, Fragment, MouseEvent, PropsWithChildren, useRef } from "react";
-import { Icon, Spacer } from "../containers";
+import Icon from "../containers/icon";
+import IconInput from "../input/icon";
 
 interface Props {
 	id: string;
 	exists?: boolean;
 }
 
-export default function Actions({ id, exists, children }: PropsWithChildren<Props>) {
+export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 	const { state, dispatch } = useDataset(id);
 	const input = useRef<HTMLInputElement | null>(null);
 
@@ -42,22 +44,32 @@ export default function Actions({ id, exists, children }: PropsWithChildren<Prop
 	}
 
 	return (
-		<Spacer as={"div"} direction="row">
-			<Icon as={"button"} tabIndex={0} onClick={() => input.current?.click()} style={{ color: colors.accent }}>
+		<div className={styles.row}>
+			<IconInput className={styles.icon({ variant: "primary" })} onClick={() => input.current?.click()} type="file" id="file" accept="application/json" onChange={handleOverwrite}>
 				<i title="Overwrite" className="fa-solid fa-file-import"></i>
-			</Icon>
-			<input ref={input} type="file" id="file" accept="application/json" style={{ display: "none" }} onChange={handleOverwrite} />
+			</IconInput>
 			{exists && (
 				<Fragment>
-					<Icon as={"button"} tabIndex={0} onClick={handleDownload} style={{ color: colors.accent }}>
+					<Icon className={styles.icon({ variant: "primary" })} onClick={handleDownload}>
 						<i title="Download" className="fa-solid fa-download"></i>
 					</Icon>
-					<Icon as={"button"} tabIndex={0} onClick={handleDelete} style={{ color: colors.error }}>
+					<Icon className={styles.icon({ variant: "error" })} onClick={handleDelete}>
 						<i title="Delete" className="fa-solid fa-trash"></i>
 					</Icon>
 				</Fragment>
 			)}
-			{children}
-		</Spacer>
+		</div>
 	);
 }
+
+const styles = {
+	row: hstack({ gap: 2 }),
+	icon: cva({
+		variants: {
+			variant: {
+				primary: { color: "primary" },
+				error: { color: "error" },
+			},
+		},
+	}),
+};

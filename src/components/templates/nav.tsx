@@ -1,24 +1,24 @@
-import { colors } from "$/constants";
-import { parsers, units } from "$/helpers";
+import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
 import { Path, useNavigate } from "$/router";
-import { join } from "$/utils";
-import { ChangeEvent, Fragment, useRef, useState } from "react";
-import { Icon, Spacer } from "../containers";
+import { css, cva } from "$/styles/css";
+import { hstack, scrollable, wrap } from "$/styles/patterns";
+import { ChangeEvent, Fragment, useState } from "react";
+import { Badge } from "..";
+import Icon from "../containers/icon";
+import IconInput from "../input/icon";
 
 interface Props {
-	controls?: boolean;
+	layout?: "home" | "basic" | "data" | "level";
 }
 
-export default function Nav({ controls }: Props) {
+export default function Nav({ layout = "basic" }: Props) {
 	const param = location.pathname.split("/")[1];
 	const [current, setCurrent] = useState<string>(param);
 	const navigate = useNavigate();
 
 	const { state, dispatch } = useDatasets();
 	const keys = Object.keys(state);
-
-	const input = useRef<HTMLInputElement | null>(null);
 
 	function handleChangeKey(e: ChangeEvent<HTMLSelectElement>) {
 		setCurrent(e.target.value);
@@ -33,41 +33,100 @@ export default function Nav({ controls }: Props) {
 	}
 
 	return (
-		<Spacer as={"nav"} direction="row" className={join("hide-webkit", "horizontal-scroll")} style={{ padding: units.rem(0.125), justifyContent: "space-between" }}>
-			<Spacer as={"div"} size={0.5} direction="row">
-				<Icon as={"a"} href={`/`} style={{ fontSize: units.rem(1.5) }}>
-					<i title="Home" className="fa-solid fa-home"></i>
-				</Icon>
-				{controls && keys.length > 0 && (
-					<select className="nav" value={current} onChange={handleChangeKey}>
+		<div className={styles.wrapper({ center: layout === "home" })}>
+			<div className={styles.row}>
+				{layout !== "home" && (
+					<Icon as={"a"} className={styles.icon()} href={`/`}>
+						<i title="Home" className="fa-solid fa-home"></i>
+					</Icon>
+				)}
+				{layout === "home" && (
+					<div className={styles.list}>
+						{keys.map((key) => {
+							const dataset = state[key];
+							return (
+								<Badge key={key} color={dataset?.color ?? undefined} href={`${key}`}>
+									{dataset?.name ?? key}
+								</Badge>
+							);
+						})}
+					</div>
+				)}
+				{["data"].includes(layout) && keys.length > 0 && (
+					<select className={styles.select} value={current} onChange={handleChangeKey}>
 						{!state[param] && <option value={undefined} />}
 						{keys.map((key) => {
 							const dataset = state[key];
 							return (
-								<option key={key} value={key} style={{ backgroundColor: dataset?.color ?? undefined }}>
+								<option key={key} value={key}>
 									{dataset?.name ?? key}
 								</option>
 							);
 						})}
 					</select>
 				)}
-				<Icon as={"a"} href={`/${current}`} style={{ fontSize: units.rem(1.5) }}>
-					<i title="Overview" className="fa-solid fa-circle-info"></i>
-				</Icon>
-				<Icon as={"a"} href={`/${current}/data`} style={{ fontSize: units.rem(1.5) }}>
-					<i title="Dataset" className="fa-solid fa-table"></i>
-				</Icon>
-			</Spacer>
-			<Spacer as={"div"} direction="row">
-				{controls && (
+				{["data", "level"].includes(layout) && (
 					<Fragment>
-						<Icon as={"button"} onClick={() => input.current?.click()} style={{ fontSize: units.rem(1.5), color: colors.accent }}>
-							<i title="Import Datasets" className="fa-solid fa-upload"></i>
+						<Icon as={"a"} className={styles.icon()} href={`/${current}`}>
+							<i title="Overview" className="fa-solid fa-circle-info"></i>
 						</Icon>
-						<input ref={input} type="file" id="file" accept="application/json" style={{ display: "none" }} onChange={handleImport} multiple />
+						<Icon as={"a"} className={styles.icon()} href={`/${current}/data`}>
+							<i title="Data" className="fa-solid fa-table"></i>
+						</Icon>
 					</Fragment>
 				)}
-			</Spacer>
-		</Spacer>
+			</div>
+			<div className={styles.row}>
+				{layout !== "level" && (
+					<Fragment>
+						<IconInput className={styles.icon({ type: "primary" })} type="file" id="file" accept="application/json" onChange={handleImport} multiple>
+							<i title="Import Datasets" className="fa-solid fa-upload"></i>
+						</IconInput>
+					</Fragment>
+				)}
+			</div>
+		</div>
 	);
 }
+
+const styles = {
+	wrapper: cva({
+		base: scrollable.raw({
+			direction: "horizontal",
+			hideScrollbar: true,
+			padding: 0.5,
+		}),
+		variants: {
+			center: {
+				true: wrap.raw({ justifyContent: "center" }),
+				false: hstack.raw({ gap: 2, justifyContent: "space-between" }),
+			},
+		},
+	}),
+	list: wrap({}),
+	row: hstack({ gap: 2 }),
+	select: css({
+		fontSize: "md",
+		fontWeight: "bold",
+		backgroundColor: "link",
+		color: "white",
+		paddingY: 1,
+		paddingX: 4,
+		cursor: "pointer",
+		transition: "background-color 0.25s",
+		"&:not([disabled]):hover": {
+			backgroundColor: "indigo.400",
+		},
+	}),
+	icon: cva({
+		base: {
+			fontSize: "2xl",
+		},
+		variants: {
+			type: {
+				primary: { color: "primary" },
+				error: { color: "error" },
+			},
+		},
+	}),
+};
