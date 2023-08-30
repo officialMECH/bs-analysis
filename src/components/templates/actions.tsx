@@ -5,8 +5,7 @@ import { hstack } from "$/styles/patterns";
 import { IData } from "$/types";
 import saveAs from "file-saver";
 import { ChangeEvent, Fragment, MouseEvent, PropsWithChildren, useRef } from "react";
-import Icon from "../containers/icon";
-import IconInput from "../input/icon";
+import { Icon, IconInput } from "..";
 
 interface Props {
 	id: string;

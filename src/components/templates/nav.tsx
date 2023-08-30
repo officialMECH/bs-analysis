@@ -4,9 +4,7 @@ import { Path, useNavigate } from "$/router";
 import { css, cva } from "$/styles/css";
 import { hstack, scrollable, wrap } from "$/styles/patterns";
 import { ChangeEvent, Fragment, useState } from "react";
-import { Badge } from "..";
-import Icon from "../containers/icon";
-import IconInput from "../input/icon";
+import { Badge, Icon, IconInput } from "..";
 
 interface Props {
 	layout?: "home" | "basic" | "data" | "level";

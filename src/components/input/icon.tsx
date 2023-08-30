@@ -1,6 +1,5 @@
 import { css } from "$/styles/css";
-import { ComponentProps } from "$/styles/types/jsx";
-import { Fragment, useRef } from "react";
+import { ComponentProps, Fragment, useRef } from "react";
 import { Icon } from "..";
 
 export default function IconInput({ children, className, ...delegated }: ComponentProps<"input">) {

@@ -1,7 +1,7 @@
 import { wrap } from "$/styles/patterns";
 import { Table } from "@tanstack/react-table";
 import { ReactNode } from "react";
-import Checkbox from "../input/checkbox";
+import { Checkbox } from "..";
 
 interface Props<T> {
 	table: Table<T>;

@@ -1,7 +1,6 @@
 import { css, cva } from "$/styles/css";
 import { center } from "$/styles/patterns";
-import { ComponentProps } from "$/styles/types/jsx";
-import { Fragment, useRef } from "react";
+import { ComponentProps, Fragment, useRef } from "react";
 
 export default function Checkbox({ id, checked, onChange, children, ...delegated }: ComponentProps<"input">) {
 	const input = useRef<HTMLInputElement | null>(null);
