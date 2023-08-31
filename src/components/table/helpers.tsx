@@ -41,6 +41,7 @@ export const columns = [
 	helper.accessor((r) => r.released, {
 		id: "released",
 		size: size.md,
+		sortingFn: "datetime",
 		header: (c) => <Cell {...c}>Released</Cell>,
 		cell: (c) => <AccessorCell {...c} transform={(value) => (value ? new Date(value).toLocaleString() : undefined)} />,
 	}),

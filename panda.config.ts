@@ -10,10 +10,12 @@ export default defineConfig({
 			backgroundColor: "background",
 			color: "text",
 			colorScheme: "light dark",
+		},
+		body: {
 			maxWidth: "6xl",
 			marginX: "auto",
 		},
-		body: {
+		main: {
 			margin: 8,
 		},
 		"&:focus": {
@@ -43,19 +45,23 @@ export default defineConfig({
 			},
 		},
 		details: {
+			width: "full",
 			"& summary": {
+				paddingY: 2,
+				paddingX: 4,
 				backgroundColor: "container",
 				cursor: "pointer",
 				display: "flex",
 				justifyContent: "space-between",
+				fontWeight: "bold",
 			},
 			"& summary::after": {
-				content: "▶",
-				paddingY: 0,
-				paddingX: 4,
+				fontFamily: "system",
+				content: '"▶"',
 			},
 			"&[open] summary::after": {
-				content: "▼",
+				fontFamily: "system",
+				content: '"▼"',
 			},
 			"& summary > *": {
 				paddingY: 2,

@@ -107,6 +107,7 @@ const styles = {
 		fontSize: "md",
 		fontWeight: "bold",
 		backgroundColor: "link",
+		border: 0,
 		color: "white",
 		paddingY: 1,
 		paddingX: 4,
@@ -118,6 +119,8 @@ const styles = {
 	}),
 	icon: cva({
 		base: {
+			width: 8,
+			height: 8,
 			fontSize: "2xl",
 		},
 		variants: {

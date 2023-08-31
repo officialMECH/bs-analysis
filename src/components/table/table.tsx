@@ -1,6 +1,6 @@
 import { center, scrollable } from "$/styles/patterns";
 import { Table as ITable, flexRender } from "@tanstack/react-table";
-import Filter from "./filter";
+import Actions from "./actions";
 
 interface Props<T> {
 	table: ITable<T>;
@@ -18,7 +18,7 @@ export default function Table<T>({ table }: Props<T>) {
 									return (
 										<th key={header.id} colSpan={header.colSpan}>
 											{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-											{header.column.getCanFilter() && <Filter column={header.column} table={table} />}
+											<Actions table={table} header={header} />
 										</th>
 									);
 								})}

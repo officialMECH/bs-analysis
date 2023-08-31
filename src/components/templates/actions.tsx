@@ -62,8 +62,12 @@ export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 }
 
 const styles = {
-	row: hstack({ gap: 2 }),
+	row: hstack({ gap: 4 }),
 	icon: cva({
+		base: {
+			width: 8,
+			height: 8,
+		},
 		variants: {
 			variant: {
 				primary: { color: "primary" },

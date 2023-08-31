@@ -53,9 +53,6 @@ export default function Filter<T, V>({ column, table }: Props<T, V>) {
 }
 
 const styles = {
-	wrapper: flex({ gap: 0.5 }),
-	input: css({
-		width: `full`,
-		hideWebkit: true,
-	}),
+	wrapper: flex({ width: 48, gap: 0.5 }),
+	input: css({ width: "full", hideWebkit: true }),
 };
