@@ -1,14 +1,17 @@
 {
 	"name": "bs-analysis",
 	"private": true,
-	"version": "0.0.0",
 	"type": "module",
+	"packageManager": "yarn@3.6.3",
 	"scripts": {
 		"prepare": "panda codegen --clean",
+		"postinstall": "husky install",
 		"dev": "vite",
 		"build": "tsc && vite build",
-		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"test": "vitest",
+		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives",
+		"format": "prettier src"
 	},
 	"dependencies": {
 		"@floating-ui/react": "^0.25.2",
@@ -33,6 +36,8 @@
 		"eslint": "^8.44.0",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-react-refresh": "^0.4.1",
+		"husky": "^8.0.3",
+		"prettier": "^3.0.3",
 		"typescript": "^5.0.2",
 		"vite": "^4.4.0",
 		"vitest": "^0.33.0"
