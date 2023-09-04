@@ -1,6 +1,6 @@
 # Generator Scripts
 
-These scripts will provide a means of generating datasets from a variety of sources that are compatible with the web app. There are plans to eventually have support for creating new datasets from within the app, but this should hopefully serve as a temporary solution.
+These scripts will provide a means of generating datasets that are compatible with the web app from a variety of sources. There are plans to eventually have support for creating new datasets from within the app, but this should hopefully serve as a temporary solution.
 
 [Node.js](https://nodejs.dev/en/learn/) is required to compile/run these scripts. You can install dependencies using [Yarn](https://yarnpkg.com/getting-started) (if you're cloning locally) or your preferred package manager (if you'd rather yoink these scripts and use them in your own preferred engine/framework).
 
@@ -20,7 +20,7 @@ In addition, _all scripts are self-contained and operate independently from the 
 
 The configuration file is used to specify additional parameters for generation, such as metadata and other script-specific processes.
 
-```json
+```ts
 {
 	"metadata": {
 		"name": string,
@@ -42,7 +42,7 @@ While each script will prompt you for a configuration file, it's technically not
 
 The `tsv` field provides the necessary parameters to parse each cell of the table to their respective properties. You can refer to the following syntax.
 
-```json
+```ts
 {
 	"tsv": {
 		"indices": {
@@ -55,7 +55,7 @@ The `tsv` field provides the necessary parameters to parse each cell of the tabl
 }
 ```
 
-- `indices`: The properties to be extracted from the table. For each key, the provided tuple will match the column index of the cell (`[0]`) and supplied transformer (`[1]`) to its corresponding data property. See the reference table below for the correct keys.
+- `indices`: The properties to be extracted from the table. For each `key`, the provided tuple will match the column index of the cell (`number`) and supplied transformer (`type`) to its corresponding data property. See the reference table below for the list of supported keys and their respective types.
 - `start`: The starting row index for filtering. Useful if you have blank/header cells that you want to exclude.
 - `end`: The ending row index for filtering. Useful if you have blank/footer cells that you want to exclude.
 - `ids`: If an `id` column is not available within your table, you can supply an array of strings here to retroactively apply `id` mappings to your entries (each `id` will be remapped according to the index of all unique entries in the `title` column that are available after serialization). If this field is not present in the configuration file, the script will instead ask you to manually provide the appropriate `id` for each individual song.
