@@ -10,8 +10,8 @@
 		"build": "tsc && vite build",
 		"preview": "vite preview",
 		"test": "vitest",
-		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives",
-		"format": "prettier src"
+		"lint": "eslint src --report-unused-disable-directives",
+		"format": "prettier src \"!src/router.ts\""
 	},
 	"dependencies": {
 		"@floating-ui/react": "^0.25.2",
@@ -37,6 +37,7 @@
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-react-refresh": "^0.4.1",
 		"husky": "^8.0.3",
+		"lint-staged": "^14.0.1",
 		"prettier": "^3.0.3",
 		"typescript": "^5.0.2",
 		"vite": "^4.4.0",

@@ -1,0 +1,3 @@
+{
+	"*.{html,css,js,jsx,ts,tsx,json}": ["yarn lint --fix", "yarn format --write"]
+}
