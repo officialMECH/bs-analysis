@@ -11,16 +11,17 @@ interface Props {
 }
 
 export default function Nav({ layout = "basic" }: Props) {
-	const param = location.pathname.split("/")[1];
-	const [current, setCurrent] = useState<string>(param);
+	const pathname = location.pathname.replace(import.meta.env.BASE_URL, "");
+	const param = pathname.split("/")[0];
 	const navigate = useNavigate();
+	const [current, setCurrent] = useState<string>(param);
 
 	const { state, dispatch } = useDatasets();
 	const keys = Object.keys(state);
 
 	function handleChangeKey(e: ChangeEvent<HTMLSelectElement>) {
 		setCurrent(e.target.value);
-		return navigate(location.pathname.replace(param, e.target.value) as Path);
+		return navigate(`/${pathname.replace(param, e.target.value)}` as Path);
 	}
 	function handleImport(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
@@ -34,7 +35,7 @@ export default function Nav({ layout = "basic" }: Props) {
 		<div className={styles.wrapper({ center: layout === "home" })}>
 			<div className={styles.row}>
 				{layout !== "home" && (
-					<Icon as={"a"} className={styles.icon()} href={`/`}>
+					<Icon as={"a"} className={styles.icon()} href={import.meta.env.BASE_URL}>
 						<i title="Home" className="fa-solid fa-home"></i>
 					</Icon>
 				)}
@@ -43,7 +44,7 @@ export default function Nav({ layout = "basic" }: Props) {
 						{keys.map((key) => {
 							const dataset = state[key];
 							return (
-								<Badge key={key} color={dataset?.color ?? undefined} href={`${key}`}>
+								<Badge key={key} color={dataset?.color ?? undefined} href={import.meta.env.BASE_URL.concat(key)}>
 									{dataset?.name ?? key}
 								</Badge>
 							);
@@ -65,10 +66,10 @@ export default function Nav({ layout = "basic" }: Props) {
 				)}
 				{["data", "level"].includes(layout) && (
 					<Fragment>
-						<Icon as={"a"} className={styles.icon()} href={`/${current}`}>
+						<Icon as={"a"} className={styles.icon()} href={import.meta.env.BASE_URL.concat(current)}>
 							<i title="Overview" className="fa-solid fa-circle-info"></i>
 						</Icon>
-						<Icon as={"a"} className={styles.icon()} href={`/${current}/data`}>
+						<Icon as={"a"} className={styles.icon()} href={import.meta.env.BASE_URL.concat(`${current}/data`)}>
 							<i title="Data" className="fa-solid fa-table"></i>
 						</Icon>
 					</Fragment>

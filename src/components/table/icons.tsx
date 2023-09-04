@@ -1,17 +1,24 @@
+import arc from "/images/arc.png";
+import bomb from "/images/bomb.png";
+import metronome from "/images/metronome.png";
+import note from "/images/note.png";
+import nps from "/images/nps.png";
+import obstacle from "/images/obstacle.png";
+
 export const icons = {
 	link: <i className="fa-solid fa-external-link" />,
 	title: <i className="fa-solid fa-t" />,
 	pack: <i className="fa-solid fa-folder-open" />,
-	bpm: <img src="/images/metronome.png" style={{ width: "1rem" }} />,
+	bpm: <img src={metronome} style={{ width: "1rem" }} />,
 	length: <i className="fa-solid fa-clock" />,
 	released: <i className="fa-solid fa-calendar-days" />,
 	characteristic: <i className="fa-solid fa-list" />,
 	difficulty: <i className="fa-solid fa-star" />,
-	nps: <img src="/images/nps.png" style={{ width: "1.25rem" }} />,
-	colorNotes: <img src="/images/note.png" style={{ width: "1.25rem" }} />,
-	bombNotes: <img src="/images/bomb.png" style={{ width: "1.25rem" }} />,
-	obstacles: <img src="/images/obstacle.png" style={{ width: "1.25rem" }} />,
-	sliders: <img src="/images/arc.png" style={{ width: "1rem" }} />,
+	nps: <img src={nps} style={{ width: "1.25rem" }} />,
+	colorNotes: <img src={note} style={{ width: "1.25rem" }} />,
+	bombNotes: <img src={bomb} style={{ width: "1.25rem" }} />,
+	obstacles: <img src={obstacle} style={{ width: "1.25rem" }} />,
+	sliders: <img src={arc} style={{ width: "1rem" }} />,
 	burstSliders: <i className="fa-solid fa-link" />,
 	basicBeatmapEvents: <i className="fa-solid fa-cube" />,
 	colorBoostBeatmapEvents: <i className="fa-solid fa-bolt" />,
