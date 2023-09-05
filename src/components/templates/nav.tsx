@@ -1,3 +1,4 @@
+import { metadata } from "$/constants";
 import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
 import { Path, useNavigate } from "$/router";
@@ -39,6 +40,9 @@ export default function Nav({ layout = "basic" }: Props) {
 						<i title="Home" className="fa-solid fa-home"></i>
 					</Icon>
 				)}
+				<Icon as={"a"} target="_blank" className={styles.icon()} href={metadata.repository}>
+					<i title="Repository" className="fa-brands fa-github"></i>
+				</Icon>
 				{layout === "home" && (
 					<div className={styles.list}>
 						{keys.map((key) => {

@@ -50,7 +50,7 @@ export default function Page() {
 	}
 	return (
 		<Templates.Content title={<Title />} layout={"level"}>
-			{data ? <br /> : "This level is not available."}
+			{data ? <Templates.Stub /> : "This level is not available."}
 		</Templates.Content>
 	);
 }

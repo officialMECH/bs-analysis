@@ -6,9 +6,10 @@ import Nav from "./nav";
 interface Props {
 	title: ReactNode;
 	layout?: "home" | "basic" | "data" | "level";
+	gap?: number;
 }
 
-export default function Content({ title: text, layout, children }: PropsWithChildren<Props>) {
+export default function Content({ title: text, layout, gap = 8, children }: PropsWithChildren<Props>) {
 	return (
 		<main>
 			<h1 className={styles.title({ center: layout === "home" })}>{text}</h1>
@@ -19,7 +20,9 @@ export default function Content({ title: text, layout, children }: PropsWithChil
 					<hr />
 				</Fragment>
 			)}
-			<div className={styles.content}>{children}</div>
+			<div className={styles.content({ center: layout === "home" })} style={{ gap: gap * 4 }}>
+				{children}
+			</div>
 		</main>
 	);
 }
@@ -40,7 +43,13 @@ const styles = {
 			},
 		},
 	}),
-	content: vstack({
-		alignItems: "start",
+	content: cva({
+		base: vstack.raw({}),
+		variants: {
+			center: {
+				true: { alignItems: "center" },
+				false: { alignItems: "start" },
+			},
+		},
 	}),
 };

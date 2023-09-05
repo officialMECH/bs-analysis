@@ -53,6 +53,8 @@ export default defineConfig({
 				cursor: "pointer",
 				display: "flex",
 				justifyContent: "space-between",
+				gap: 8,
+				alignItems: "center",
 				fontWeight: "bold",
 			},
 			"& summary::after": {
@@ -65,9 +67,8 @@ export default defineConfig({
 			},
 			"& summary > *": {
 				paddingY: 2,
-				marginX: 4,
 			},
-			"& *:not(summary) ": {
+			"& section ": {
 				paddingY: 2,
 				marginX: 4,
 			},
@@ -97,7 +98,7 @@ export default defineConfig({
 			},
 		},
 		p: {
-			marginBottom: 3,
+			marginBottom: 2,
 		},
 		pre: {
 			fontFamily: "monospace",

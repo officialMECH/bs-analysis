@@ -12,7 +12,7 @@ export default function Data() {
 	function Title() {
 		return (
 			<Fragment>
-				<span className={styles.name({ exists: !!dataset?.name })}>{dataset ? dataset.name ?? key : "Unknown Level"}</span>
+				<span className={styles.name({ exists: !!dataset?.name })}>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
 				<Templates.Actions id={key} exists={!!dataset}></Templates.Actions>
 			</Fragment>
 		);
