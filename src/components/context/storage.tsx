@@ -1,15 +1,18 @@
+import { datasets } from "$/constants";
 import { IData, IDataset, PayloadAction, schemas } from "$/types";
 import { omit } from "$/utils";
-import { Dispatch, PropsWithChildren, Reducer, createContext, useReducer } from "react";
+import { Dispatch, PropsWithChildren, Reducer, createContext, useEffect, useReducer } from "react";
 
 type T = IDataset<IData[]> | undefined;
 type State = Record<string, T>;
-type Actions = PayloadAction<{ id: string; dataset: IDataset }, "UPDATE"> | PayloadAction<{ id: string }, "DELETE"> | PayloadAction<{ id: string }, "DOWNLOAD">;
+type Actions = PayloadAction<{ id: string; dataset: IDataset; overwrite?: boolean }, "UPDATE"> | PayloadAction<{ id: string }, "DELETE"> | PayloadAction<{ id: string }, "DOWNLOAD">;
 
 const reducer: Reducer<State, Actions> = (state, action) => {
 	switch (action.type) {
 		case "UPDATE": {
-			const { id, dataset } = action.payload;
+			const { id, dataset, overwrite } = action.payload;
+			const exists = Object.keys(state).includes(id);
+			if (exists && !overwrite) return state;
 			const data = Object.values(dataset.data);
 			const valid = data.filter((entry, index, array) => {
 				const result = schemas.data.safeParse(entry);
@@ -44,6 +47,12 @@ const Context = createContext<{ state: State; dispatch: Dispatch<Actions> }>({ s
 
 function StorageProvider({ children }: PropsWithChildren) {
 	const [state, dispatch] = useReducer<Reducer<State, Actions>>(reducer, storage);
+	useEffect(() => {
+		Object.entries(datasets).forEach(([key, contents]) => {
+			const name = key.split("/")[key.split("/").length - 1].split(".")[0];
+			dispatch({ type: "UPDATE", payload: { id: name, dataset: schemas.dataset.parse(contents), overwrite: false } });
+		});
+	}, []);
 	return <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>;
 }
 
