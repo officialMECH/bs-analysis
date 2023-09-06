@@ -1,10 +1,10 @@
 # Beat Saber Map Analysis
 
-This is a web application which provides a comprehensive interface for statistical analysis of Beat Saber maps.
+This is a web application that provides a comprehensive interface for statistical analysis of Beat Saber maps.
 
 ## Getting Started
 
-A live deployment and related documentation will be available soon™.
+Documentation will be available soon™.
 
 The OST/DLC dataset will be added following the next content update for Beat Saber, and will be natively accessible from within the application by default.
 
@@ -16,4 +16,4 @@ You can check out the [Contributor's Guide](./.github/CONTRIBUTING.md) for guide
 
 ## Contact
 
-For any other questions or concerns, you're welcome to leave your thoughts in the [**Discussions**](https://github.com/officialMECH/bs-analysis/discussions) feed or reach out to me via Discord at `@officialMECH`.
+For any other questions or concerns, you're welcome to leave your thoughts in the [Discussions](https://github.com/officialMECH/bs-analysis/discussions) feed or reach out to me via Discord at `@officialMECH`.
