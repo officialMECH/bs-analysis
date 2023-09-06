@@ -40,7 +40,9 @@ jobs:
       - name: Prepare
         run: yarn prepare
       - name: Build
-        run: yarn build --base="/${{ github.event.repository.name }}/"
+        run: |
+          yarn build --base="/${{ github.event.repository.name }}/"
+          cp ./dist/index.html ./dist/404.html
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
