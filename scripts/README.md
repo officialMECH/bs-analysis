@@ -4,30 +4,37 @@ These scripts will provide a means of generating datasets that are compatible wi
 
 [Node.js](https://nodejs.dev/en/learn/) is required to compile/run these scripts. You can install dependencies using [Yarn](https://yarnpkg.com/getting-started) (if you're cloning locally) or your preferred package manager (if you'd rather yoink these scripts and use them in your own preferred engine/framework).
 
-In addition, _all scripts are self-contained and operate independently from the rest of the application._ This means you're welcome to just grab the snippets you need if you don't feel like cloning the entire repository or you prefer using a different environment/framework for parsing external schemas.
+If you're cloning the repository, you can enter the following command to run any of the respective scripts in the root terminal:
+
+```sh
+> node scripts/[name].js
+```
+
+In addition, _all scripts are self-contained and operate independently from the rest of the application._ This means you're welcome to just grab the snippets you need if you don't feel like cloning the entire repository or prefer using a different environment/framework for parsing external schemas.
 
 ## Available Scripts
 
-- `merge.ts`: Used to combine multiple datasets together, merging fields on related entries and overriding stale properties. Useful if your data is fragmented across multiple sources.
-- `tsv.ts`: Generate a dataset from a `.tsv` file.
-- `directory.ts`: Generate a dataset from a valid map directory.
-- `archive.ts`: Generate a dataset from a `.zip` archive of a valid map directory.
-- `beatsaver.ts`: Generate a dataset from a collection of maps available on BeatSaver. Support is also available to pool _all_ maps from specified user(s) if provided.
+- `merge.js`: Used to combine multiple datasets together, merging fields on related entries and overriding stale properties. Useful if your data is fragmented across multiple sources.
+- `tsv.js`: Generate a dataset from a `.tsv` file.
+- `directory.js`: Generate a dataset from a valid map directory.
+- `archive.js`: Generate a dataset from a `.zip` archive of a valid map directory.
+- `beatsaver.js`: Generate a dataset from a collection of maps available on BeatSaver. Support is also available to pool _all_ maps from specified users if provided.
 
 > **NOTE**: `helpers.js` is not a script file, but rather a collection of helper functions used across these scripts.
 
 ## Configuration File
 
-The configuration file is used to specify additional parameters for generation, such as metadata and other script-specific processes.
+The configuration file is used to specify additional parameters for generation, such as metadata and other script-specific processes. You can refer to the following syntax:
 
 ```ts
 {
-	"metadata": {
-		"name": string,
-		"description": string,
-		"contributors": string[],
-		'updated': Date
-	}
+  "metadata": {
+    "name": string,
+    "description": string,
+    "contributors": string[],
+    'updated': Date
+  },
+  ...
 }
 ```
 
@@ -40,25 +47,26 @@ While each script will prompt you for a configuration file, it's technically not
 
 ### `tsv.js`
 
-The `tsv` field provides the necessary parameters to parse each cell of the table to their respective properties. You can refer to the following syntax.
+The `tsv` field provides the necessary parameters to parse each cell of the table to their respective properties. You can refer to the following syntax:
 
 ```ts
 {
-	"tsv": {
-		"indices": {
-			[key]: [number, type]
-		},
-		"start": number,
-		"end": number,
-		"ids": string[]
-	}
+  ...,
+  "tsv": {
+    "indices": {
+      [key]: [number, type]
+    },
+    "start": number,
+    "end": number,
+    "ids": string[]
+  }
 }
 ```
 
 - `indices`: The properties to be extracted from the table. For each `key`, the provided tuple will match the column index of the cell (`number`) and supplied transformer (`type`) to its corresponding data property. See the reference table below for the list of supported keys and their respective types.
-- `start`: The starting row index for filtering. Useful if you have blank/header cells that you want to exclude.
-- `end`: The ending row index for filtering. Useful if you have blank/footer cells that you want to exclude.
-- `ids`: If an `id` column is not available within your table, you can supply an array of strings here to retroactively apply `id` mappings to your entries (each `id` will be remapped according to the index of all unique entries in the `title` column that are available after serialization). If this field is not present in the configuration file, the script will instead ask you to manually provide the appropriate `id` for each individual song.
+- `start` _(optional)_: The starting row index for filtering. Useful if you have blank/header cells that you want to exclude.
+- `end` _(optional)_: The ending row index for filtering. Useful if you have blank/footer cells that you want to exclude.
+- `ids` _(optional)_: If an `id` column is not available within your table, you can supply an array of strings here to retroactively apply `id` mappings to your entries (each `id` will be remapped according to the index of all unique entries in the `title` column that are available after serialization). If this field is not present in the configuration file, the script will instead ask you to manually provide the appropriate `id` for each individual song.
 
 #### Transformer Reference
 
