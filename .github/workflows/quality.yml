@@ -43,3 +43,20 @@ jobs:
         run: yarn prepare
       - name: Run Prettier
         run: yarn format --check
+  test:
+    name: Run Unit Tests (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Prepare
+        run: yarn prepare
+      - name: Run Vitest
+        run: yarn test
