@@ -14,7 +14,7 @@ export default function Pagination<T>({ id, table }: Props<T>) {
 		<div className={styles.column}>
 			<div className={styles.row}>
 				<button onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
-					<i className="fa-solid fa-angles-left"></i>
+					<i className="fa-solid fa-angles-left" />
 				</button>
 				<button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
 					<i className="fa-solid fa-angle-left" />
@@ -23,7 +23,7 @@ export default function Pagination<T>({ id, table }: Props<T>) {
 					<i className="fa-solid fa-angle-right" />
 				</button>
 				<button onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
-					<i className="fa-solid fa-angles-right"></i>
+					<i className="fa-solid fa-angles-right" />
 				</button>
 			</div>
 			<div className={styles.row}>

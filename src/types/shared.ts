@@ -6,7 +6,4 @@ const difficulty = z.enum(["Easy", "Normal", "Hard", "Expert", "Expert+"]);
 export type Characteristic = z.infer<typeof characteristic>;
 export type Difficulty = z.infer<typeof difficulty>;
 
-export default {
-	characteristic,
-	difficulty,
-};
+export default { characteristic, difficulty };

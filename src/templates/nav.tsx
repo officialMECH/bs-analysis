@@ -1,11 +1,11 @@
+import { Badge, Icon, UnstyledInput } from "$/components";
 import { metadata } from "$/constants";
 import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
 import { Path, useNavigate } from "$/router";
-import { css, cva } from "$/styles/css";
+import { css, cva, cx } from "$/styles/css";
 import { hstack, scrollable, wrap } from "$/styles/patterns";
 import { ChangeEvent, Fragment, useState } from "react";
-import { Badge, Icon, IconInput } from "..";
 
 interface Props {
 	layout?: "home" | "basic" | "data" | "level";
@@ -36,12 +36,12 @@ export default function Nav({ layout = "basic" }: Props) {
 		<div className={styles.wrapper({ center: layout === "home" })}>
 			<div className={styles.row}>
 				{layout !== "home" && (
-					<Icon as={"a"} className={styles.icon()} href={import.meta.env.BASE_URL}>
-						<i title="Home" className="fa-solid fa-home"></i>
+					<Icon asChild className={cx("fa-solid fa-home", styles.icon)}>
+						<a href={import.meta.env.BASE_URL} />
 					</Icon>
 				)}
-				<Icon as={"a"} target="_blank" className={styles.icon()} href={metadata.repository}>
-					<i title="Repository" className="fa-brands fa-github"></i>
+				<Icon asChild title="Repository" className={cx("fa-brands fa-github", styles.icon)}>
+					<a href={metadata.repository} target="_blank" />
 				</Icon>
 				{layout === "home" && (
 					<div className={styles.list}>
@@ -70,11 +70,11 @@ export default function Nav({ layout = "basic" }: Props) {
 				)}
 				{["data", "level"].includes(layout) && (
 					<Fragment>
-						<Icon as={"a"} className={styles.icon()} href={import.meta.env.BASE_URL.concat(current)}>
-							<i title="Overview" className="fa-solid fa-circle-info"></i>
+						<Icon asChild title="Overview" className={cx("fa-solid fa-circle-info", styles.icon)}>
+							<a href={import.meta.env.BASE_URL.concat(current)} />
 						</Icon>
-						<Icon as={"a"} className={styles.icon()} href={import.meta.env.BASE_URL.concat(`${current}/data`)}>
-							<i title="Data" className="fa-solid fa-table"></i>
+						<Icon asChild title="Data" className={cx("fa-solid fa-table", styles.icon)}>
+							<a href={import.meta.env.BASE_URL.concat(`${current}/data`)} />
 						</Icon>
 					</Fragment>
 				)}
@@ -82,9 +82,9 @@ export default function Nav({ layout = "basic" }: Props) {
 			<div className={styles.row}>
 				{layout !== "level" && (
 					<Fragment>
-						<IconInput className={styles.icon({ type: "primary" })} type="file" id="file" accept="application/json" onChange={handleImport} multiple>
-							<i title="Import Datasets" className="fa-solid fa-upload"></i>
-						</IconInput>
+						<UnstyledInput type="file" id="file" accept="application/json" onChange={handleImport} multiple>
+							<Icon variant="primary" title="Import Datasets" className={cx("fa-solid fa-upload", styles.icon)} />
+						</UnstyledInput>
 					</Fragment>
 				)}
 			</div>
@@ -107,7 +107,7 @@ const styles = {
 		},
 	}),
 	list: wrap({}),
-	row: hstack({ gap: 2 }),
+	row: hstack({ gap: 3 }),
 	select: css({
 		fontSize: "md",
 		fontWeight: "bold",
@@ -122,17 +122,5 @@ const styles = {
 			backgroundColor: "indigo.400",
 		},
 	}),
-	icon: cva({
-		base: {
-			width: 8,
-			height: 8,
-			fontSize: "2xl",
-		},
-		variants: {
-			type: {
-				primary: { color: "primary" },
-				error: { color: "error" },
-			},
-		},
-	}),
+	icon: css({ fontSize: "2xl" }),
 };

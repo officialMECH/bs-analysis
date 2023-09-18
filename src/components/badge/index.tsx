@@ -1,10 +1,12 @@
-import { poly } from "$/helpers";
 import { cva } from "$/styles/css";
-import { HTMLPolymorphicProps } from "@polymorphic-factory/react";
-import { ElementType } from "react";
+import { ComponentPropsWithoutRef } from "react";
 
-export default function Badge<T extends ElementType>({ href, children, color, ...delegated }: HTMLPolymorphicProps<T>) {
-	const As = poly(href ? "a" : "span");
+interface Props extends ComponentPropsWithoutRef<"span"> {
+	href?: string;
+}
+
+export default function Badge({ href, children, color, ...delegated }: Props) {
+	const As = href ? "a" : "span";
 	return (
 		<As href={href} className={wrapper({ link: !!href })} style={{ backgroundColor: color }} {...delegated}>
 			{children}

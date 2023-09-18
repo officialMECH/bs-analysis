@@ -1,7 +1,7 @@
 import { wrap } from "$/styles/patterns";
 import { Table } from "@tanstack/react-table";
 import { ReactNode } from "react";
-import { Checkbox } from "..";
+import { Toggle as Button } from "..";
 
 interface Props<T> {
 	table: Table<T>;
@@ -14,9 +14,9 @@ export default function Toggle<T>({ table, icons = {} }: Props<T>) {
 			{table.getAllLeafColumns().map((c) => {
 				if (["link"].includes(c.id)) return null;
 				return (
-					<Checkbox key={c.id} id={c.id} checked={c.getIsVisible()} onChange={c.getToggleVisibilityHandler()}>
+					<Button key={c.id} id={c.id} checked={c.getIsVisible()} onChange={c.getToggleVisibilityHandler()}>
 						{icons[c.id] ?? c.id}
-					</Checkbox>
+					</Button>
 				);
 			})}
 		</div>

@@ -1,6 +1,6 @@
-import { Templates } from "$/components";
 import { css, cva } from "$/styles/css";
 import { flex, hstack, vstack } from "$/styles/patterns";
+import Templates from "$/templates";
 import { PropsWithChildren } from "react";
 
 function Section({ heading, direction, gap = 8, children }: PropsWithChildren<{ heading?: string; gap?: number; direction?: "column" | "row" }>) {
@@ -53,7 +53,7 @@ export default function App() {
 				</Feature>
 			</Section>
 			<Section heading="Credits">
-				<Templates.Profile name="officialMECH" role="Lead Developer, Maintainer"></Templates.Profile>
+				<Templates.Profile name="officialMECH" role="Lead Developer, Maintainer" />
 			</Section>
 		</Templates.Content>
 	);

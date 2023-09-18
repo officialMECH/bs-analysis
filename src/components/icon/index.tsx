@@ -1,20 +1,26 @@
-import { poly } from "$/helpers";
-import { center } from "$/styles/patterns";
-import { join } from "$/utils";
-import { HTMLPolymorphicProps } from "@polymorphic-factory/react";
-import { ElementType } from "react";
+import { cva, cx } from "$/styles/css";
+import { AsChildProps } from "$/types";
+import { Slot } from "@radix-ui/react-slot";
 
-export default function Icon<T extends ElementType>({ as, children, className, ...delegated }: HTMLPolymorphicProps<T>) {
-	const As = poly(as ?? "span");
+interface Props {
+	variant?: "primary" | "danger";
+}
+
+export default function Icon({ asChild, variant, children, className, ...delegated }: AsChildProps<"i"> & Props) {
+	const As = asChild ? Slot : "i";
 	return (
-		<As tabIndex={0} className={join(wrapper, className)} {...delegated}>
+		<As tabIndex={0} className={cx(wrapper({ variant }), className && className)} {...delegated}>
 			{children}
 		</As>
 	);
 }
 
-const wrapper = center({
-	minWidth: 6,
-	minHeight: 6,
-	cursor: "pointer",
+const wrapper = cva({
+	base: { cursor: "pointer" },
+	variants: {
+		variant: {
+			primary: { color: "primary" },
+			danger: { color: "danger" },
+		},
+	},
 });

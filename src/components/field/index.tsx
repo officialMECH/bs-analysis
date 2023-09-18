@@ -1,8 +1,7 @@
-import { css } from "$/styles/css";
+import { css, cx } from "$/styles/css";
 import { hstack, vstack } from "$/styles/patterns";
-import { join } from "$/utils";
 import { ComponentProps, ReactNode } from "react";
-import Tooltip from "../floating/tooltip";
+import { Tooltip } from "..";
 
 interface Props extends ComponentProps<"input"> {
 	heading: string;
@@ -10,7 +9,7 @@ interface Props extends ComponentProps<"input"> {
 	tooltip?: () => ReactNode;
 }
 
-export default function InputField({ heading, subheading, tooltip, onClick, ...delegated }: Props) {
+export default function Field({ heading, subheading, tooltip, onClick, children, ...delegated }: Props) {
 	return (
 		<div className={styles.group}>
 			<h2 className={styles.row}>
@@ -18,11 +17,11 @@ export default function InputField({ heading, subheading, tooltip, onClick, ...d
 				{subheading && <small className={styles.subheading}>{subheading}</small>}
 				{tooltip && (
 					<Tooltip render={tooltip}>
-						<i className={join("fa-solid fa-question-circle", styles.tooltip)} onClick={onClick}></i>
+						<i className={cx("fa-solid fa-question-circle", styles.tooltip)} onClick={onClick} />
 					</Tooltip>
 				)}
 			</h2>
-			<input {...delegated} />
+			{children ?? <input {...delegated} />}
 		</div>
 	);
 }

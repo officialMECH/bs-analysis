@@ -16,7 +16,7 @@ function parse(data: { id: string; object: unknown }, callback: Callback) {
 	throw result.error;
 }
 
-export const parsers = {
+export default {
 	raw: parse,
 	file: (file: File, callback: Callback) => {
 		const id = file.name.split(".")[0];

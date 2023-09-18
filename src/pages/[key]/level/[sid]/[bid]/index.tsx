@@ -1,10 +1,11 @@
-import { Badge, Templates } from "$/components";
+import { Badge } from "$/components";
 import { resolveLevelIndex } from "$/helpers";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
 import { css, cva } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
+import Templates from "$/templates";
 import { IData } from "$/types";
 import { predicates } from "$/utils";
 import { Fragment } from "react";
@@ -37,10 +38,8 @@ export default function Page() {
 				{data && (
 					<Fragment>
 						<div className={styles.level}>
-							<Badge as={"div"}>{data.characteristic}</Badge>
-							<Badge as={"div"} color={token(`colors.difficulty.${data.difficulty}`)}>
-								{data.difficulty}
-							</Badge>
+							<Badge>{data.characteristic}</Badge>
+							<Badge color={token(`colors.difficulty.${data.difficulty}`)}>{data.difficulty}</Badge>
 						</div>
 						{(data.mappers || data.lighters) && mappers.length > 0 && <span className={styles.mappers.list}>[{mappers(data)}]</span>}
 					</Fragment>

@@ -1,7 +1,7 @@
-import { Templates } from "$/components";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
 import { cva } from "$/styles/css";
+import Templates from "$/templates";
 import { Fragment } from "react";
 
 export default function Data() {
@@ -13,7 +13,7 @@ export default function Data() {
 		return (
 			<Fragment>
 				<span className={styles.name({ exists: !!dataset?.name })}>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
-				<Templates.Actions id={key} exists={!!dataset}></Templates.Actions>
+				<Templates.Actions id={key} exists={!!dataset} />
 			</Fragment>
 		);
 	}

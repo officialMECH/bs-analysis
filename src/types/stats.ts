@@ -56,4 +56,4 @@ export type IEntity<T = unknown> = z.infer<typeof entity> & Partial<T>;
 export type IData = z.infer<typeof data>;
 export type IDataset<T = z.infer<typeof format>> = Omit<z.infer<typeof dataset>, "data"> & { data: T };
 
-export default { stats: entity, data, format, dataset };
+export default { entity, data, format, dataset };

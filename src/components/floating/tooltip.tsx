@@ -12,7 +12,7 @@ interface Props {
 	}>;
 }
 
-export default function Popover({ render, options = { placement: "top", offset: 4 }, children }: PropsWithChildren<Props>) {
+export default function Tooltip({ render, options = { placement: "top", offset: 4 }, children }: PropsWithChildren<Props>) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const { refs, floatingStyles, context } = useFloating({

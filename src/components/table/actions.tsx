@@ -1,4 +1,4 @@
-import { cva } from "$/styles/css";
+import { cva, cx } from "$/styles/css";
 import { center } from "$/styles/patterns";
 import { Header, SortDirection, Table } from "@tanstack/react-table";
 import { Fragment, MouseEvent } from "react";
@@ -11,38 +11,33 @@ interface Props<D> {
 }
 
 export default function Actions<D>({ table, header }: Props<D>) {
-	const SortIcon = (props: { direction: false | SortDirection }) => {
-		if (!props.direction) return <i className="fa-solid fa-sort" />;
+	function getSortIcon(props: { direction: false | SortDirection }) {
+		if (!props.direction) return "fa-solid fa-sort";
 		const direction = header.column.getSortingFn().name === "basic" ? header.column.getNextSortingOrder() : props.direction;
-		return direction === "asc" ? <i className="fa-solid fa-caret-up" /> : <i className="fa-solid fa-caret-down" />;
-	};
+		return direction === "asc" ? "fa-solid fa-caret-up" : "fa-solid fa-caret-down";
+	}
 	function handleClickSort(event: MouseEvent<HTMLElement>) {
 		const handler = header.column.getToggleSortingHandler();
 		if (event.shiftKey) event.preventDefault();
 		if (handler) handler(event);
 	}
+	const sortIcon = getSortIcon({ direction: header.column.getIsSorted() });
 	return (
 		<Fragment>
 			<div className={styles.actions}>
 				{header.column.getCanFilter() && (
 					<Popover render={() => <Filter table={table} column={header.column} />}>
-						<Icon as={"span"} className={styles.icon({ active: !!header.column.getIsFiltered() })}>
-							{<i className="fa-solid fa-filter" />}
-						</Icon>
+						<Icon className={cx("fa-solid fa-filter", styles.icon({ active: !!header.column.getIsFiltered() }))} />
 					</Popover>
 				)}
-				{header.column.getCanSort() && (
-					<Icon as={"span"} onClick={(event: MouseEvent<HTMLElement>) => handleClickSort(event)} className={styles.icon({ active: !!header.column.getIsSorted() })}>
-						{<SortIcon direction={header.column.getIsSorted()} />}
-					</Icon>
-				)}
+				{header.column.getCanSort() && <Icon onClick={(event: MouseEvent<HTMLElement>) => handleClickSort(event)} className={cx(sortIcon, styles.icon({ active: !!header.column.getIsSorted() }))} />}
 			</div>
 		</Fragment>
 	);
 }
 
 const styles = {
-	actions: center({ color: "neutral" }),
+	actions: center({ gap: 1, color: "neutral" }),
 	icon: cva({
 		variants: {
 			active: {

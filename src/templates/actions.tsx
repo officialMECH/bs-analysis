@@ -1,12 +1,12 @@
+import { Icon, UnstyledInput } from "$/components";
 import { datasets } from "$/constants";
 import { createLevelIndex, parsers, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
-import { cva } from "$/styles/css";
+import { cx } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
 import { IData, schemas } from "$/types";
 import saveAs from "file-saver";
 import { ChangeEvent, Fragment, MouseEvent, PropsWithChildren, useRef } from "react";
-import { Icon, IconInput } from "..";
 
 interface Props {
 	id: string;
@@ -54,24 +54,14 @@ export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 
 	return (
 		<div className={styles.row}>
-			<IconInput className={styles.icon({ variant: "primary" })} onClick={() => input.current?.click()} type="file" id="file" accept="application/json" onChange={handleOverwrite}>
-				<i title="Overwrite" className="fa-solid fa-file-import"></i>
-			</IconInput>
+			<UnstyledInput onClick={() => input.current?.click()} type="file" id="file" accept="application/json" onChange={handleOverwrite}>
+				<Icon title="Overwrite" variant="primary" className={cx("fa-solid fa-file-import")} />
+			</UnstyledInput>
 			{exists && (
 				<Fragment>
-					<Icon className={styles.icon({ variant: "primary" })} onClick={handleDownload}>
-						<i title="Download" className="fa-solid fa-download"></i>
-					</Icon>
-					{!isInternal && (
-						<Icon className={styles.icon({ variant: "error" })} onClick={handleDelete}>
-							<i title="Delete" className="fa-solid fa-trash"></i>
-						</Icon>
-					)}
-					{isInternal && (
-						<Icon className={styles.icon({ variant: "primary" })} onClick={handleRefresh}>
-							<i title="Refresh" className="fa-solid fa-refresh"></i>
-						</Icon>
-					)}
+					<Icon title="Download" variant="primary" className={cx("fa-solid fa-download")} onClick={handleDownload} />
+					{!isInternal && <Icon title="Delete" variant="danger" className={cx("fa-solid fa-trash")} onClick={handleDelete} />}
+					{isInternal && <Icon title="Refresh" variant="primary" className={cx("fa-solid fa-refresh")} onClick={handleRefresh} />}
 				</Fragment>
 			)}
 		</div>
@@ -80,16 +70,4 @@ export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 
 const styles = {
 	row: hstack({ gap: 4 }),
-	icon: cva({
-		base: {
-			width: 8,
-			height: 8,
-		},
-		variants: {
-			variant: {
-				primary: { color: "primary" },
-				error: { color: "error" },
-			},
-		},
-	}),
 };

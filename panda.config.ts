@@ -44,18 +44,23 @@ export default defineConfig({
 				cursor: "not-allowed",
 			},
 		},
+		"code, pre": {
+			fontFamily: "monospace",
+			fontSize: "md",
+		},
 		details: {
 			width: "full",
 			"& summary": {
 				paddingY: 2,
 				paddingX: 4,
-				backgroundColor: "container",
+				backgroundColor: "element",
 				cursor: "pointer",
 				display: "flex",
 				justifyContent: "space-between",
 				gap: 8,
 				alignItems: "center",
 				fontWeight: "bold",
+				fontSize: "xl",
 			},
 			"& summary::after": {
 				fontFamily: "system",
@@ -130,7 +135,7 @@ export default defineConfig({
 					subtext: { value: { base: "{colors.zinc.600}", _osDark: "{colors.zinc.400}" } },
 					neutral: { value: { base: "{colors.zinc.500}" } },
 					primary: { value: { base: "{colors.blue.500}" } },
-					error: { value: { base: "{colors.red.600}" } },
+					danger: { value: { base: "{colors.red.600}" } },
 					link: { value: { base: "{colors.indigo.500}" } },
 					difficulty: {
 						["Easy"]: { value: { base: "{colors.green.200}", _osDark: "{colors.green.800}" } },
@@ -149,7 +154,7 @@ export default defineConfig({
 				description: "A container that allows for scrolling",
 				properties: {
 					// The direction of the scroll
-					direction: { type: "enum", value: ["horizontal", "vertical"] },
+					direction: { type: "enum", value: ["horizontal", "vertical", "both"] },
 					// Whether to hide the scrollbar
 					hideScrollbar: { type: "boolean" },
 				},
@@ -158,10 +163,10 @@ export default defineConfig({
 				transform(props: Partial<{ direction: "horizontal" | "vertical"; hideScrollbar: boolean }>) {
 					const { direction, hideScrollbar, ...rest } = props;
 					return {
-						overflowX: direction === "horizontal" ? "auto" : "hidden",
-						overflowY: direction === "vertical" ? "auto" : "hidden",
-						height: direction === "horizontal" ? "full" : "auto",
-						width: direction === "vertical" ? "full" : "auto",
+						overflowX: direction !== "vertical" ? "auto" : "hidden",
+						overflowY: direction !== "horizontal" ? "auto" : "hidden",
+						height: direction !== "vertical" ? "full" : "auto",
+						width: direction !== "horizontal" ? "full" : "auto",
 						scrollbarWidth: hideScrollbar ? "none" : "auto",
 						hideWebkit: hideScrollbar,
 						...rest,

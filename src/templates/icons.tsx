@@ -5,7 +5,7 @@ import note from "/images/note.png";
 import nps from "/images/nps.png";
 import obstacle from "/images/obstacle.png";
 
-export const icons = {
+export default {
 	link: <i className="fa-solid fa-external-link" />,
 	title: <i className="fa-solid fa-t" />,
 	pack: <i className="fa-solid fa-folder-open" />,
