@@ -44,7 +44,7 @@ export default function Overview() {
 							)}
 						</div>
 					)}
-					<Templates.Stub />
+					<Templates.Charts id={key} />
 				</Fragment>
 			) : (
 				"This dataset is not available."
