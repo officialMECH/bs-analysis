@@ -10,7 +10,7 @@ interface Props {
 	theme?: string;
 }
 
-export default function Chart({ option, style, settings, show = true, loading, theme }: Props): JSX.Element | null {
+export default function Chart({ option, style, settings = { notMerge: true }, show = true, loading, theme }: Props): JSX.Element | null {
 	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
