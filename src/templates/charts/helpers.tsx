@@ -63,6 +63,36 @@ export const base = {
 			}),
 		};
 	},
+	time: (dataset, transformer, options, filter = () => true) => {
+		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
+		const cells = data.map((x) => {
+			const date = new Date(transformer(x));
+			return { hours: date.getHours(), day: date.getDay() };
+		});
+		return {
+			...template,
+			...options,
+			xAxis: { type: "category", data: ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"] },
+			yAxis: { type: "category", data: ["Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"] },
+			visualMap: {
+				min: 0,
+				max: 500,
+				calculable: true,
+				orient: "horizontal",
+				left: "center",
+			},
+			series: {
+				type: "heatmap",
+				data: cells.map((cell) => {
+					const values = data.filter((x) => {
+						const date = new Date(transformer(x));
+						return date.getDay() === cell.day && date.getHours() === cell.hours;
+					});
+					return [cell.hours, cell.day, values.length];
+				}),
+			},
+		};
+	},
 } satisfies Record<string, Chart>;
 
 export const styles = {

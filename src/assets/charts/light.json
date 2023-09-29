@@ -6,6 +6,9 @@
 	"legend": {
 		"textStyle": { "color": "#18181b" }
 	},
+	"visualMap": {
+		"textStyle": { "color": "#18181b" }
+	},
 	"label": { "color": "#3f3f46" },
 	"categoryAxis": {
 		"axisLine": { "lineStyle": { "color": "#71717a" } },
