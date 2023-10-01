@@ -1,0 +1,23 @@
+{
+	"title": {
+		"textStyle": { "color": "#18181b" },
+		"subtextStyle": { "color": "#52525b" }
+	},
+	"legend": {
+		"textStyle": { "color": "#18181b" }
+	},
+	"visualMap": {
+		"textStyle": { "color": "#18181b" }
+	},
+	"label": { "color": "#3f3f46" },
+	"categoryAxis": {
+		"axisLine": { "lineStyle": { "color": "#71717a" } },
+		"splitLine": { "lineStyle": { "color": "#71717a" } },
+		"axisLabel": { "color": "#3f3f46" }
+	},
+	"valueAxis": {
+		"axisLine": { "lineStyle": { "color": "#71717a" } },
+		"splitLine": { "lineStyle": { "color": "#71717a" } },
+		"axisLabel": { "color": "#3f3f46" }
+	}
+}
