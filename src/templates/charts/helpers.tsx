@@ -49,7 +49,7 @@ export const base = {
 		return {
 			...template,
 			...options,
-			xAxis: { type: "category", data: titles, axisTick: { show: false }, axisLabel: { show: false } },
+			xAxis: { type: "category", axisTick: { show: false }, axisLabel: { show: false }, data: titles },
 			series: difficulties.map((difficulty) => {
 				const values = data.filter((x) => x.difficulty === difficulty && transformer(x) !== undefined);
 				return {
@@ -69,27 +69,22 @@ export const base = {
 			const date = new Date(transformer(x));
 			return { hours: date.getHours(), day: date.getDay() };
 		});
+		const totals = cells.map((cell) => {
+			const values = data.filter((x) => {
+				const date = new Date(transformer(x));
+				return date.getDay() === cell.day && date.getHours() === cell.hours;
+			});
+			return values.length;
+		});
 		return {
 			...template,
 			...options,
 			xAxis: { type: "category", data: ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"] },
 			yAxis: { type: "category", data: ["Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"] },
-			visualMap: {
-				min: 0,
-				max: 500,
-				calculable: true,
-				orient: "horizontal",
-				left: "center",
-			},
+			visualMap: { min: 0, max: Math.max(...totals), calculable: true, orient: "horizontal", left: "center" },
 			series: {
 				type: "heatmap",
-				data: cells.map((cell) => {
-					const values = data.filter((x) => {
-						const date = new Date(transformer(x));
-						return date.getDay() === cell.day && date.getHours() === cell.hours;
-					});
-					return [cell.hours, cell.day, values.length];
-				}),
+				data: cells.map((cell, i) => [cell.hours, cell.day, totals[i]]),
 			},
 		};
 	},
