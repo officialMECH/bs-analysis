@@ -66,4 +66,4 @@ const dataset = await entries.reduce(async (record, entry) => {
 	return { ...(await record), [`${detail.id}/${bid}`]: data };
 }, Promise.resolve({}));
 
-writeFileSync(output, JSON.stringify({ updated: new Date().toISOString(), ...metadata, data: dataset }, null, 2));
+writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, 2));

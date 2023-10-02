@@ -18,7 +18,7 @@ const dataset = files.reduce((original, entry) => {
 	if (entry.name === "config.json") return original;
 	const path = join(directory, entry.name);
 	const raw = JSON.parse(readFileSync(path, { encoding: "utf-8" }));
-	const data = [original, raw].reduce((record, current) => {
+	return [original, raw.data].reduce((record, current) => {
 		const entries = Object.entries(current).sort(sort);
 		entries.forEach(([key, value]) => {
 			record[key] ??= {};
@@ -26,7 +26,6 @@ const dataset = files.reduce((original, entry) => {
 		});
 		return record;
 	}, {});
-	return { ...original, ...data };
 }, {});
 
-writeFileSync(output, JSON.stringify({ updated: new Date().toISOString(), ...metadata, data: dataset }, null, 2));
+writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, 2));
