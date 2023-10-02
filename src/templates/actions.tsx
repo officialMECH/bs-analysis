@@ -35,6 +35,7 @@ export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 	}
 	function handleDownload(event: MouseEvent<HTMLButtonElement>) {
 		if (!state) return;
+		event.preventDefault();
 		let data: IData[] | Record<string, IData> = state.data;
 		data = data.sort((a, b) => sort.level(a, b));
 		data = data.sort((a, b) => sort.string(a.id, b.id));
@@ -43,7 +44,7 @@ export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 			return { ...record, [`${value.id}/${createLevelIndex(value)}`]: value };
 		}, {});
 		parsers.raw({ id, object: { ...state, data } }, (id, dataset) => {
-			const blob = new Blob([JSON.stringify(dataset, null, 2)], { type: "application/json" });
+			const blob = new Blob([JSON.stringify(dataset, null, event.shiftKey ? 0 : 2)], { type: "application/json" });
 			saveAs(blob, `${id}.json`);
 		});
 	}
