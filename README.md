@@ -4,9 +4,9 @@ This is a web application that provides a comprehensive interface for statistica
 
 ## Getting Started
 
-Documentation will be available soon™.
+The **OST/DLC** dataset is available by default from within the application. You can use the controls at the top-right of the Overview/Data pages to freely override a built-in dataset with new metadata, or likewise refresh the dataset to pull the latest updates from the repository.
 
-The OST/DLC dataset will be added following the next content update for Beat Saber, and will be natively accessible from within the application by default.
+**We currently don't have plans to support any additional built-in datasets at this time**, but you're welcome to share any custom datasets you've made in the corresponding [Discussions](https://github.com/officialMECH/bs-analysis/discussions/categories/community-datasets) feed.
 
 If you'd like to create your own datasets, [generator scripts](./scripts/README.md) are available which will allow you to create a dataset from a multitude of sources through the command line. Support for generating datasets in-app will be available in the near future.
 
