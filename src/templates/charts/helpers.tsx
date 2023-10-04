@@ -10,7 +10,7 @@ export interface ChartProps {
 	height?: number;
 }
 
-type Chart = (dataset: IDataset<IData[]>, transformer: (data: IData) => string | number | Date, options?: EChartsOption, filter?: (data: IData) => boolean) => EChartsOption;
+type Chart = (dataset: IDataset<IData[]>, transformer: (data: IData) => string | number | Date | undefined, options?: EChartsOption, filter?: (data: IData) => boolean) => EChartsOption | null;
 
 const template: EChartsOption = {
 	animation: false,
@@ -24,7 +24,7 @@ const template: EChartsOption = {
 export const base = {
 	pie: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x));
-		const series = dataset.data.map(transformer).filter(predicates.unique);
+		const series = data.map(transformer).filter(predicates.unique);
 		return {
 			...template,
 			...options,
@@ -33,10 +33,10 @@ export const base = {
 			series: {
 				type: "pie",
 				data: series.map((serie) => {
-					const values = data.filter((x) => transformer(x) === serie && transformer(x) !== undefined);
+					const values = data.filter((x) => transformer(x) === serie);
 					return {
 						value: values.length,
-						name: serie.toString(),
+						name: serie!.toString(),
 					};
 				}),
 			},
@@ -44,18 +44,19 @@ export const base = {
 	},
 	level: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
-		const difficulties = dataset.data.map((x) => x.difficulty).filter(predicates.unique);
+		if (data.length === 0) return null;
+		const difficulties = data.map((x) => x.difficulty).filter(predicates.unique);
 		const titles = data.map((x) => x.title ?? x.id).filter(predicates.unique);
 		return {
 			...template,
 			...options,
 			xAxis: { type: "category", axisTick: { show: false }, axisLabel: { show: false }, data: titles },
 			series: difficulties.map((difficulty) => {
-				const values = data.filter((x) => x.difficulty === difficulty && transformer(x) !== undefined);
+				const values = data.filter((x) => x.difficulty === difficulty);
 				return {
 					type: "scatter",
 					name: difficulty,
-					data: values.map((x) => [titles.indexOf(x.title ?? x.id), transformer(x)]),
+					data: values.map((x) => [titles.indexOf(x.title ?? x.id), transformer(x)!]),
 					markLine: {
 						data: [{ type: "average", name: "Average" }],
 					},
@@ -65,13 +66,14 @@ export const base = {
 	},
 	time: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
+		if (data.length === 0) return null;
 		const cells = data.map((x) => {
-			const date = new Date(transformer(x));
+			const date = new Date(transformer(x)!);
 			return { hours: date.getHours(), day: date.getDay() };
 		});
 		const totals = cells.map((cell) => {
 			const values = data.filter((x) => {
-				const date = new Date(transformer(x));
+				const date = new Date(transformer(x)!);
 				return date.getDay() === cell.day && date.getHours() === cell.hours;
 			});
 			return values.length;

@@ -11,6 +11,9 @@ export default function LevelCharts({ id, show, theme, height }: ChartProps) {
 	const [idx, setIdx] = useState(0);
 	const [pack, setPack] = useState("All");
 	const [characteristic, setCharacteristic] = useState("Standard");
+	const packs = Object.values(state!.data.map((x) => x.pack).filter((x, i, a) => !!x && predicates.unique(x, i, a)));
+
+	if (!show) return null;
 
 	const filter = (x: IData) => {
 		const withPack = pack !== "All" ? x.pack === pack : true;
@@ -18,16 +21,17 @@ export default function LevelCharts({ id, show, theme, height }: ChartProps) {
 	};
 
 	const charts = [
-		base.level(state!, (x) => calc.nps(x)!.toFixed(2), { title: { text: "Level Distribution", subtext: "by NPS" }, yAxis: { min: 0 } }, filter), //
-		base.level(state!, (x) => x.jumpSpeed!, { title: { text: "Level Distribution", subtext: "by Jump Speed" }, yAxis: { min: 10 } }, filter),
-		base.level(state!, (x) => calc.jd(x)!.toFixed(3)!, { title: { text: "Level Distribution", subtext: "by Jump Distance" }, yAxis: { min: 10 } }, filter),
-	];
-	const packs = Object.values(state!.data.map((x) => x.pack).filter((x, i, a) => !!x && predicates.unique(x, i, a)));
+		base.level(state!, (x) => calc.nps(x)?.toFixed(2), { title: { text: "Level Distribution", subtext: "by NPS" }, yAxis: { min: 0 } }, filter), //
+		base.level(state!, (x) => x.jumpSpeed, { title: { text: "Level Distribution", subtext: "by Jump Speed" }, yAxis: { min: 10 } }, filter),
+		base.level(state!, (x) => calc.jd(x)?.toFixed(3), { title: { text: "Level Distribution", subtext: "by Jump Distance" }, yAxis: { min: 10 } }, filter),
+	].filter((x) => !!x);
+	if (charts.length === 0) return null;
 
-	if (!show) return null;
+	if (charts.length <= idx) setIdx(charts.length - 1);
+
 	return (
 		<div className={styles.column}>
-			<Chart style={{ height }} theme={theme} option={charts[idx]}></Chart>
+			<Chart style={{ height }} theme={theme} option={charts[idx]!}></Chart>
 			<div className={styles.row}>
 				<select disabled={pack === "All" && packs.length < 2} value={pack} onChange={(e) => setPack(e.target.value)}>
 					{["All", ...packs, pack].filter(predicates.unique).map((x) => (
