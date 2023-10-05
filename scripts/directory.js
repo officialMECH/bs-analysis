@@ -6,7 +6,7 @@ import { default as prompt } from "prompts";
 import slugify from "slugify";
 import { CHARACTERISTICS, DIFFICULTIES, config, createLevelIndex, fromEntries, resolveLevelStats } from "./helpers.js";
 
-const { details, directory, metadata, output } = await config(false, [
+const { details, directory, metadata, output, minify } = await config(false, [
 	{ name: "directory", type: "text", message: "Directory" }, //
 ]);
 
@@ -35,4 +35,4 @@ const dataset = await entries.reduce(async (record, entry) => {
 	return { ...(await record), [`${sid}/${bid}`]: data };
 }, Promise.resolve({}));
 
-writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, 2));
+writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, minify ? 0 : 2));

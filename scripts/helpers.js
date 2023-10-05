@@ -44,16 +44,16 @@ export const predicates = {
 /**
  * @param {boolean} required
  * @param {import("prompts").PromptObject[]} prompts
- * @returns
  */
 export async function config(required, prompts) {
-	const details = ["-d", "--details"].includes(process.argv[2]);
+	const details = ["-d", "--details"].includes(...process.argv.slice(2));
+	const minify = ["-m", "--minify"].includes(...process.argv.slice(2));
 	const { config: path } = await prompt({ name: "config", type: "text", message: "Configuration File" });
 	if (required && !existsSync(path)) throw Error("A configuration file is required to run this script.");
 	const { ...settings } = await prompt(prompts);
 	const { output: o } = await prompt({ name: "output", type: "text", message: "Output File", initial: join(process.cwd(), ".local", "output.json") });
 	const config = existsSync(path) ? JSON.parse(readFileSync(path, { encoding: "utf-8" })) : {};
-	return { details, ...config, ...settings, output: o };
+	return { details, minify, ...config, ...settings, output: o };
 }
 
 export function createLevelIndex(data) {

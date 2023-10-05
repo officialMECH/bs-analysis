@@ -3,7 +3,7 @@
 import { writeFileSync } from "node:fs";
 import { CHARACTERISTICS, DIFFICULTIES, config, createLevelIndex, extract, nonempty, resolveLevelStats } from "./helpers.js";
 
-const { details, users, ids, metadata, output } = await config(false, [
+const { details, users, ids, metadata, output, minify } = await config(false, [
 	{ name: "users", type: "list", message: "User ID(s)" },
 	{ name: "ids", type: "list", message: "Map ID(s)" },
 ]);
@@ -66,4 +66,4 @@ const dataset = await entries.reduce(async (record, entry) => {
 	return { ...(await record), [`${detail.id}/${bid}`]: data };
 }, Promise.resolve({}));
 
-writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, 2));
+writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, minify ? 0 : 2));

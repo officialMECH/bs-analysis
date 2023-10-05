@@ -4,7 +4,7 @@ import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { config } from "./helpers.js";
 
-const { metadata, directory, output } = await config(false, [
+const { metadata, directory, output, minify } = await config(false, [
 	{ name: "directory", type: "text", message: "Directory" }, //
 ]);
 
@@ -28,4 +28,4 @@ const dataset = files.reduce((original, entry) => {
 	}, {});
 }, {});
 
-writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, 2));
+writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, minify ? 0 : 2));

@@ -22,6 +22,12 @@ In addition, _all scripts are self-contained and operate independently from the 
 
 > **NOTE**: `helpers.js` is not a script file, but rather a collection of helper functions used across these scripts.
 
+## Arguments
+
+The following arguments are supported in _all_ the available scripts:
+
+- `--minify` (`-m`): Will minify the output to a single line and trim available whitespace. Useful to reduce filesize for larger datasets.
+
 ## Configuration File
 
 The configuration file is used to specify additional parameters for generation, such as metadata and other script-specific processes. You can refer to the following syntax:
