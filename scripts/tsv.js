@@ -5,7 +5,7 @@ import prompt from "prompts";
 import slugify from "slugify";
 import { config, createLevelIndex, importDuration, predicates } from "./helpers.js";
 
-const { input, tsv, metadata, output } = await config(true, [
+const { input, tsv, metadata, output, minify } = await config(true, [
 	{ name: "input", type: "text", message: "Source (File or URL)" }, //
 ]);
 
@@ -23,7 +23,10 @@ const transformers = {
 	string: (value) => value.toString(),
 	number: (value) => Number(value),
 	entity: (value) => ({ total: Number(value) }),
-	array: (value) => Array.from(value.trim().split(",")),
+	array: (value) => {
+		const trim = value.trim();
+		return trim !== "" ? Array.from(trim.split(",")) : undefined;
+	},
 	date: (value) => new Date(value).toISOString(),
 	duration: (value) => importDuration(value),
 };
@@ -59,4 +62,4 @@ const dataset = await lines.reduce(async (record, line) => {
 	return { ...(await record), [`${sid}/${bid}`]: { id: sid, ...data } };
 }, Promise.resolve({}));
 
-writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, 2));
+writeFileSync(output, JSON.stringify({ ...metadata, data: dataset, updated: new Date().toISOString() }, null, minify ? 0 : 2));
