@@ -51,6 +51,7 @@ export const base = {
 			...template,
 			...options,
 			xAxis: { type: "category", axisTick: { show: false }, axisLabel: { show: false }, data: titles },
+			yAxis: {},
 			series: difficulties.map((difficulty) => {
 				const values = data.filter((x) => x.difficulty === difficulty);
 				return {

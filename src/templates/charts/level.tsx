@@ -21,9 +21,9 @@ export default function LevelCharts({ id, show, theme, height }: ChartProps) {
 	};
 
 	const charts = [
-		base.level(state!, (x) => calc.nps(x)?.toFixed(2), { title: { text: "Level Distribution", subtext: "by NPS" }, yAxis: { min: 0 } }, filter), //
-		base.level(state!, (x) => x.jumpSpeed, { title: { text: "Level Distribution", subtext: "by Jump Speed" }, yAxis: { min: 10 } }, filter),
-		base.level(state!, (x) => calc.jd(x)?.toFixed(3), { title: { text: "Level Distribution", subtext: "by Jump Distance" }, yAxis: { min: 10 } }, filter),
+		base.level(state!, (x) => calc.nps(x)?.toFixed(2), { title: { text: "Level Distribution", subtext: "by NPS" } }, filter), //
+		base.level(state!, (x) => x.jumpSpeed, { title: { text: "Level Distribution", subtext: "by Jump Speed" } }, filter),
+		base.level(state!, (x) => calc.jd(x)?.toFixed(3), { title: { text: "Level Distribution", subtext: "by Jump Distance" } }, filter),
 	].filter((x) => !!x);
 	if (charts.length === 0) return null;
 
