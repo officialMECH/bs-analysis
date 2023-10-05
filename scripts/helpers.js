@@ -117,89 +117,41 @@ export const isV3 = (data) => {
 
 export function resolveLevelStats(data, details = false) {
 	if (isV2(data)) {
-		const colorNotes = data._notes?.filter((x) => x && [0, 1].includes(x._type));
-		const bombNotes = data._notes?.filter((x) => x && [3].includes(x._type));
-		const basicBeatmapEvents = data._events?.filter((x) => x && ![5, 14, 15, 100].includes(x._type));
-		const colorBoostBeatmapEvents = data._events?.filter((x) => x && [5].includes(x._type));
-		const rotationEvents = data._events?.filter((x) => x && [14, 15].includes(x._type));
-		const bpmEvents = data._events?.filter((x) => x && [100].includes(x._type));
+		const colorNotes = data._notes.filter((x) => x && [0, 1].includes(x._type));
+		const bombNotes = data._notes.filter((x) => x && [3].includes(x._type));
+		const basicBeatmapEvents = data._events.filter((x) => x && ![5, 14, 15, 100].includes(x._type));
+		const colorBoostBeatmapEvents = data._events.filter((x) => x && [5].includes(x._type));
+		const rotationEvents = data._events.filter((x) => x && [14, 15].includes(x._type));
+		const bpmEvents = data._events.filter((x) => x && [100].includes(x._type));
 		return {
-			colorNotes: {
-				total: colorNotes?.length ?? 0,
-			},
-			bombNotes: {
-				total: bombNotes?.length ?? 0,
-			},
-			obstacles: {
-				total: data._obstacles?.length ?? 0,
-			},
-			sliders: {
-				total: data._sliders?.length ?? 0,
-			},
-			basicBeatmapEvents: {
-				total: basicBeatmapEvents?.length ?? 0,
-			},
-			colorBoostBeatmapEvents: {
-				total: colorBoostBeatmapEvents?.length ?? 0,
-			},
-			rotationEvents: {
-				total: rotationEvents?.length ?? 0,
-			},
-			bpmEvents: {
-				total: bpmEvents?.length ?? 0,
-			},
-			waypoints: {
-				total: data._waypoints?.length ?? 0,
-			},
-			basicEventTypesWithKeywords: {
-				total: data._specialEventsKeywordFilters?._keywords.map((filter) => filter._specialEvents).filter(predicates.unique).length ?? 0,
-			},
+			colorNotes: { total: colorNotes.length },
+			bombNotes: { total: bombNotes.length },
+			obstacles: { total: data._obstacles.length },
+			sliders: data._sliders ? { total: data._sliders.length } : undefined,
+			basicBeatmapEvents: { total: basicBeatmapEvents.length },
+			colorBoostBeatmapEvents: { total: colorBoostBeatmapEvents.length },
+			rotationEvents: { total: rotationEvents.length },
+			bpmEvents: { total: bpmEvents.length },
+			waypoints: data._waypoints ? { total: data._waypoints.length } : undefined,
+			basicEventTypesWithKeywords: data._specialEventsKeywordFilters ? { total: data._specialEventsKeywordFilters._keywords.map((filter) => filter._specialEvents).filter(predicates.unique).length } : undefined,
 		};
 	}
 	if (isV3(data)) {
 		return {
-			colorNotes: {
-				total: data.colorNotes?.length ?? 0,
-			},
-			bombNotes: {
-				total: data.bombNotes?.length ?? 0,
-			},
-			obstacles: {
-				total: data.obstacles?.length ?? 0,
-			},
-			sliders: {
-				total: data.sliders?.length ?? 0,
-			},
-			burstSliders: {
-				total: data.burstSliders?.length ?? 0,
-			},
-			basicBeatmapEvents: {
-				total: data.basicBeatmapEvents?.length ?? 0,
-			},
-			colorBoostBeatmapEvents: {
-				total: data.colorBoostBeatmapEvents?.length ?? 0,
-			},
-			rotationEvents: {
-				total: data.rotationEvents?.length ?? 0,
-			},
-			bpmEvents: {
-				total: data.bpmEvents?.length ?? 0,
-			},
-			lightColorEventBoxGroups: {
-				total: data.lightColorEventBoxGroups?.length ?? 0,
-			},
-			lightRotationEventBoxGroups: {
-				total: data.lightRotationEventBoxGroups?.length ?? 0,
-			},
-			lightTranslationEventBoxGroups: {
-				total: data.lightTranslationEventBoxGroups?.length ?? 0,
-			},
-			waypoints: {
-				total: data.waypoints?.length,
-			},
-			basicEventTypesWithKeywords: {
-				total: data.basicEventTypesWithKeywords?.d?.map((filter) => filter.e).filter(predicates.unique).length,
-			},
+			colorNotes: { total: data.colorNotes.length },
+			bombNotes: { total: data.bombNotes.length },
+			obstacles: { total: data.obstacles.length },
+			sliders: { total: data.sliders.length },
+			burstSliders: { total: data.burstSliders.length },
+			basicBeatmapEvents: { total: data.basicBeatmapEvents.length },
+			colorBoostBeatmapEvents: { total: data.colorBoostBeatmapEvents.length },
+			rotationEvents: { total: data.rotationEvents.length },
+			bpmEvents: { total: data.bpmEvents.length },
+			lightColorEventBoxGroups: { total: data.lightColorEventBoxGroups.length },
+			lightRotationEventBoxGroups: { total: data.lightRotationEventBoxGroups.length },
+			lightTranslationEventBoxGroups: data.lightTranslationEventBoxGroups ? { total: data.lightTranslationEventBoxGroups.length } : undefined,
+			waypoints: { total: data.waypoints.length },
+			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d.map((filter) => filter.e).filter(predicates.unique).length },
 		};
 	}
 }
