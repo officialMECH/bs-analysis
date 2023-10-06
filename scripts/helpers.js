@@ -104,6 +104,11 @@ export function fromEntries(entries) {
 	return valid.map((level) => ({ name: level.name, info: info.contents, level: level.contents }));
 }
 
+export const isV1 = (data) => {
+	const version = data._version;
+	if (!version && "_notes" in data) return true;
+	return false;
+};
 export const isV2 = (data) => {
 	const version = data._version;
 	if (typeof version !== "string") return false;
@@ -116,7 +121,7 @@ export const isV3 = (data) => {
 };
 
 export function resolveLevelStats(data, details = false) {
-	if (isV2(data)) {
+	if (isV1(data) || isV2(data)) {
 		const colorNotes = data._notes.filter((x) => x && [0, 1].includes(x._type));
 		const bombNotes = data._notes.filter((x) => x && [3].includes(x._type));
 		const basicBeatmapEvents = data._events.filter((x) => x && ![5, 14, 15, 100].includes(x._type));
@@ -133,7 +138,7 @@ export function resolveLevelStats(data, details = false) {
 			rotationEvents: { total: rotationEvents.length },
 			bpmEvents: { total: bpmEvents.length },
 			waypoints: data._waypoints ? { total: data._waypoints.length } : undefined,
-			basicEventTypesWithKeywords: data._specialEventsKeywordFilters ? { total: data._specialEventsKeywordFilters._keywords.map((filter) => filter._specialEvents).filter(predicates.unique).length } : undefined,
+			basicEventTypesWithKeywords: data._specialEventsKeywordFilters ? { total: data._specialEventsKeywordFilters._keywords?.map((filter) => filter._specialEvents).filter(predicates.unique).length ?? 0 } : undefined,
 		};
 	}
 	if (isV3(data)) {
@@ -151,7 +156,7 @@ export function resolveLevelStats(data, details = false) {
 			lightRotationEventBoxGroups: { total: data.lightRotationEventBoxGroups.length },
 			lightTranslationEventBoxGroups: data.lightTranslationEventBoxGroups ? { total: data.lightTranslationEventBoxGroups.length } : undefined,
 			waypoints: { total: data.waypoints.length },
-			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d.map((filter) => filter.e).filter(predicates.unique).length },
+			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
 		};
 	}
 }

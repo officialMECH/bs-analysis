@@ -1,5 +1,5 @@
 import { flex, hstack, vstack } from "$/styles/patterns";
-import { IData, IDataset } from "$/types";
+import { IData, IDataset, schemas } from "$/types";
 import { predicates } from "$/utils";
 import { EChartsOption } from "echarts";
 
@@ -44,8 +44,7 @@ export const base = {
 	},
 	level: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
-		if (data.length === 0) return null;
-		const difficulties = data.map((x) => x.difficulty).filter(predicates.unique);
+		const difficulties = Object.values(schemas.difficulty.Values);
 		const titles = data.map((x) => x.title ?? x.id).filter(predicates.unique);
 		return {
 			...template,
@@ -67,7 +66,6 @@ export const base = {
 	},
 	time: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
-		if (data.length === 0) return null;
 		const cells = data.map((x) => {
 			const date = new Date(transformer(x)!);
 			return { hours: date.getHours(), day: date.getDay() };
