@@ -82,7 +82,7 @@ export default function Nav({ layout = "basic" }: Props) {
 			<div className={styles.row}>
 				{layout !== "level" && (
 					<Fragment>
-						<UnstyledInput type="file" id="file" accept="application/json" onChange={handleImport} multiple>
+						<UnstyledInput type="file" id="file" accept="application/json,text/plain" onChange={handleImport} multiple>
 							<Icon variant="primary" title="Import Datasets" className={cx("fa-solid fa-upload", styles.icon)} />
 						</UnstyledInput>
 					</Fragment>

@@ -6,7 +6,7 @@ import { cx } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
 import { IData, schemas } from "$/types";
 import saveAs from "file-saver";
-import { ChangeEvent, Fragment, MouseEvent, PropsWithChildren, useRef } from "react";
+import { ChangeEvent, Fragment, MouseEvent, PropsWithChildren } from "react";
 
 interface Props {
 	id: string;
@@ -15,7 +15,6 @@ interface Props {
 
 export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 	const { state, dispatch } = useDataset(id);
-	const input = useRef<HTMLInputElement | null>(null);
 
 	function internal(key: string) {
 		const name = key.split("/")[key.split("/").length - 1].split(".")[0];
@@ -55,7 +54,7 @@ export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 
 	return (
 		<div className={styles.row}>
-			<UnstyledInput onClick={() => input.current?.click()} type="file" id="file" accept="application/json" onChange={handleOverwrite}>
+			<UnstyledInput type="file" id="file" accept="application/json,text/plain" onChange={handleOverwrite}>
 				<Icon title="Overwrite" variant="primary" className={cx("fa-solid fa-file-import")} />
 			</UnstyledInput>
 			{exists && (
