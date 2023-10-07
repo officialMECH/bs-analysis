@@ -3,7 +3,7 @@
 import { writeFileSync } from "node:fs";
 import { CHARACTERISTICS, DIFFICULTIES, config, createLevelIndex, extract, nonempty, resolveLevelStats } from "./helpers.js";
 
-const { details, users, ids, metadata, output, minify } = await config(false, [
+const { details, users, ids, beatsaver, metadata, output, minify } = await config(false, [
 	{ name: "users", type: "list", message: "User ID(s)" },
 	{ name: "ids", type: "list", message: "Map ID(s)" },
 ]);
@@ -12,12 +12,18 @@ const maps = [];
 
 if (users.filter(nonempty).length > 0) {
 	const fromUsers = await Promise.all(
-		users.filter(nonempty).map(async (id) => {
+		await users.filter(nonempty).map(async (id) => {
 			const maps = [];
-			const user = JSON.parse(await fetch(`https://api.beatsaver.com/users/id/${id}`).then((r) => r.text()));
-			const pages = Math.ceil(user.stats.totalMaps / 20);
-			for (let page = 0; page <= pages; page++) {
-				const search = JSON.parse(await fetch(`https://api.beatsaver.com/maps/uploader/${id}/${page}`).then((r) => r.text()));
+			let range = [];
+			if (beatsaver?.users) {
+				range[0] = beatsaver.users.start ?? 0;
+				range[1] = (beatsaver.users.start ?? 0) + (beatsaver.users.requests ?? 1) - 1;
+			} else {
+				const user = await fetch(`https://api.beatsaver.com/users/id/${id}`).then((r) => r.json());
+				range[1] = Math.ceil(user.stats.totalMaps / 20);
+			}
+			for (let page = range[0]; page <= range[1]; page++) {
+				const search = await fetch(`https://api.beatsaver.com/maps/uploader/${id}/${page}`).then((r) => r.json());
 				search.docs.forEach((detail) => maps.push(detail));
 			}
 			return maps;
@@ -28,8 +34,8 @@ if (users.filter(nonempty).length > 0) {
 
 if (ids.filter(nonempty).length > 0) {
 	const fromIds = await Promise.all(
-		ids.filter(nonempty).map(async (id) => {
-			const map = JSON.parse(await fetch(`https://api.beatsaver.com/maps/id/${id}`).then((r) => r.text()));
+		await ids.filter(nonempty).map(async (id) => {
+			const map = await fetch(`https://api.beatsaver.com/maps/id/${id}`).then((r) => r.json());
 			return map;
 		})
 	).then((d) => d.flat());

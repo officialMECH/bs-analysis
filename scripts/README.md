@@ -51,6 +51,25 @@ The configuration file is used to specify additional parameters for generation, 
 
 While each script will prompt you for a configuration file, it's technically not required for most scripts and can be safely omitted, **except for the following cases**:
 
+### `beatsaver.js`
+
+The `beatsaver` field allows you to set finite limits on the number of API requests to make when pooling user collections of maps, which may be necessary for those with a _very_ large collection of maps. You can refer to the [BeatSaver API Docs](https://api.beatsaver.com/docs) for more information.
+
+```ts
+{
+  ...,
+  "beatsaver": {
+    "users": {
+      "start": number,
+      "requests": number
+    },
+  }
+}
+```
+
+- `users.start` _(optional)_: The starting page for the API to request from. As a tip, each page will contain no more than **20** maps at a time sorted by the most recent upload.
+- `users.requests` _(optional)_: The number of requests to make to the API for the particular run. You may need to set this to a lower value if you end up hitting the rate limit too quickly.
+
 ### `tsv.js`
 
 The `tsv` field provides the necessary parameters to parse each cell of the table to their respective properties. You can refer to the following syntax:
