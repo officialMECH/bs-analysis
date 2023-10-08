@@ -23,10 +23,7 @@ const transformers = {
 	string: (value) => value.toString(),
 	number: (value) => Number(value),
 	entity: (value) => ({ total: Number(value) }),
-	array: (value) => {
-		const trim = value.trim();
-		return trim !== "" ? Array.from(trim.split(",")) : undefined;
-	},
+	array: (value) => (value.trim() !== "" ? Array.from(value.split(",").map((x) => x.trim())) : undefined),
 	date: (value) => new Date(value).toISOString(),
 	duration: (value) => importDuration(value),
 };
