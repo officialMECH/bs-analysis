@@ -1,47 +1,46 @@
+import { FloatableOptions } from "$/hooks";
 import { css } from "$/styles/css";
-import { FloatingFocusManager, FloatingOverlay, FloatingPortal, useClick, useDismiss, useFloating, useInteractions, useRole } from "@floating-ui/react";
-import { Fragment, PropsWithChildren, useState } from "react";
+import { FloatingFocusManager, FloatingOverlay, FloatingPortal, useMergeRefs } from "@floating-ui/react";
+import { HTMLProps, PropsWithChildren, ReactNode, forwardRef, useContext } from "react";
+import { FloatingContext, FloatingProvider } from "../context/floating";
+import Trigger from "./trigger";
 
-export interface DialogContentProps {
-	close: () => void;
+interface Props extends Omit<FloatableOptions, "interactions"> {
+	render: () => ReactNode;
 }
 
-interface Props {
-	open?: boolean;
-	render: (props: DialogContentProps) => React.ReactNode;
-}
-
-export default function Dialog({ render, open: passedOpen = false, children }: PropsWithChildren<Props>) {
-	const [isOpen, setIsOpen] = useState(passedOpen);
-
-	const { refs, context } = useFloating({
-		open: isOpen,
-		onOpenChange: setIsOpen,
-	});
-
-	const click = useClick(context);
-	const role = useRole(context);
-	const dismiss = useDismiss(context, { outsidePressEvent: "mousedown" });
-
-	const { getReferenceProps, getFloatingProps } = useInteractions([click, role, dismiss]);
-
+const Content = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, propRef) => {
+	const context = useContext(FloatingContext);
+	if (!context) throw Error("All floating elements must be wrapped in <FloatingProvider />");
+	const ref = useMergeRefs([context.refs.setFloating, propRef]);
+	if (!context.open) return null;
 	return (
-		<Fragment>
-			<div ref={refs.setReference} {...getReferenceProps()}>
-				{children}
-			</div>
-			<FloatingPortal>
-				{isOpen && (
-					<FloatingOverlay className={styles.wrapper} lockScroll>
-						<FloatingFocusManager context={context}>
-							<div className={styles.content} {...getFloatingProps()}>
-								{render({ close: () => setIsOpen(false) })}
-							</div>
-						</FloatingFocusManager>
-					</FloatingOverlay>
-				)}
-			</FloatingPortal>
-		</Fragment>
+		<FloatingPortal>
+			<FloatingOverlay className={styles.wrapper} lockScroll>
+				<FloatingFocusManager context={context.context}>
+					<div ref={ref} className={styles.content} {...context.getFloatingProps(props)}>
+						{props.children}
+					</div>
+				</FloatingFocusManager>
+			</FloatingOverlay>
+		</FloatingPortal>
+	);
+});
+
+export default function Dialog({ options, render, children }: PropsWithChildren<Props>) {
+	const interactions: FloatableOptions["interactions"] = {
+		click: { enabled: true },
+		hover: { enabled: false },
+		focus: { enabled: false },
+		dismiss: { enabled: true },
+		role: { role: "dialog" },
+	};
+	const defaultOptions: FloatableOptions["options"] = {};
+	return (
+		<FloatingProvider interactions={interactions} options={{ ...options, ...defaultOptions }}>
+			<Trigger>{children}</Trigger>
+			<Content>{render()}</Content>
+		</FloatingProvider>
 	);
 }
 
@@ -49,7 +48,7 @@ const styles = {
 	wrapper: css({
 		position: "fixed",
 		zIndex: 1,
-		paddingTop: 10,
+		paddingY: 10,
 		left: 0,
 		top: 0,
 		width: "full",
