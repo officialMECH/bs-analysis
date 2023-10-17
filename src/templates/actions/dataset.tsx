@@ -1,4 +1,4 @@
-import { Icon, UnstyledInput } from "$/components";
+import { Dialog, Icon, UnstyledInput } from "$/components";
 import { datasets } from "$/constants";
 import { createLevelIndex, parsers, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
@@ -7,13 +7,13 @@ import { hstack } from "$/styles/patterns";
 import { IData, schemas } from "$/types";
 import saveAs from "file-saver";
 import { ChangeEvent, Fragment, MouseEvent, PropsWithChildren } from "react";
+import { DatasetForm } from "../form";
 
 interface Props {
 	id: string;
-	exists?: boolean;
 }
 
-export default function Actions({ id, exists }: PropsWithChildren<Props>) {
+export default function DatasetActions({ id }: PropsWithChildren<Props>) {
 	const { state, dispatch } = useDataset(id);
 
 	function internal(key: string) {
@@ -54,10 +54,13 @@ export default function Actions({ id, exists }: PropsWithChildren<Props>) {
 
 	return (
 		<div className={styles.row}>
+			<Dialog render={({ close }) => <DatasetForm id={id} onSubmit={() => close()} />}>
+				<Icon title="Edit" variant="primary" className={cx("fa-solid fa-pencil")} />
+			</Dialog>
 			<UnstyledInput type="file" id="file" accept="application/json,text/plain" onChange={handleOverwrite}>
 				<Icon title="Overwrite" variant="primary" className={cx("fa-solid fa-file-import")} />
 			</UnstyledInput>
-			{exists && (
+			{state && (
 				<Fragment>
 					<Icon title="Download" variant="primary" className={cx("fa-solid fa-download")} onClick={handleDownload} />
 					{!isInternal && <Icon title="Delete" variant="danger" className={cx("fa-solid fa-trash")} onClick={handleDelete} />}

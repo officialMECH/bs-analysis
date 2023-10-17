@@ -5,7 +5,7 @@ import { useParams } from "$/router";
 import { css, cva } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
-import Templates from "$/templates";
+import { Content, LevelActions, Stub } from "$/templates";
 import { IData } from "$/types";
 import { predicates } from "$/utils";
 import { Fragment } from "react";
@@ -25,7 +25,11 @@ export default function Page() {
 			const isMapper = data.mappers && data.mappers.includes(mapper);
 			const isLighter = data.lighters && data.lighters.includes(mapper);
 			const type = isMapper && !isLighter ? "mapper" : isLighter && !isMapper ? "lighter" : "hybrid";
-			const Name = <a className={styles.mappers.name({ type })}>{mapper}</a>;
+			const Name = (
+				<a key={mapper} className={styles.mappers.name({ type })}>
+					{mapper}
+				</a>
+			);
 			if (i === values.length - 1) return Name;
 			return <span>{Name}, </span>;
 		}, null);
@@ -33,24 +37,29 @@ export default function Page() {
 
 	function Title() {
 		return (
-			<div className={styles.title.wrapper}>
-				<span className={styles.title.name({ exists: !!data?.title })}>{data ? data.title ?? data.id : "Unknown Level"}</span>
-				{data && (
-					<Fragment>
-						<div className={styles.level}>
-							<Badge>{data.characteristic}</Badge>
-							<Badge color={token(`colors.difficulty.${data.difficulty}`)}>{data.difficulty}</Badge>
-						</div>
-						{(data.mappers || data.lighters) && mappers.length > 0 && <span className={styles.mappers.list}>[{mappers(data)}]</span>}
-					</Fragment>
-				)}
-			</div>
+			<Fragment>
+				<div className={styles.title.wrapper}>
+					<span className={styles.title.name({ exists: !!data?.title })}>{data ? data.title ?? data.id : "Unknown Level"}</span>
+					{data && (
+						<Fragment>
+							<div className={styles.level}>
+								<Badge>{data.characteristic}</Badge>
+								<Badge color={token(`colors.difficulty.${data.difficulty}`)}>{data.difficulty}</Badge>
+							</div>
+							{(data.mappers || data.lighters) && mappers.length > 0 && <span className={styles.mappers.list}>[{mappers(data)}]</span>}
+						</Fragment>
+					)}
+				</div>
+				<div className={styles.title.wrapper}>
+					<LevelActions id={`${sid}/${bid}`} />
+				</div>
+			</Fragment>
 		);
 	}
 	return (
-		<Templates.Content title={<Title />} layout={"level"}>
-			{data ? <Templates.Stub /> : "This level is not available."}
-		</Templates.Content>
+		<Content title={<Title />} layout={"level"}>
+			{data ? <Stub /> : "This level is not available."}
+		</Content>
 	);
 }
 

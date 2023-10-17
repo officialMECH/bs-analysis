@@ -1,4 +1,4 @@
-import { Badge, Icon, UnstyledInput } from "$/components";
+import { Badge, Dialog, Icon, UnstyledInput } from "$/components";
 import { metadata } from "$/constants";
 import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
@@ -6,6 +6,7 @@ import { Path, useNavigate } from "$/router";
 import { css, cva, cx } from "$/styles/css";
 import { hstack, scrollable, wrap } from "$/styles/patterns";
 import { ChangeEvent, Fragment, useState } from "react";
+import ManualDatasetForm from "./form/dataset";
 
 interface Props {
 	layout?: "home" | "basic" | "data" | "level";
@@ -82,6 +83,9 @@ export default function Nav({ layout = "basic" }: Props) {
 			<div className={styles.row}>
 				{layout !== "level" && (
 					<Fragment>
+						<Dialog render={({ close }) => <ManualDatasetForm onSubmit={() => close()} />}>
+							<Icon variant="primary" title="Create Dataset" className={cx("fa-solid fa-add", styles.icon)} />
+						</Dialog>
 						<UnstyledInput type="file" id="file" accept="application/json,text/plain" onChange={handleImport} multiple>
 							<Icon variant="primary" title="Import Datasets" className={cx("fa-solid fa-upload", styles.icon)} />
 						</UnstyledInput>

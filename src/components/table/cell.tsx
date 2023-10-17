@@ -38,6 +38,7 @@ const styles = {
 		hideScrollbar: true,
 		whiteSpace: "nowrap",
 		textAlign: "center",
+		"& > *": { paddingX: 1 },
 	}),
 	accessor: cva({
 		variants: {

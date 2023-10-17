@@ -24,6 +24,7 @@ const template: EChartsOption = {
 export const base = {
 	pie: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x));
+		if (dataset.data.length === 0) return null;
 		const series = data.map(transformer).filter(predicates.unique);
 		return {
 			...template,
@@ -44,6 +45,7 @@ export const base = {
 	},
 	level: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
+		if (dataset.data.length === 0) return null;
 		const difficulties = Object.values(schemas.difficulty.Values);
 		const titles = data.map((x) => x.title ?? x.id).filter(predicates.unique);
 		return {
@@ -66,6 +68,7 @@ export const base = {
 	},
 	time: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
+		if (dataset.data.length === 0) return null;
 		const cells = data.map((x) => {
 			const date = new Date(transformer(x)!);
 			return { hours: date.getHours(), day: date.getDay() };

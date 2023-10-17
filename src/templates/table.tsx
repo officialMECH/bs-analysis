@@ -1,11 +1,13 @@
-import { Table } from "$/components";
+import { Dialog, Icon, Popover, Table } from "$/components";
 import { calc, createLevelIndex, formatDuration, formatters, sort } from "$/helpers";
-import { vstack } from "$/styles/patterns";
+import { hstack, vstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
 import { Characteristic, Difficulty, IData, schemas } from "$/types";
 import { ColumnFiltersState, SortingState, createColumnHelper, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useState } from "react";
-import Icons from "./icons";
+import { icons } from ".";
+import LevelActions from "./actions/level";
+import ManualDataForm from "./form/level";
 
 interface Props {
 	id: string;
@@ -21,8 +23,13 @@ const columns = [
 		size: size.sm,
 		header: (c) => <Table.Cell {...c}>Level</Table.Cell>,
 		cell: (c) => (
-			<Table.Cell href={`./level/${c.row.id}`} {...c}>
-				<i className="fa-solid fa-external-link" />
+			<Table.Cell {...c}>
+				<Icon className="fa-solid fa-external-link" asChild>
+					<a href={`./level/${c.row.id}`} />
+				</Icon>
+				<Popover render={() => <LevelActions id={c.row.id} />}>
+					<Icon className="fa-solid fa-ellipsis" />
+				</Popover>
 			</Table.Cell>
 		),
 	}),
@@ -307,13 +314,21 @@ export default function DataTable({ id, data }: Props) {
 
 	return (
 		<div className={styles.column}>
-			<Table.Toggle table={table} icons={Icons} />
+			<Table.Toggle table={table} icons={icons} />
 			<Table.Pagination id={id} table={table} />
+			<div className={styles.row}>
+				<Dialog render={({ close }) => <ManualDataForm onSubmit={close} />}>
+					<button>
+						<Icon className="fa-solid fa-add" />
+					</button>
+				</Dialog>
+			</div>
 			<Table.Table table={table} />
 		</div>
 	);
 }
 
 const styles = {
-	column: vstack({ gap: 4, width: "full" }),
+	column: vstack({ gap: 4, alignItems: "center", width: "full" }),
+	row: hstack({ gap: 2 }),
 };

@@ -1,6 +1,6 @@
 import { css, cva } from "$/styles/css";
 import { flex, hstack, vstack } from "$/styles/patterns";
-import Templates from "$/templates";
+import { Content, Profile } from "$/templates";
 import { PropsWithChildren } from "react";
 
 function Section({ heading, direction, gap = 8, children }: PropsWithChildren<{ heading?: string; gap?: number; direction?: "column" | "row" }>) {
@@ -30,7 +30,7 @@ function Feature({ heading, icons, children }: PropsWithChildren<{ heading: stri
 
 export default function App() {
 	return (
-		<Templates.Content layout={"home"} title={<span className={styles.title}>Beat Saber Map Analysis</span>}>
+		<Content layout={"home"} title={<span className={styles.title}>Beat Saber Map Analysis</span>}>
 			<Section direction="column" gap={0}>
 				<p>This website provides a comprehensive interface for statistical analysis of Beat Saber maps.</p>
 				<p>
@@ -53,9 +53,9 @@ export default function App() {
 				</Feature>
 			</Section>
 			<Section heading="Credits">
-				<Templates.Profile name="officialMECH" role="Lead Developer, Maintainer" />
+				<Profile name="officialMECH" role="Lead Developer, Maintainer" />
 			</Section>
-		</Templates.Content>
+		</Content>
 	);
 }
 

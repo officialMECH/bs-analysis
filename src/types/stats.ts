@@ -1,17 +1,17 @@
-import { ZodIssueCode, z } from "zod";
+import { z } from "zod";
 import shared from "./shared";
 
 const date = z.coerce.date().transform((date) => date?.toISOString());
 
-const entity = z.object({ total: z.number().min(0) });
+const entity = z.object({ total: shared.total });
 
 const data = z.object({
-	id: z.string().nonempty(),
+	id: shared.id,
 	title: z.string().optional(),
 	pack: z.string().optional(),
 	released: date.optional(),
 	bpm: z.number().min(10).max(1000).optional(),
-	length: z.number().min(0).optional(),
+	length: shared.total.optional(),
 	characteristic: shared.characteristic,
 	difficulty: shared.difficulty,
 	colorNotes: entity.extend({}).optional(),
@@ -34,14 +34,7 @@ const data = z.object({
 	lighters: z.array(z.string()).optional(),
 });
 
-const format = z.union([
-	data.array().min(1),
-	z.record(data).superRefine((arg, ctx) => {
-		// @ts-ignore
-		if (Object.values(arg).length === 0) ctx.addIssue({ code: ZodIssueCode.too_small, minimum: 0, type: "object", inclusive: true, exact: false, message: "Object must contain at least 1 element(s)" });
-		return true;
-	}),
-]);
+const format = z.union([z.array(data), z.record(data)]);
 
 const dataset = z.object({
 	name: z.string().optional(),

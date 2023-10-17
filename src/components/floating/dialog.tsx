@@ -1,12 +1,16 @@
 import { FloatableOptions } from "$/hooks";
 import { css } from "$/styles/css";
 import { FloatingFocusManager, FloatingOverlay, FloatingPortal, useMergeRefs } from "@floating-ui/react";
-import { HTMLProps, PropsWithChildren, ReactNode, forwardRef, useContext } from "react";
+import { HTMLProps, PropsWithChildren, ReactNode, forwardRef, useContext, useState } from "react";
 import { FloatingContext, FloatingProvider } from "../context/floating";
 import Trigger from "./trigger";
 
-interface Props extends Omit<FloatableOptions, "interactions"> {
-	render: () => ReactNode;
+interface DialogProps {
+	close: () => void;
+}
+
+interface Props extends Omit<FloatableOptions, "open" | "onOpenChange" | "interactions"> {
+	render: (props: DialogProps) => ReactNode;
 }
 
 const Content = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...props }, propRef) => {
@@ -28,6 +32,7 @@ const Content = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ ...prop
 });
 
 export default function Dialog({ options, render, children }: PropsWithChildren<Props>) {
+	const [open, setOpen] = useState(false);
 	const interactions: FloatableOptions["interactions"] = {
 		click: { enabled: true },
 		hover: { enabled: false },
@@ -37,9 +42,9 @@ export default function Dialog({ options, render, children }: PropsWithChildren<
 	};
 	const defaultOptions: FloatableOptions["options"] = {};
 	return (
-		<FloatingProvider interactions={interactions} options={{ ...options, ...defaultOptions }}>
+		<FloatingProvider interactions={interactions} options={{ ...options, ...defaultOptions }} open={open} onOpenChange={setOpen}>
 			<Trigger>{children}</Trigger>
-			<Content>{render()}</Content>
+			<Content>{render({ close: () => setOpen(false) })}</Content>
 		</FloatingProvider>
 	);
 }
@@ -60,6 +65,6 @@ const styles = {
 		backgroundColor: "background",
 		marginX: "auto",
 		padding: 6,
-		maxWidth: "2xl",
+		maxWidth: "4xl",
 	}),
 };

@@ -5,7 +5,7 @@ import { HTMLProps, PropsWithChildren, ReactNode, forwardRef, useContext } from 
 import { FloatingContext, FloatingProvider } from "../context/floating";
 import Trigger from "./trigger";
 
-interface Props extends Omit<FloatableOptions, "interactions"> {
+interface Props extends Omit<FloatableOptions, "open" | "onOpenChange" | "interactions"> {
 	render: () => ReactNode;
 }
 

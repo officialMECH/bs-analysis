@@ -17,6 +17,7 @@
 		"@floating-ui/react": "^0.25.4",
 		"@generouted/react-router": "^1.15.8",
 		"@radix-ui/react-slot": "^1.0.2",
+		"@tanstack/react-form": "^0.3.6",
 		"@tanstack/react-table": "^8.10.3",
 		"echarts": "^5.4.3",
 		"file-saver": "^2.0.5",
