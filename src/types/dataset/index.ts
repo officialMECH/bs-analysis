@@ -1,5 +1,5 @@
 import { z } from "zod";
-import shared from "./shared";
+import shared from "../shared";
 
 const date = z.coerce.date().transform((date) => date?.toISOString());
 

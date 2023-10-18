@@ -30,7 +30,7 @@ export default function DatasetActions({ id }: PropsWithChildren<Props>) {
 	function handleOverwrite(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files) return;
-		parsers.file(files[0], (_, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
+		parsers.dataset.file(files[0], (_, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
 	}
 	function handleDownload(event: MouseEvent<HTMLButtonElement>) {
 		if (!state) return;
@@ -42,7 +42,7 @@ export default function DatasetActions({ id }: PropsWithChildren<Props>) {
 		data = state.data.reduce((record, value) => {
 			return { ...record, [`${value.id}/${createLevelIndex(value)}`]: value };
 		}, {});
-		parsers.raw({ id, object: { ...state, data } }, (id, dataset) => {
+		parsers.dataset.raw({ id, object: { ...state, data } }, (id, dataset) => {
 			const blob = new Blob([JSON.stringify(dataset, null, event.shiftKey ? 0 : 2)], { type: "application/json" });
 			saveAs(blob, `${id}.json`);
 		});

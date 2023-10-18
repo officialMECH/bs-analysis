@@ -29,7 +29,7 @@ export default function Nav({ layout = "basic" }: Props) {
 		const files = event.target.files;
 		if (!files) return;
 		for (let i = 0; i < files.length; i++) {
-			parsers.file(files[i], (id, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
+			parsers.dataset.file(files[i], (id, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
 		}
 	}
 

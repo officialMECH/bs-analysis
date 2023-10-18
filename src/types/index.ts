@@ -1,12 +1,19 @@
 import { ZodSchema, literal, union } from "zod";
+import { default as stats } from "./dataset";
+import { default as metadata } from "./metadata";
 import shared from "./shared";
-import stats from "./stats";
 
 export * from "./components";
+export * from "./dataset";
+export * from "./metadata";
 export * from "./shared";
-export * from "./stats";
 
-export const schemas = { ...shared, ...stats };
+export interface Entry<T> {
+	name: string;
+	contents: T;
+}
+
+export const schemas = { ...shared, ...stats, metadata };
 
 // HACK: undefined input values are pain, this is my personal hell
 export function artificial<T>(schema: ZodSchema, transformer = (x: unknown) => x as T) {

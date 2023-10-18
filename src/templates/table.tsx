@@ -7,6 +7,7 @@ import { ColumnFiltersState, SortingState, createColumnHelper, getCoreRowModel, 
 import { useState } from "react";
 import { icons } from ".";
 import LevelActions from "./actions/level";
+import ArchiveDataForm from "./form/archive";
 import ManualDataForm from "./form/level";
 
 interface Props {
@@ -318,8 +319,13 @@ export default function DataTable({ id, data }: Props) {
 			<Table.Pagination id={id} table={table} />
 			<div className={styles.row}>
 				<Dialog render={({ close }) => <ManualDataForm onSubmit={close} />}>
-					<button>
+					<button title="Add Entry">
 						<Icon className="fa-solid fa-add" />
+					</button>
+				</Dialog>
+				<Dialog render={({ close }) => <ArchiveDataForm onSubmit={close} />}>
+					<button title="Import from Archive">
+						<Icon className="fa-solid fa-archive" />
 					</button>
 				</Dialog>
 			</div>

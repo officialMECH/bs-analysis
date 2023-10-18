@@ -1,4 +1,4 @@
-import { Field } from "$/components/field";
+import { TField } from "$/components";
 import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
 import { css } from "$/styles/css";
@@ -43,7 +43,7 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 		if (!initial && state[id]) {
 			if (!confirm("This dataset already exists, so any existing data will be overwritten. Are you sure you want to continue?")) return;
 		}
-		parsers.raw({ id, object: { ...update, updated: new Date().toISOString() } }, (id, dataset) => {
+		parsers.dataset.raw({ id, object: { ...update, updated: new Date().toISOString() } }, (id, dataset) => {
 			dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } });
 			if (onSubmit) onSubmit();
 		});
@@ -54,15 +54,15 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 			<Form.Template title={initial ? "Edit Dataset" : "Create Dataset"}>
 				{!initial && (
 					<Form.Row>
-						<F.Field name="id" onChange={(x) => validate(x, schemas.id)} children={(field) => <Field.String field={field} heading="ID" />} />
+						<F.Field name="id" onChange={(x) => validate(x, schemas.id)} children={(field) => <TField.String field={field} heading="ID" />} />
 					</Form.Row>
 				)}
 				<Form.Row>
-					<F.Field name="name" onChange={(x) => validate(x, schemas.dataset.shape.name)} children={(field) => <Field.String field={field} heading="Name" />} />
-					<F.Field name="contributors" onChange={(x) => validate(x, schemas.dataset.shape.contributors)} children={(field) => <Field.Array field={field} heading="Contributor(s)" />} />
+					<F.Field name="name" onChange={(x) => validate(x, schemas.dataset.shape.name)} children={(field) => <TField.String field={field} heading="Name" />} />
+					<F.Field name="contributors" onChange={(x) => validate(x, schemas.dataset.shape.contributors)} children={(field) => <TField.Array field={field} heading="Contributor(s)" />} />
 				</Form.Row>
 				<Form.Row>
-					<F.Field name="description" onChange={(x) => validate(x, schemas.dataset.shape.description)} children={(field) => <Field.Text field={field} heading="Description" />} />
+					<F.Field name="description" onChange={(x) => validate(x, schemas.dataset.shape.description)} children={(field) => <TField.Text field={field} heading="Description" />} />
 				</Form.Row>
 				<F.Subscribe
 					selector={() => F.state.canSubmit}
