@@ -54,7 +54,7 @@ export default function DatasetActions({ id }: PropsWithChildren<Props>) {
 
 	return (
 		<div className={styles.row}>
-			<Dialog render={({ close }) => <DatasetForm initial={{ id }} onSubmit={() => close()} />}>
+			<Dialog render={({ close }) => <DatasetForm initial={{ id, ...state }} onSubmit={() => close()} />}>
 				<Icon title="Edit" variant="primary" className={cx("fa-solid fa-pencil")} />
 			</Dialog>
 			<UnstyledInput type="file" id="file" accept="application/json,text/plain" onChange={handleOverwrite}>
