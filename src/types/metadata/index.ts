@@ -23,7 +23,7 @@ const info = z.object({
 });
 
 const v2 = z.object({
-	_version: z.string(),
+	_version: z.string().optional(),
 	_notes: z.array(z.object({ _type: z.number() })),
 	_obstacles: z.array(z.unknown()),
 	_sliders: z.array(z.unknown()).optional(),
