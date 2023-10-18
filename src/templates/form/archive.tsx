@@ -101,7 +101,7 @@ export default function ArchiveDataForm({ onSubmit }: Props) {
 					)}
 				</pre>
 			</details>
-			<button disabled={data.length === 0} onClick={() => handleSubmit()}>
+			<button disabled={data.length === 0 || id === ""} onClick={() => handleSubmit()}>
 				{"Submit"}
 			</button>
 		</Form.Template>
