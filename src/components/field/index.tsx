@@ -37,22 +37,20 @@ export default function Wrapper<T, V>({ field, heading, subheading, center, tool
 
 export const Field = {
 	String: <T, V extends string | undefined>({ field, ...wrapper }: Props<T, V>) => {
-		const [value, setValue] = useState(field.state.value);
+		const [value, setValue] = useState(field.state.value ?? "");
 		useEffect(() => {
-			if (value === "") return field.handleChange(undefined as V);
-			field.handleChange(value);
+			field.handleChange(value as V);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
-				<input className={styles.input} name={field.name as string} value={value ?? ""} onChange={(e) => setValue(e.target.value as V)} />
+				<input className={styles.input} name={field.name as string} value={value ?? ""} onChange={(e) => setValue(e.target.value)} />
 			</Wrapper>
 		);
 	},
 	Number: <T, V extends number | undefined>({ field, ...wrapper }: Props<T, V>) => {
 		const [value, setValue] = useState(field.state.value ?? "");
 		useEffect(() => {
-			if (value === "") return field.handleChange(undefined as V);
-			field.handleChange(Number(value) as V);
+			field.handleChange((value !== "" ? Number(value) : value) as V);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
@@ -61,19 +59,18 @@ export const Field = {
 		);
 	},
 	Text: <T, V extends string | undefined>({ field, ...wrapper }: Props<T, V>) => {
-		const [value, setValue] = useState(field.state.value);
+		const [value, setValue] = useState(field.state.value ?? "");
 		useEffect(() => {
-			if (value === "") return field.handleChange(undefined as V);
-			field.handleChange(value);
+			field.handleChange(value as V);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
-				<textarea className={styles.input} name={field.name as string} value={value ?? ""} onChange={(e) => setValue(e.target.value as V)} />
+				<textarea className={styles.input} name={field.name as string} value={value ?? ""} onChange={(e) => setValue(e.target.value)} />
 			</Wrapper>
 		);
 	},
 	Enum: <T, V extends string>({ field, children, ...wrapper }: PropsWithChildren<Props<T, V>>) => {
-		const [value, setValue] = useState(field.state.value);
+		const [value, setValue] = useState(field.state.value ?? "");
 		useEffect(() => {
 			field.handleChange(value);
 		}, [field, value]);

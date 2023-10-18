@@ -189,7 +189,7 @@ const columns = [
 		cell: (c) => <Table.AccessorCell {...c} />,
 	}),
 	helper.accessor((r) => r.basicEventTypesWithKeywords?.total, {
-		id: "basicEventTypesForKeyword",
+		id: "basicEventTypesWithKeywords",
 		size: size.sm,
 		filterFn: "inNumberRange",
 		header: (c) => <Table.Cell {...c}>Special Event Types</Table.Cell>,
@@ -272,7 +272,7 @@ export default function DataTable({ id, data }: Props) {
 		lightRotationEventBoxGroups: false,
 		lightTranslationEventBoxGroups: false,
 		waypoints: false,
-		basicEventTypesForKeyword: false,
+		basicEventTypesWithKeywords: false,
 		hjd: false,
 		jd: false,
 		rt: false,

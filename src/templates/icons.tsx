@@ -28,7 +28,7 @@ export default {
 	lightRotationEventBoxGroups: <i title="Light Rotation Event Box Groups" className="fa-solid fa-rotate" />,
 	lightTranslationEventBoxGroups: <i title="Light Translation Event Box Groups" className="fa-solid fa-up-down-left-right" />,
 	waypoints: <i title="Waypoints" className="fa-solid fa-location" />,
-	basicEventTypesForKeyword: <i title="Special Event Types" className="fa-solid fa-key" />,
+	basicEventTypesWithKeywords: <i title="Special Event Types" className="fa-solid fa-key" />,
 	jumpSpeed: <i title="Jump Speed" className="fa-solid fa-gauge" />,
 	jumpOffset: <i title="Jump Offset" className="fa-solid fa-left-right" />,
 	hjd: <i title="Half-Jump Duration" className="fa-solid fa-timeline" />,

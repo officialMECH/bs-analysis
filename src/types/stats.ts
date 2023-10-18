@@ -3,7 +3,7 @@ import shared from "./shared";
 
 const date = z.coerce.date().transform((date) => date?.toISOString());
 
-const entity = z.object({ total: shared.total });
+const entity = z.object({ total: z.number().min(0) });
 
 const data = z.object({
 	id: shared.id,
@@ -11,7 +11,7 @@ const data = z.object({
 	pack: z.string().optional(),
 	released: date.optional(),
 	bpm: z.number().min(10).max(1000).optional(),
-	length: shared.total.optional(),
+	length: z.number().min(0).optional(),
 	characteristic: shared.characteristic,
 	difficulty: shared.difficulty,
 	colorNotes: entity.extend({}).optional(),

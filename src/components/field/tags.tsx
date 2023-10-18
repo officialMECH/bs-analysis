@@ -16,18 +16,19 @@ export default function Tags({ value = [], onChange, ...delegated }: Props) {
 				e.preventDefault();
 				const value = e.currentTarget.value;
 				if (!value) return;
-				setTags([...tags, value]);
+				const update = [...tags, value];
+				setTags(update);
 				e.currentTarget.value = "";
-				onChange(tags);
+				onChange(update);
 				break;
 			}
 			case "Backspace": {
 				const value = e.currentTarget.value;
 				if (value) return;
-				const x = tags.filter((_, i) => i !== tags.length - 1);
-				setTags(x);
+				const update = tags.filter((_, i) => i !== tags.length - 1);
+				setTags(update);
 				e.currentTarget.value = "";
-				onChange(tags);
+				onChange(update);
 				break;
 			}
 			default: {
@@ -37,8 +38,9 @@ export default function Tags({ value = [], onChange, ...delegated }: Props) {
 	}
 
 	function removeTag(index: number) {
-		setTags(tags.filter((_, i) => i !== index));
-		onChange(tags);
+		const update = tags.filter((_, i) => i !== index);
+		setTags(update);
+		onChange(update);
 	}
 
 	return (

@@ -1,14 +1,14 @@
 import { Field } from "$/components/field";
-import { createLevelIndex } from "$/helpers";
+import { createLevelIndex, parsers } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { css } from "$/styles/css";
-import { IData, schemas } from "$/types";
+import { IData, artificial, entity, numeric, schemas } from "$/types";
 import { useForm } from "@tanstack/react-form";
 import { Fragment } from "react";
 import { Schema } from "zod";
 import { Form } from ".";
-import icons from "../icons";
+import { icons } from "..";
 
 interface Props {
 	initial?: IData;
@@ -27,12 +27,8 @@ export default function ManualDataForm({ initial, onSubmit }: Props) {
 
 	const F = useForm({
 		defaultValues: {
+			...initial,
 			id: initial?.id ?? "",
-			title: initial?.title ?? undefined,
-			pack: initial?.pack ?? undefined,
-			released: initial?.released ?? undefined,
-			bpm: initial?.bpm ?? undefined,
-			length: initial?.length ?? undefined,
 			characteristic: initial?.characteristic ?? "Standard",
 			difficulty: initial?.difficulty ?? "Easy",
 			colorNotes: initial?.colorNotes?.total ?? undefined,
@@ -49,40 +45,44 @@ export default function ManualDataForm({ initial, onSubmit }: Props) {
 			lightTranslationEventBoxGroups: initial?.lightTranslationEventBoxGroups?.total ?? undefined,
 			waypoints: initial?.waypoints?.total ?? undefined,
 			basicEventTypesWithKeywords: initial?.basicEventTypesWithKeywords?.total ?? undefined,
-			jumpSpeed: initial?.jumpSpeed ?? undefined,
-			jumpOffset: initial?.jumpOffset ?? undefined,
-			mappers: initial?.mappers ?? undefined,
-			lighters: initial?.lighters ?? undefined,
 		},
 	});
 
 	function handleSubmit(values: typeof F.state.values) {
-		if (!state) throw Error("An unexpected error occured.");
-		const data = {
+		if (!state) throw Error("You cannot create an entry in a dataset that does not exist.");
+		const update: IData = {
 			...values,
-			id: values.id,
-			colorNotes: values.colorNotes ? { total: values.colorNotes } : undefined,
-			bombNotes: values.bombNotes ? { total: values.bombNotes } : undefined,
-			obstacles: values.obstacles ? { total: values.obstacles } : undefined,
-			sliders: values.sliders ? { total: values.sliders } : undefined,
-			burstSliders: values.burstSliders ? { total: values.burstSliders } : undefined,
-			basicBeatmapEvents: values.basicBeatmapEvents ? { total: values.basicBeatmapEvents } : undefined,
-			colorBoostBeatmapEvents: values.colorBoostBeatmapEvents ? { total: values.colorBoostBeatmapEvents } : undefined,
-			rotationEvents: values.rotationEvents ? { total: values.rotationEvents } : undefined,
-			bpmEvents: values.bpmEvents ? { total: values.bpmEvents } : undefined,
-			lightColorEventBoxGroups: values.lightColorEventBoxGroups ? { total: values.lightColorEventBoxGroups } : undefined,
-			lightRotationEventBoxGroups: values.lightRotationEventBoxGroups ? { total: values.lightRotationEventBoxGroups } : undefined,
-			lightTranslationEventBoxGroups: values.lightTranslationEventBoxGroups ? { total: values.lightTranslationEventBoxGroups } : undefined,
-			waypoints: values.waypoints ? { total: values.waypoints } : undefined,
-			basicEventTypesWithKeywords: values.basicEventTypesWithKeywords ? { total: values.basicEventTypesWithKeywords } : undefined,
+			title: artificial<IData["title"]>(schemas.data.shape.title).parse(values.title),
+			pack: artificial<IData["pack"]>(schemas.data.shape.title).parse(values.pack),
+			bpm: numeric(schemas.data.shape.bpm).parse(values.bpm),
+			length: numeric(schemas.data.shape.length).parse(values.length),
+			released: artificial<IData["released"]>(schemas.data.shape.released).parse(values.released),
+			colorNotes: entity(schemas.total).parse(values.colorNotes),
+			bombNotes: entity(schemas.total).parse(values.bombNotes),
+			obstacles: entity(schemas.total).parse(values.obstacles),
+			sliders: entity(schemas.total).parse(values.sliders),
+			burstSliders: entity(schemas.total).parse(values.burstSliders),
+			basicBeatmapEvents: entity(schemas.total).parse(values.basicBeatmapEvents),
+			colorBoostBeatmapEvents: entity(schemas.total).parse(values.colorBoostBeatmapEvents),
+			rotationEvents: entity(schemas.total).parse(values.rotationEvents),
+			bpmEvents: entity(schemas.total).parse(values.bpmEvents),
+			lightColorEventBoxGroups: entity(schemas.total).parse(values.lightColorEventBoxGroups),
+			lightRotationEventBoxGroups: entity(schemas.total).parse(values.lightRotationEventBoxGroups),
+			lightTranslationEventBoxGroups: entity(schemas.total).parse(values.lightTranslationEventBoxGroups),
+			waypoints: entity(schemas.total).parse(values.waypoints),
+			basicEventTypesWithKeywords: entity(schemas.total).parse(values.basicEventTypesWithKeywords),
+			jumpSpeed: numeric(schemas.data.shape.jumpSpeed).parse(values.jumpSpeed),
+			jumpOffset: numeric(schemas.data.shape.jumpOffset).parse(values.jumpOffset),
+			mappers: artificial<IData["mappers"]>(schemas.data.shape.mappers).parse(values.mappers),
+			lighters: artificial<IData["lighters"]>(schemas.data.shape.lighters).parse(values.lighters),
 		};
-		const parsed = schemas.data.safeParse(data);
-		if (!parsed.success) throw parsed.error;
 		if (!initial && state.data.some((x) => x.id === values.id && x.characteristic === values.characteristic && x.difficulty === values.difficulty)) {
 			if (!confirm("This entry already exists in the dataset, so any existing data will be overwritten. Are you sure you want to continue?")) return;
 		}
-		dispatch({ type: "UPDATE", payload: { id: key, dataset: { ...state, data: { ...state.data, [`${parsed.data.id}/${createLevelIndex(parsed.data)}`]: parsed.data }, updated: new Date().toISOString() }, overwrite: true } });
-		if (onSubmit) onSubmit();
+		parsers.raw({ id: key, object: { ...state, data: { ...state.data, [`${update.id}/${createLevelIndex(update)}`]: update }, updated: new Date().toISOString() } }, (id, dataset) => {
+			dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } });
+			if (onSubmit) onSubmit();
+		});
 	}
 
 	return (
@@ -115,39 +115,39 @@ export default function ManualDataForm({ initial, onSubmit }: Props) {
 					<F.Field name="title" onChange={(x) => validate(x, schemas.data.shape.title)} children={(field) => <Field.String field={field} heading="Title" />} />
 					<F.Field name="pack" onChange={(x) => validate(x, schemas.data.shape.pack)} children={(field) => <Field.String field={field} heading="Pack" />} />
 					{/* @ts-ignore */}
-					<F.Field name="released" onChange={(x) => validate(x, schemas.data.shape.released)} children={(field) => <Field.String field={field} heading="Release Date" subheading="(ISO)" />} />
-					<F.Field name="bpm" onChange={(x) => validate(x, schemas.data.shape.bpm)} children={(field) => <Field.Number field={field} heading="BPM" />} />
-					<F.Field name="length" onChange={(x) => validate(x, schemas.data.shape.length)} children={(field) => <Field.Number field={field} heading="Length" subheading="(sec)" />} />
+					<F.Field name="released" onChange={(x) => validate(x, artificial(schemas.data.shape.released))} children={(field) => <Field.String field={field} heading="Release Date" subheading="(ISO)" />} />
+					<F.Field name="bpm" onChange={(x) => validate(x, numeric(schemas.data.shape.bpm))} children={(field) => <Field.Number field={field} heading="BPM" />} />
+					<F.Field name="length" onChange={(x) => validate(x, numeric(schemas.data.shape.length))} children={(field) => <Field.Number field={field} heading="Length" subheading="(sec)" />} />
 				</Form.Row>
 				<Form.Row>
-					<F.Field name="colorNotes" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.colorNotes} />} />
-					<F.Field name="bombNotes" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.bombNotes} />} />
-					<F.Field name="obstacles" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.obstacles} />} />
-					<F.Field name="sliders" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.sliders} />} />
-					<F.Field name="burstSliders" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.burstSliders} />} />
-					<F.Field name="basicBeatmapEvents" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.basicBeatmapEvents} />} />
-					<F.Field name="colorBoostBeatmapEvents" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.colorBoostBeatmapEvents} />} />
-					<F.Field name="rotationEvents" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.rotationEvents} />} />
-					<F.Field name="bpmEvents" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.bpmEvents} />} />
-					<F.Field name="lightColorEventBoxGroups" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.lightColorEventBoxGroups} />} />
-					<F.Field name="lightRotationEventBoxGroups" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.lightRotationEventBoxGroups} />} />
-					<F.Field name="lightTranslationEventBoxGroups" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.lightTranslationEventBoxGroups} />} />
-					<F.Field name="waypoints" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.waypoints} />} />
-					<F.Field name="basicEventTypesWithKeywords" onChange={(x) => validate(x, schemas.total.optional())} children={(field) => <Field.Number center field={field} heading={icons.basicEventTypesForKeyword} />} />
-					<F.Field name="jumpSpeed" onChange={(x) => validate(x, schemas.data.shape.jumpSpeed)} children={(field) => <Field.Number center field={field} heading={icons.jumpSpeed} />} />
-					<F.Field name="jumpOffset" onChange={(x) => validate(x, schemas.data.shape.jumpOffset)} children={(field) => <Field.Number center field={field} heading={icons.jumpOffset} />} />
+					<F.Field name="colorNotes" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.colorNotes} />} />
+					<F.Field name="bombNotes" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.bombNotes} />} />
+					<F.Field name="obstacles" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.obstacles} />} />
+					<F.Field name="sliders" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.sliders} />} />
+					<F.Field name="burstSliders" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.burstSliders} />} />
+					<F.Field name="basicBeatmapEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.basicBeatmapEvents} />} />
+					<F.Field name="colorBoostBeatmapEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.colorBoostBeatmapEvents} />} />
+					<F.Field name="rotationEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.rotationEvents} />} />
+					<F.Field name="bpmEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.bpmEvents} />} />
+					<F.Field name="lightColorEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.lightColorEventBoxGroups} />} />
+					<F.Field name="lightRotationEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.lightRotationEventBoxGroups} />} />
+					<F.Field name="lightTranslationEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.lightTranslationEventBoxGroups} />} />
+					<F.Field name="waypoints" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.waypoints} />} />
+					<F.Field name="basicEventTypesWithKeywords" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <Field.Number center field={field} heading={icons.basicEventTypesWithKeywords} />} />
+					<F.Field name="jumpSpeed" onChange={(x) => validate(x, numeric(schemas.data.shape.jumpSpeed))} children={(field) => <Field.Number center field={field} heading={icons.jumpSpeed} />} />
+					<F.Field name="jumpOffset" onChange={(x) => validate(x, numeric(schemas.data.shape.jumpOffset))} children={(field) => <Field.Number center field={field} heading={icons.jumpOffset} />} />
 				</Form.Row>
 				<Form.Row>
 					<F.Field name="mappers" onChange={(x) => validate(x, schemas.data.shape.mappers)} children={(field) => <Field.Array field={field} heading="Mapper(s)" />} />
 					<F.Field name="lighters" onChange={(x) => validate(x, schemas.data.shape.lighters)} children={(field) => <Field.Array field={field} heading="Lighter(s)" />} />
 				</Form.Row>
 				<F.Subscribe
-					selector={() => [F.state.canSubmit, F.state.isSubmitting]}
-					children={([canSubmit, isSubmitting]) => {
+					selector={() => F.state.canSubmit}
+					children={(canSubmit) => {
 						return (
 							<Fragment>
 								<button disabled={!canSubmit} onClick={() => handleSubmit(F.state.values)}>
-									{isSubmitting ? "..." : "Submit"}
+									{"Submit"}
 								</button>
 							</Fragment>
 						);
