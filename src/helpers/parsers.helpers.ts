@@ -80,8 +80,9 @@ export default {
 			const id = resolvers.file(file.name);
 			void file.arrayBuffer().then((contents) => parseArchive({ id, buffer: contents }, callback));
 		},
-		url: (url: string, callback: (id: string, value: Entry<unknown>[]) => void) => {
+		url: (url: string, callback: (id: string, value: Entry<unknown>[]) => void, onStart?: () => void) => {
 			const id = resolvers.url(url);
+			if (onStart) onStart();
 			void fetch(url).then((response) => {
 				void response.blob().then((blob) => {
 					void blob.arrayBuffer().then((contents) => parseArchive({ id, buffer: contents }, callback));

@@ -1,36 +1,41 @@
-import { Dialog, Icon, Popover, Table } from "$/components";
-import { calc, createLevelIndex, formatDuration, formatters, sort } from "$/helpers";
-import { hstack, vstack } from "$/styles/patterns";
+import { Checkbox, Icon, Table } from "$/components";
+import { calc, formatDuration, formatters } from "$/helpers";
+import { vstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
-import { Characteristic, Difficulty, IData, schemas } from "$/types";
-import { ColumnFiltersState, SortingState, createColumnHelper, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { useState } from "react";
-import { icons } from ".";
-import LevelActions from "./actions/level";
-import ArchiveDataForm from "./form/archive";
-import ManualDataForm from "./form/level";
-
-interface Props {
-	id: string;
-	data: IData[];
-}
+import { IData, schemas } from "$/types";
+import { createColumnHelper } from "@tanstack/react-table";
+import RowActions from "../actions/row";
 
 const helper = createColumnHelper<IData>();
 const size = { sm: 4, md: 6, lg: 10 };
 
-const columns = [
+export const columns = [
 	helper.display({
 		id: "link",
 		size: size.sm,
-		header: (c) => <Table.Cell {...c}>Level</Table.Cell>,
+		header: (c) => {
+			const isSelected = c.table.getIsSomeRowsSelected() || c.table.getIsAllRowsSelected();
+			return (
+				<Table.Cell {...c} className={vstack({ gap: 0 })}>
+					<span>Level</span>
+					<Checkbox id={c.column.id} checked={isSelected} onChange={c.table.getToggleAllRowsSelectedHandler()} />
+				</Table.Cell>
+			);
+		},
+		footer: (c) => {
+			const { rows } = c.table.getFilteredSelectedRowModel();
+			return (
+				<Table.Cell {...c} className={vstack({ gap: 0 })}>
+					<RowActions ids={rows.map((r) => r.id)} onDelete={() => c.table.setRowSelection(() => ({}))} />
+				</Table.Cell>
+			);
+		},
 		cell: (c) => (
 			<Table.Cell {...c}>
+				<Checkbox id={c.row.id} checked={c.row.getIsSelected()} onChange={c.row.getToggleSelectedHandler()} />
 				<Icon className="fa-solid fa-external-link" asChild>
 					<a href={`./level/${c.row.id}`} />
 				</Icon>
-				<Popover render={() => <LevelActions id={c.row.id} />}>
-					<Icon className="fa-solid fa-ellipsis" />
-				</Popover>
 			</Table.Cell>
 		),
 	}),
@@ -246,95 +251,3 @@ const columns = [
 		cell: (c) => <Table.AccessorCell {...c} transform={(value) => (value ? formatters.array(value) : undefined)} />,
 	}),
 ];
-
-export default function DataTable({ id, data }: Props) {
-	const [sorting, setSorting] = useState<SortingState>([
-		{ id: "released", desc: false },
-		{ id: "id", desc: false },
-		{ id: "characteristic", desc: false },
-		{ id: "difficulty", desc: false },
-	]);
-
-	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
-	const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
-		id: false,
-		pack: false,
-		released: false,
-		bombNotes: false,
-		obstacles: false,
-		sliders: false,
-		burstSliders: false,
-		basicBeatmapEvents: false,
-		colorBoostBeatmapEvents: false,
-		rotationEvents: false,
-		bpmEvents: false,
-		lightColorEventBoxGroups: false,
-		lightRotationEventBoxGroups: false,
-		lightTranslationEventBoxGroups: false,
-		waypoints: false,
-		basicEventTypesWithKeywords: false,
-		hjd: false,
-		jd: false,
-		rt: false,
-		mappers: false,
-		lighters: false,
-	});
-
-	const table = useReactTable<IData>({
-		data: data ?? [],
-		columns,
-		state: { columnVisibility, sorting, columnFilters },
-		defaultColumn: {
-			minSize: 2,
-			maxSize: 12,
-		},
-		sortingFns: {
-			characteristic: (rowA, rowB) => {
-				const a = rowA.getValue<Characteristic>("characteristic");
-				const b = rowB.getValue<Characteristic>("characteristic");
-				return sort.characteristic(a, b);
-			},
-			difficulty: (rowA, rowB) => {
-				const a = rowA.getValue<Difficulty>("difficulty");
-				const b = rowB.getValue<Difficulty>("difficulty");
-				return sort.difficulty(a, b);
-			},
-		},
-		getRowId: (row, index) => (row.id ? `${row.id}/${createLevelIndex(row)}` : index.toString()),
-		onColumnVisibilityChange: setColumnVisibility,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		getFacetedUniqueValues: getFacetedUniqueValues(),
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		debugTable: import.meta.env.DEV,
-	});
-
-	return (
-		<div className={styles.column}>
-			<Table.Toggle table={table} icons={icons} />
-			<Table.Pagination id={id} table={table} />
-			<div className={styles.row}>
-				<Dialog render={({ close }) => <ManualDataForm onSubmit={close} />}>
-					<button title="Add Entry">
-						<Icon className="fa-solid fa-add" />
-					</button>
-				</Dialog>
-				<Dialog render={({ close }) => <ArchiveDataForm onSubmit={close} />}>
-					<button title="Import from Archive">
-						<Icon className="fa-solid fa-archive" />
-					</button>
-				</Dialog>
-			</div>
-			<Table.Table table={table} />
-		</div>
-	);
-}
-
-const styles = {
-	column: vstack({ gap: 4, alignItems: "center", width: "full" }),
-	row: hstack({ gap: 2 }),
-};

@@ -1,9 +1,9 @@
 import { TField } from "$/components";
-import { createLevelIndex, parsers } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { css } from "$/styles/css";
 import { IData, artificial, entity, numeric, schemas } from "$/types";
+import { omit } from "$/utils";
 import { useForm } from "@tanstack/react-form";
 import { Fragment } from "react";
 import { Schema } from "zod";
@@ -12,12 +12,13 @@ import { icons } from "..";
 
 interface Props {
 	initial?: IData;
-	onSubmit?: () => void;
+	disable?: Partial<Record<keyof IData, boolean>>;
+	onSubmit?: (update: IData) => void;
 }
 
-export default function ManualDataForm({ initial, onSubmit }: Props) {
+export default function ManualDataForm({ initial, disable = {}, onSubmit }: Props) {
 	const { key } = useParams("/:key");
-	const { state, dispatch } = useDataset(key);
+	const { state } = useDataset(key);
 
 	function validate<O>(x: unknown, schema: Schema<O>) {
 		const parsed = schema.safeParse(x);
@@ -49,7 +50,7 @@ export default function ManualDataForm({ initial, onSubmit }: Props) {
 	});
 
 	function handleSubmit(values: typeof F.state.values) {
-		if (!state) throw Error("You cannot create an entry in a dataset that does not exist.");
+		if (!state) throw Error("You cannot create new entries in a dataset that does not exist.");
 		const update: IData = {
 			...values,
 			title: artificial<IData["title"]>(schemas.data.shape.title).parse(values.title),
@@ -77,12 +78,9 @@ export default function ManualDataForm({ initial, onSubmit }: Props) {
 			lighters: artificial<IData["lighters"]>(schemas.data.shape.lighters).parse(values.lighters),
 		};
 		if (!initial && state.data.some((x) => x.id === values.id && x.characteristic === values.characteristic && x.difficulty === values.difficulty)) {
-			if (!confirm("This entry already exists in the dataset, so any existing data will be overwritten. Are you sure you want to continue?")) return;
+			if (!confirm("This entry already exists in the dataset, so any existing data may be overwritten. Are you sure you want to continue?")) return;
 		}
-		parsers.dataset.raw({ id: key, object: { ...state, data: { ...state.data, [`${update.id}/${createLevelIndex(update)}`]: update }, updated: new Date().toISOString() } }, (id, dataset) => {
-			dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } });
-			if (onSubmit) onSubmit();
-		});
+		if (onSubmit) onSubmit(omit(update, ...(Object.keys(disable ?? {}) as (keyof IData)[])) as IData);
 	}
 
 	return (
@@ -112,34 +110,34 @@ export default function ManualDataForm({ initial, onSubmit }: Props) {
 					</Form.Row>
 				)}
 				<Form.Row>
-					<F.Field name="title" onChange={(x) => validate(x, schemas.data.shape.title)} children={(field) => <TField.String field={field} heading="Title" />} />
-					<F.Field name="pack" onChange={(x) => validate(x, schemas.data.shape.pack)} children={(field) => <TField.String field={field} heading="Pack" />} />
+					<F.Field name="title" onChange={(x) => validate(x, schemas.data.shape.title)} children={(field) => <TField.String field={field} heading="Title" disabled={disable?.[field.name]} />} />
+					<F.Field name="pack" onChange={(x) => validate(x, schemas.data.shape.pack)} children={(field) => <TField.String field={field} heading="Pack" disabled={disable?.[field.name]} />} />
 					{/* @ts-ignore */}
-					<F.Field name="released" onChange={(x) => validate(x, artificial(schemas.data.shape.released))} children={(field) => <TField.String field={field} heading="Release Date" subheading="(ISO)" />} />
-					<F.Field name="bpm" onChange={(x) => validate(x, numeric(schemas.data.shape.bpm))} children={(field) => <TField.Number field={field} heading="BPM" />} />
-					<F.Field name="length" onChange={(x) => validate(x, numeric(schemas.data.shape.length))} children={(field) => <TField.Number field={field} heading="Length" subheading="(sec)" />} />
+					<F.Field name="released" onChange={(x) => validate(x, artificial(schemas.data.shape.released))} children={(field) => <TField.String field={field} heading="Release Date" subheading="(ISO)" disabled={disable?.[field.name]} />} />
+					<F.Field name="bpm" onChange={(x) => validate(x, numeric(schemas.data.shape.bpm))} children={(field) => <TField.Number field={field} heading="BPM" disabled={disable?.[field.name]} />} />
+					<F.Field name="length" onChange={(x) => validate(x, numeric(schemas.data.shape.length))} children={(field) => <TField.Number field={field} heading="Length" subheading="(sec)" disabled={disable?.[field.name]} />} />
 				</Form.Row>
 				<Form.Row>
-					<F.Field name="colorNotes" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.colorNotes} />} />
-					<F.Field name="bombNotes" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.bombNotes} />} />
-					<F.Field name="obstacles" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.obstacles} />} />
-					<F.Field name="sliders" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.sliders} />} />
-					<F.Field name="burstSliders" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.burstSliders} />} />
-					<F.Field name="basicBeatmapEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.basicBeatmapEvents} />} />
-					<F.Field name="colorBoostBeatmapEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.colorBoostBeatmapEvents} />} />
-					<F.Field name="rotationEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.rotationEvents} />} />
-					<F.Field name="bpmEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.bpmEvents} />} />
-					<F.Field name="lightColorEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightColorEventBoxGroups} />} />
-					<F.Field name="lightRotationEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightRotationEventBoxGroups} />} />
-					<F.Field name="lightTranslationEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightTranslationEventBoxGroups} />} />
-					<F.Field name="waypoints" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.waypoints} />} />
-					<F.Field name="basicEventTypesWithKeywords" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.basicEventTypesWithKeywords} />} />
-					<F.Field name="jumpSpeed" onChange={(x) => validate(x, numeric(schemas.data.shape.jumpSpeed))} children={(field) => <TField.Number center field={field} heading={icons.jumpSpeed} />} />
-					<F.Field name="jumpOffset" onChange={(x) => validate(x, numeric(schemas.data.shape.jumpOffset))} children={(field) => <TField.Number center field={field} heading={icons.jumpOffset} />} />
+					<F.Field name="colorNotes" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.colorNotes} disabled={disable?.[field.name]} />} />
+					<F.Field name="bombNotes" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.bombNotes} disabled={disable?.[field.name]} />} />
+					<F.Field name="obstacles" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.obstacles} disabled={disable?.[field.name]} />} />
+					<F.Field name="sliders" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.sliders} disabled={disable?.[field.name]} />} />
+					<F.Field name="burstSliders" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.burstSliders} disabled={disable?.[field.name]} />} />
+					<F.Field name="basicBeatmapEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.basicBeatmapEvents} disabled={disable?.[field.name]} />} />
+					<F.Field name="colorBoostBeatmapEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.colorBoostBeatmapEvents} disabled={disable?.[field.name]} />} />
+					<F.Field name="rotationEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.rotationEvents} disabled={disable?.[field.name]} />} />
+					<F.Field name="bpmEvents" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.bpmEvents} disabled={disable?.[field.name]} />} />
+					<F.Field name="lightColorEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightColorEventBoxGroups} disabled={disable?.[field.name]} />} />
+					<F.Field name="lightRotationEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightRotationEventBoxGroups} disabled={disable?.[field.name]} />} />
+					<F.Field name="lightTranslationEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightTranslationEventBoxGroups} disabled={disable?.[field.name]} />} />
+					<F.Field name="waypoints" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.waypoints} disabled={disable?.[field.name]} />} />
+					<F.Field name="basicEventTypesWithKeywords" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.basicEventTypesWithKeywords} disabled={disable?.[field.name]} />} />
+					<F.Field name="jumpSpeed" onChange={(x) => validate(x, numeric(schemas.data.shape.jumpSpeed))} children={(field) => <TField.Number center field={field} heading={icons.jumpSpeed} disabled={disable?.[field.name]} />} />
+					<F.Field name="jumpOffset" onChange={(x) => validate(x, numeric(schemas.data.shape.jumpOffset))} children={(field) => <TField.Number center field={field} heading={icons.jumpOffset} disabled={disable?.[field.name]} />} />
 				</Form.Row>
 				<Form.Row>
-					<F.Field name="mappers" onChange={(x) => validate(x, schemas.data.shape.mappers)} children={(field) => <TField.Array field={field} heading="Mapper(s)" />} />
-					<F.Field name="lighters" onChange={(x) => validate(x, schemas.data.shape.lighters)} children={(field) => <TField.Array field={field} heading="Lighter(s)" />} />
+					<F.Field name="mappers" onChange={(x) => validate(x, schemas.data.shape.mappers)} children={(field) => <TField.Array field={field} heading="Mapper(s)" disabled={disable?.[field.name]} />} />
+					<F.Field name="lighters" onChange={(x) => validate(x, schemas.data.shape.lighters)} children={(field) => <TField.Array field={field} heading="Lighter(s)" disabled={disable?.[field.name]} />} />
 				</Form.Row>
 				<F.Subscribe
 					selector={() => F.state.canSubmit}

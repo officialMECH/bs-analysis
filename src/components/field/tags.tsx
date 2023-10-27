@@ -6,7 +6,7 @@ interface Props extends Omit<ComponentProps<"input">, "value" | "onChange"> {
 	onChange: (values: string[]) => void;
 }
 
-export default function Tags({ value = [], onChange, ...delegated }: Props) {
+export default function Tags({ value = [], onChange, disabled, ...delegated }: Props) {
 	const [tags, setTags] = useState<string[]>(value);
 
 	function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
@@ -48,10 +48,10 @@ export default function Tags({ value = [], onChange, ...delegated }: Props) {
 			{tags.map((tag, index) => (
 				<span className={styles.tag} key={index}>
 					{tag}
-					<i onClick={() => removeTag(index)} className="fa-solid fa-close" />
+					{!disabled && <i onClick={() => removeTag(index)} className="fa-solid fa-close" />}
 				</span>
 			))}
-			<input {...delegated} type="text" onKeyDown={handleKeyDown} className={styles.input} />
+			<input {...delegated} disabled={disabled} type="text" onKeyDown={handleKeyDown} className={styles.input} />
 		</div>
 	);
 }

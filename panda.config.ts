@@ -93,6 +93,7 @@ export default defineConfig({
 			"&:not([disabled]):hover": {
 				borderColor: "primary",
 			},
+			"&[disabled]": { backgroundColor: "container" },
 		},
 		"input, textarea": {
 			paddingX: 1,

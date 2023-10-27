@@ -8,5 +8,5 @@ export { default as Tooltip } from "./floating/tooltip";
 export { default as Icon } from "./icon";
 export { default as Table } from "./table";
 export { default as Tabs } from "./tabs";
-export { default as Toggle } from "./toggle";
+export { default as Checkbox } from "./toggle";
 export { default as UnstyledInput } from "./unstyled/input";

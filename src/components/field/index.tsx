@@ -10,6 +10,7 @@ interface Props<T, V> {
 	heading: ReactNode;
 	subheading?: string;
 	center?: boolean;
+	disabled?: boolean;
 	tooltip?: () => ReactNode;
 }
 
@@ -36,47 +37,47 @@ export default function Wrapper<T, V>({ field, heading, subheading, center, tool
 }
 
 export const TField = {
-	String: <T, V extends string | undefined>({ field, ...wrapper }: Props<T, V>) => {
+	String: <T, V extends string | undefined>({ field, disabled, ...wrapper }: Props<T, V>) => {
 		const [value, setValue] = useState(field?.state.value ?? "");
 		useEffect(() => {
 			field?.handleChange(value as V);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
-				<input name={field?.name as string} value={value ?? ""} onChange={(e) => setValue(e.target.value)} />
+				<input name={field?.name as string} disabled={disabled} value={value ?? ""} onChange={(e) => setValue(e.target.value)} />
 			</Wrapper>
 		);
 	},
-	Number: <T, V extends number | undefined>({ field, ...wrapper }: Props<T, V>) => {
+	Number: <T, V extends number | undefined>({ field, disabled, ...wrapper }: Props<T, V>) => {
 		const [value, setValue] = useState(field?.state.value ?? "");
 		useEffect(() => {
 			field?.handleChange((value !== "" ? Number(value) : value) as V);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
-				<input type="text" name={field?.name as string} value={value ?? ""} onChange={(e) => setValue(e.target.value)} />
+				<input type="text" name={field?.name as string} disabled={disabled} value={value ?? ""} onChange={(e) => setValue(e.target.value)} />
 			</Wrapper>
 		);
 	},
-	Text: <T, V extends string | undefined>({ field, ...wrapper }: Props<T, V>) => {
+	Text: <T, V extends string | undefined>({ field, disabled, ...wrapper }: Props<T, V>) => {
 		const [value, setValue] = useState(field?.state.value ?? "");
 		useEffect(() => {
 			field?.handleChange(value as V);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
-				<textarea name={field?.name as string} value={value ?? ""} onChange={(e) => setValue(e.target.value)} />
+				<textarea name={field?.name as string} disabled={disabled} value={value ?? ""} onChange={(e) => setValue(e.target.value)} />
 			</Wrapper>
 		);
 	},
-	Enum: <T, V extends string>({ field, children, ...wrapper }: PropsWithChildren<Props<T, V>>) => {
+	Enum: <T, V extends string>({ field, disabled, children, ...wrapper }: PropsWithChildren<Props<T, V>>) => {
 		const [value, setValue] = useState(field?.state.value ?? "");
 		useEffect(() => {
 			field?.handleChange(value as V);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
-				<select name={field?.name as string} value={value ?? ""} onChange={(e) => setValue(e.target.value as V)}>
+				<select name={field?.name as string} disabled={disabled} value={value ?? ""} onChange={(e) => setValue(e.target.value as V)}>
 					{Children.map(children, (child) => (
 						<option>{child}</option>
 					))}
@@ -84,14 +85,14 @@ export const TField = {
 			</Wrapper>
 		);
 	},
-	Array: <T, V extends string[] | undefined>({ field, ...wrapper }: Props<T, V>) => {
+	Array: <T, V extends string[] | undefined>({ field, disabled, ...wrapper }: Props<T, V>) => {
 		const [value, setValue] = useState(field?.state.value);
 		useEffect(() => {
 			field?.handleChange(value as V);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
-				<Tags name={field?.name as string} value={value ?? []} onChange={(value) => setValue(value as V)} />
+				<Tags name={field?.name as string} disabled={disabled} value={value ?? []} onChange={(value) => setValue(value as V)} />
 			</Wrapper>
 		);
 	},

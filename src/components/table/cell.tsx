@@ -1,4 +1,4 @@
-import { cva } from "$/styles/css";
+import { cva, cx } from "$/styles/css";
 import { scrollable } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
 import { AsChildProps } from "$/types";
@@ -10,12 +10,12 @@ type CellProps<D, V> = Pick<CellContext<D, V>, "column"> & { wrapper?: ElementTy
 type AccessorCellProps<D, V> = CellProps<D, V> & Pick<CellContext<D, V>, "getValue"> & { validate?: (raw: V | undefined) => boolean; transform?: (raw: V | undefined, valid: boolean) => ReactNode; background?: (raw: V) => string; color?: (raw: V) => string };
 type Props<P> = Omit<AsChildProps<"div">, "color"> & P;
 
-export function Cell<D, V>({ asChild, href, column, style, children }: Props<CellProps<D, V>>) {
+export function Cell<D, V>({ asChild, href, column, style, children, className }: Props<CellProps<D, V>>) {
 	const Child = asChild ? Slot : "div";
 	const Parent = href ? "a" : "div";
 	return (
 		<Parent href={href}>
-			<Child className={styles.wrapper} style={{ width: column.getSize() * 16, ...style }}>
+			<Child className={cx(styles.wrapper, className)} style={{ width: column.getSize() * 16, ...style }}>
 				{children}
 			</Child>
 		</Parent>
