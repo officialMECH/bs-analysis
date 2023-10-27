@@ -1,12 +1,12 @@
 export { default as Badge } from "./badge";
 export { default as Chart } from "./chart";
 export { StorageProvider } from "./context/storage";
-export { default as Field } from "./field";
+export { default as Field, TField } from "./field";
 export { default as Dialog } from "./floating/dialog";
 export { default as Popover } from "./floating/popover";
 export { default as Tooltip } from "./floating/tooltip";
 export { default as Icon } from "./icon";
 export { default as Table } from "./table";
 export { default as Tabs } from "./tabs";
-export { default as Toggle } from "./toggle";
+export { default as Checkbox } from "./toggle";
 export { default as UnstyledInput } from "./unstyled/input";

@@ -1,7 +1,8 @@
-import { wrap } from "$/styles/patterns";
+import { cva } from "$/styles/css";
+import { center, wrap } from "$/styles/patterns";
 import { Table } from "@tanstack/react-table";
 import { ReactNode } from "react";
-import { Toggle as Button } from "..";
+import { Checkbox } from "..";
 
 interface Props<T> {
 	table: Table<T>;
@@ -14,9 +15,9 @@ export default function Toggle<T>({ table, icons = {} }: Props<T>) {
 			{table.getAllLeafColumns().map((c) => {
 				if (["link"].includes(c.id)) return null;
 				return (
-					<Button key={c.id} id={c.id} checked={c.getIsVisible()} onChange={c.getToggleVisibilityHandler()}>
+					<Checkbox className={styles.wrapper({ checked: c.getIsVisible() })} key={c.id} id={c.id} checked={c.getIsVisible()} onChange={c.getToggleVisibilityHandler()}>
 						{icons[c.id] ?? c.id}
-					</Button>
+					</Checkbox>
 				);
 			})}
 		</div>
@@ -28,5 +29,21 @@ const styles = {
 		justifyContent: "center",
 		backgroundColor: "container",
 		padding: 4,
+	}),
+	wrapper: cva({
+		base: center.raw({
+			width: 8,
+			height: 8,
+			color: "white",
+			"&:focus": {
+				borderColor: "white",
+			},
+		}),
+		variants: {
+			checked: {
+				true: { backgroundColor: "primary" },
+				false: { backgroundColor: "neutral" },
+			},
+		},
 	}),
 };

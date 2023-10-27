@@ -84,7 +84,7 @@ export default defineConfig({
 		hr: {
 			marginY: 4,
 		},
-		"input, select": {
+		"input, select, textarea": {
 			backgroundColor: "element",
 			border: "1px solid transparent",
 			transition: "border-color 0.25s",
@@ -93,8 +93,9 @@ export default defineConfig({
 			"&:not([disabled]):hover": {
 				borderColor: "primary",
 			},
+			"&[disabled]": { backgroundColor: "container" },
 		},
-		input: {
+		"input, textarea": {
 			paddingX: 1,
 			fontWeight: "normal",
 			"&::placeholder": {

@@ -3,7 +3,7 @@ import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
 import { cva } from "$/styles/css";
 import { stack, vstack } from "$/styles/patterns";
-import Templates from "$/templates";
+import { Charts, Content, DatasetActions } from "$/templates";
 import { Fragment } from "react";
 
 export default function Overview() {
@@ -15,12 +15,12 @@ export default function Overview() {
 		return (
 			<Fragment>
 				<span className={styles.name({ exists: !!dataset?.name })}>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
-				<Templates.Actions id={key} exists={!!dataset} />
+				<DatasetActions id={key} />
 			</Fragment>
 		);
 	}
 	return (
-		<Templates.Content title={<Title />} layout={"data"}>
+		<Content title={<Title />} layout={"data"}>
 			{dataset ? (
 				<Fragment>
 					{(dataset.description || dataset.contributors || dataset.updated) && (
@@ -44,12 +44,12 @@ export default function Overview() {
 							)}
 						</div>
 					)}
-					<Templates.Charts id={key} />
+					<Charts id={key} />
 				</Fragment>
 			) : (
 				"This dataset is not available."
 			)}
-		</Templates.Content>
+		</Content>
 	);
 }
 

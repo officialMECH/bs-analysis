@@ -4,17 +4,24 @@ import { Fragment, ReactNode, useState } from "react";
 
 interface Props {
 	render: Record<string, ReactNode>;
+	onChange?: (id: string) => void;
 	initial?: string;
 }
 
-export default function Tabs({ render, initial = "" }: Props) {
+export default function Tabs({ render, onChange, initial = "" }: Props) {
 	const entries = Object.entries(render);
 	const [active, setActive] = useState(initial);
+
+	function handleClick(id: string) {
+		setActive(id);
+		if (onChange) onChange(id);
+	}
+
 	return (
 		<div className={styles.container}>
 			<ul className={styles.list.wrapper}>
 				{entries.map(([id]) => (
-					<li key={id} onClick={() => setActive(id)} className={styles.list.item({ active: active === id })}>
+					<li key={id} onClick={() => handleClick(id)} className={styles.list.item({ active: active === id })}>
 						{id}
 					</li>
 				))}

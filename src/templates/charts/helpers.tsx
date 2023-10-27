@@ -24,7 +24,7 @@ const template: EChartsOption = {
 export const base = {
 	pie: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x));
-		const series = data.map(transformer).filter(predicates.unique);
+		const series = data.length === 0 ? [] : data.map(transformer).filter(predicates.unique);
 		return {
 			...template,
 			...options,
@@ -56,7 +56,7 @@ export const base = {
 				return {
 					type: "scatter",
 					name: difficulty,
-					data: values.map((x) => [titles.indexOf(x.title ?? x.id), transformer(x)!]),
+					data: data.length === 0 ? [] : values.map((x) => [titles.indexOf(x.title ?? x.id), transformer(x)!]),
 					markLine: {
 						data: [{ type: "average", name: "Average" }],
 					},
@@ -66,6 +66,7 @@ export const base = {
 	},
 	time: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
+		if (data.length === 0) return null;
 		const cells = data.map((x) => {
 			const date = new Date(transformer(x)!);
 			return { hours: date.getHours(), day: date.getDay() };

@@ -59,4 +59,4 @@ jobs:
       - name: Prepare
         run: yarn prepare
       - name: Run Vitest
-        run: yarn test
+        run: yarn test run

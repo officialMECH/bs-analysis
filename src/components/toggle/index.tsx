@@ -1,13 +1,13 @@
-import { css, cva } from "$/styles/css";
-import { center } from "$/styles/patterns";
+import { css } from "$/styles/css";
 import { ComponentProps, Fragment, useRef } from "react";
+import { Icon } from "..";
 
-export default function Checkbox({ id, checked, onChange, children, ...delegated }: ComponentProps<"input">) {
+export default function Checkbox({ id, checked, onChange, children, className, ...delegated }: ComponentProps<"input">) {
 	const input = useRef<HTMLInputElement | null>(null);
 	return (
 		<Fragment>
-			<label tabIndex={0} title={id} htmlFor={id} className={styles.wrapper({ checked })}>
-				{children}
+			<label tabIndex={0} htmlFor={id} className={className}>
+				{children ?? <Icon className={checked ? "fa-solid fa-square-check" : "fa-solid fa-square"}></Icon>}
 			</label>
 			<input ref={input} type="checkbox" tabIndex={-1} id={id} checked={checked} onChange={onChange} className={styles.input} {...delegated} />
 		</Fragment>
@@ -15,21 +15,5 @@ export default function Checkbox({ id, checked, onChange, children, ...delegated
 }
 
 const styles = {
-	wrapper: cva({
-		base: center.raw({
-			width: 8,
-			height: 8,
-			color: "white",
-			"&:focus": {
-				borderColor: "white",
-			},
-		}),
-		variants: {
-			checked: {
-				true: { backgroundColor: "primary" },
-				false: { backgroundColor: "neutral" },
-			},
-		},
-	}),
 	input: css({ display: "none" }),
 };
