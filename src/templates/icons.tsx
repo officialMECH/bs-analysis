@@ -27,6 +27,7 @@ export default {
 	lightColorEventBoxGroups: <i title="Light Color Event Box Groups" className="fa-solid fa-lightbulb" />,
 	lightRotationEventBoxGroups: <i title="Light Rotation Event Box Groups" className="fa-solid fa-rotate" />,
 	lightTranslationEventBoxGroups: <i title="Light Translation Event Box Groups" className="fa-solid fa-up-down-left-right" />,
+	vfxEventBoxGroups: <i title="VFX Event Box Groups" className="fa-solid fa-video" />,
 	waypoints: <i title="Waypoints" className="fa-solid fa-location" />,
 	basicEventTypesWithKeywords: <i title="Special Event Types" className="fa-solid fa-key" />,
 	jumpSpeed: <i title="Jump Speed" className="fa-solid fa-gauge" />,

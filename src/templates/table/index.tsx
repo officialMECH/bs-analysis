@@ -35,6 +35,7 @@ export default function DataTable({ id, data }: Props) {
 		lightColorEventBoxGroups: false,
 		lightRotationEventBoxGroups: false,
 		lightTranslationEventBoxGroups: false,
+		vfxEventBoxGroups: false,
 		waypoints: false,
 		basicEventTypesWithKeywords: false,
 		hjd: false,

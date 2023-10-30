@@ -187,6 +187,13 @@ export const columns = [
 		header: (c) => <Table.Cell {...c}>Light Translation Event Box Groups</Table.Cell>,
 		cell: (c) => <Table.AccessorCell {...c} />,
 	}),
+	helper.accessor((r) => r.vfxEventBoxGroups?.total, {
+		id: "vfxEventBoxGroups",
+		size: size.sm,
+		filterFn: "inNumberRange",
+		header: (c) => <Table.Cell {...c}>VFX Event Box Groups</Table.Cell>,
+		cell: (c) => <Table.AccessorCell {...c} />,
+	}),
 	helper.accessor((r) => r.waypoints?.total, {
 		id: "waypoints",
 		size: size.sm,
