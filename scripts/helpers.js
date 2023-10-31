@@ -155,6 +155,7 @@ export function resolveLevelStats(data, details = false) {
 			lightColorEventBoxGroups: { total: data.lightColorEventBoxGroups.length },
 			lightRotationEventBoxGroups: { total: data.lightRotationEventBoxGroups.length },
 			lightTranslationEventBoxGroups: data.lightTranslationEventBoxGroups ? { total: data.lightTranslationEventBoxGroups.length } : undefined,
+			vfxEventBoxGroups: data.vfxEventBoxGroups ? { total: data.vfxEventBoxGroups.length } : undefined,
 			waypoints: { total: data.waypoints.length },
 			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
 		};

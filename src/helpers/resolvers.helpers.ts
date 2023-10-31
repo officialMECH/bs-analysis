@@ -76,6 +76,7 @@ export function resolveLevelStats(data: unknown, details = false) {
 			lightColorEventBoxGroups: { total: isV3.data.lightColorEventBoxGroups.length },
 			lightRotationEventBoxGroups: { total: isV3.data.lightRotationEventBoxGroups.length },
 			lightTranslationEventBoxGroups: isV3.data.lightTranslationEventBoxGroups ? { total: isV3.data.lightTranslationEventBoxGroups.length } : undefined,
+			vfxEventBoxGroups: isV3.data.vfxEventBoxGroups ? { total: isV3.data.vfxEventBoxGroups.length } : undefined,
 			waypoints: { total: isV3.data.waypoints.length },
 			basicEventTypesWithKeywords: { total: isV3.data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
 		};

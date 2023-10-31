@@ -26,6 +26,7 @@ const data = z.object({
 	lightColorEventBoxGroups: entity.extend({}).optional(),
 	lightRotationEventBoxGroups: entity.extend({}).optional(),
 	lightTranslationEventBoxGroups: entity.extend({}).optional(),
+	vfxEventBoxGroups: entity.extend({}).optional(),
 	waypoints: entity.extend({}).optional(),
 	basicEventTypesWithKeywords: entity.extend({}).optional(),
 	jumpSpeed: z.number().optional(),

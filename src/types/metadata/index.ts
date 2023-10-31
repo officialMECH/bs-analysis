@@ -46,6 +46,7 @@ const v3 = z.object({
 	lightColorEventBoxGroups: z.array(z.unknown()),
 	lightRotationEventBoxGroups: z.array(z.unknown()),
 	lightTranslationEventBoxGroups: z.array(z.unknown()).optional(),
+	vfxEventBoxGroups: z.array(z.unknown()).optional(),
 	waypoints: z.array(z.unknown()),
 	basicEventTypesWithKeywords: z.object({ d: z.array(z.object({ e: z.array(z.number()) })).optional() }),
 });

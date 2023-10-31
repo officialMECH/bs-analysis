@@ -44,6 +44,7 @@ export default function ManualDataForm({ initial, disable = {}, onSubmit }: Prop
 			lightColorEventBoxGroups: initial?.lightColorEventBoxGroups?.total ?? undefined,
 			lightRotationEventBoxGroups: initial?.lightRotationEventBoxGroups?.total ?? undefined,
 			lightTranslationEventBoxGroups: initial?.lightTranslationEventBoxGroups?.total ?? undefined,
+			vfxEventBoxGroups: initial?.vfxEventBoxGroups?.total ?? undefined,
 			waypoints: initial?.waypoints?.total ?? undefined,
 			basicEventTypesWithKeywords: initial?.basicEventTypesWithKeywords?.total ?? undefined,
 		},
@@ -70,6 +71,7 @@ export default function ManualDataForm({ initial, disable = {}, onSubmit }: Prop
 			lightColorEventBoxGroups: entity(schemas.total).parse(values.lightColorEventBoxGroups),
 			lightRotationEventBoxGroups: entity(schemas.total).parse(values.lightRotationEventBoxGroups),
 			lightTranslationEventBoxGroups: entity(schemas.total).parse(values.lightTranslationEventBoxGroups),
+			vfxEventBoxGroups: entity(schemas.total).parse(values.vfxEventBoxGroups),
 			waypoints: entity(schemas.total).parse(values.waypoints),
 			basicEventTypesWithKeywords: entity(schemas.total).parse(values.basicEventTypesWithKeywords),
 			jumpSpeed: numeric(schemas.data.shape.jumpSpeed).parse(values.jumpSpeed),
@@ -130,6 +132,7 @@ export default function ManualDataForm({ initial, disable = {}, onSubmit }: Prop
 					<F.Field name="lightColorEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightColorEventBoxGroups} disabled={disable?.[field.name]} />} />
 					<F.Field name="lightRotationEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightRotationEventBoxGroups} disabled={disable?.[field.name]} />} />
 					<F.Field name="lightTranslationEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.lightTranslationEventBoxGroups} disabled={disable?.[field.name]} />} />
+					<F.Field name="vfxEventBoxGroups" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.vfxEventBoxGroups} disabled={disable?.[field.name]} />} />
 					<F.Field name="waypoints" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.waypoints} disabled={disable?.[field.name]} />} />
 					<F.Field name="basicEventTypesWithKeywords" onChange={(x) => validate(x, numeric(schemas.total))} children={(field) => <TField.Number center field={field} heading={icons.basicEventTypesWithKeywords} disabled={disable?.[field.name]} />} />
 					<F.Field name="jumpSpeed" onChange={(x) => validate(x, numeric(schemas.data.shape.jumpSpeed))} children={(field) => <TField.Number center field={field} heading={icons.jumpSpeed} disabled={disable?.[field.name]} />} />
