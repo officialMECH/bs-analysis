@@ -53,7 +53,7 @@ export const base = {
 			yAxis: {},
 			dataZoom: [
 				{ type: "inside", yAxisIndex: 0, filterMode: "none" },
-				{ type: "inside", xAxisIndex: 0, filterMode: "none" },
+				{ type: "slider", xAxisIndex: 0, filterMode: "none", bottom: 40 },
 			],
 			series: difficulties.map((difficulty) => {
 				const values = data.filter((x) => x.difficulty === difficulty);
