@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { writeFileSync } from "node:fs";
-import { CHARACTERISTICS, DIFFICULTIES, config, createLevelIndex, extract, nonempty, resolveLevelStats } from "./helpers.js";
+import { config, createLevelIndex, extract, nonempty, resolveLevelStats } from "./helpers.js";
 
 const { details, users, ids, beatsaver, metadata, output, minify } = await config(false, [
 	{ name: "users", type: "list", message: "User ID(s)" },
@@ -53,8 +53,8 @@ const entries = await Promise.all(
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const { detail, info, level } = entry;
-	const characteristic = CHARACTERISTICS[level.beatmap._beatmapCharacteristicName];
-	const difficulty = DIFFICULTIES[level.beatmap._difficulty];
+	const characteristic = level.beatmap._beatmapCharacteristicName;
+	const difficulty = level.beatmap._difficulty;
 	const bid = createLevelIndex({ characteristic, difficulty });
 	const title = info._songName ?? detail.metadata.songName;
 	const data = {

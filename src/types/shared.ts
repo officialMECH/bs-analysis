@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-const id = z.string().nonempty();
+const id = z.string().min(1);
 const total = z.number().min(0);
 
-const characteristic = z.enum(["Standard", "No Arrows", "One Saber", "Legacy", "360 Degree", "90 Degree", "Lightshow", "Lawless"]);
-const difficulty = z.enum(["Easy", "Normal", "Hard", "Expert", "Expert+"]);
+const characteristic = z.enum(["Standard", "NoArrows", "OneSaber", "Legacy", "360Degree", "90Degree", "Lightshow", "Lawless"]);
+const difficulty = z.enum(["Easy", "Normal", "Hard", "Expert", "ExpertPlus"]);
 
 export type Characteristic = z.infer<typeof characteristic>;
 export type Difficulty = z.infer<typeof difficulty>;

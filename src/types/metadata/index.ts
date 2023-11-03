@@ -1,7 +1,5 @@
 import { z } from "zod";
-
-const characteristic = z.enum(["Standard", "NoArrows", "OneSaber", "Legacy", "360Degree", "90Degree", "Lightshow", "Lawless"]);
-const difficulty = z.enum(["Easy", "Normal", "Hard", "Expert", "ExpertPlus"]);
+import shared from "../shared";
 
 const info = z.object({
 	_songName: z.string(),
@@ -9,10 +7,10 @@ const info = z.object({
 	_beatsPerMinute: z.number(),
 	_difficultyBeatmapSets: z.array(
 		z.object({
-			_beatmapCharacteristicName: characteristic,
+			_beatmapCharacteristicName: shared.characteristic,
 			_difficultyBeatmaps: z.array(
 				z.object({
-					_difficulty: difficulty,
+					_difficulty: shared.difficulty,
 					_beatmapFilename: z.string(),
 					_noteJumpMovementSpeed: z.number(),
 					_noteJumpStartBeatOffset: z.number(),
@@ -55,4 +53,4 @@ export type IInfo = z.infer<typeof info>;
 export type ILevelV2 = z.infer<typeof v2>;
 export type ILevelV3 = z.infer<typeof v3>;
 
-export default { characteristic, difficulty, info, v2, v3 };
+export default { info, v2, v3 };

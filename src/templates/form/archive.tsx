@@ -4,7 +4,7 @@ import { createLevelIndex, fromEntries, parsers, resolveLevelStats } from "$/hel
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { scrollable } from "$/styles/patterns";
-import { Entry, IData, schemas } from "$/types";
+import { Entry, IData } from "$/types";
 import { ChangeEvent, useEffect, useState } from "react";
 import slugify from "slugify";
 import { Form } from ".";
@@ -33,8 +33,8 @@ export default function ArchiveDataForm({ onSubmit }: Props) {
 				title: info._songName,
 				bpm: Number(info._beatsPerMinute.toFixed(3)),
 				length: audio ? Number(audio.duration.toFixed(3)) : undefined,
-				characteristic: Object.values(schemas.characteristic.Values)[Object.values(schemas.metadata.characteristic.Values).indexOf(level.beatmap._beatmapCharacteristicName)],
-				difficulty: Object.values(schemas.difficulty.Values)[Object.values(schemas.metadata.difficulty.Values).indexOf(level.beatmap._difficulty)],
+				characteristic: level.beatmap._beatmapCharacteristicName,
+				difficulty: level.beatmap._difficulty,
 				...resolveLevelStats(level.data),
 				jumpSpeed: level.beatmap._noteJumpMovementSpeed,
 				jumpOffset: level.beatmap._noteJumpStartBeatOffset,

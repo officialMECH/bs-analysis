@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import prompt from "prompts";
 import slugify from "slugify";
-import { config, createLevelIndex, importDuration, predicates } from "./helpers.js";
+import { CHARACTERISTICS, DIFFICULTIES, config, createLevelIndex, importDuration, predicates } from "./helpers.js";
 
 const { input, tsv, metadata, output, minify } = await config(true, [
 	{ name: "input", type: "text", message: "Source (File or URL)" }, //
@@ -51,6 +51,7 @@ const dataset = await lines.reduce(async (record, line) => {
 	const characteristic = cell(cells, "characteristic");
 	const difficulty = cell(cells, "difficulty");
 	if (!characteristic || !difficulty) return record;
+	if (!CHARACTERISTICS.includes(characteristic) || !DIFFICULTIES.includes(difficulty)) return record;
 	const data = Object.keys(tsv.indices).reduce((record, key) => {
 		return { ...record, [key]: cell(cells, key, remap.transformers[key]) };
 	}, {});

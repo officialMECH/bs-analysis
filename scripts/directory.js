@@ -4,7 +4,7 @@ import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { default as prompt } from "prompts";
 import slugify from "slugify";
-import { CHARACTERISTICS, DIFFICULTIES, config, createLevelIndex, fromEntries, resolveLevelStats } from "./helpers.js";
+import { config, createLevelIndex, fromEntries, resolveLevelStats } from "./helpers.js";
 
 const { details, directory, metadata, output, minify } = await config(false, [
 	{ name: "directory", type: "text", message: "Directory" }, //
@@ -17,8 +17,8 @@ const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(e
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const { info, level } = entry;
-	const characteristic = CHARACTERISTICS[level.beatmap._beatmapCharacteristicName];
-	const difficulty = DIFFICULTIES[level.beatmap._difficulty];
+	const characteristic = level.beatmap._beatmapCharacteristicName;
+	const difficulty = level.beatmap._difficulty;
 	const bid = createLevelIndex({ characteristic, difficulty });
 	const title = info._songName;
 	const { sid } = await id;

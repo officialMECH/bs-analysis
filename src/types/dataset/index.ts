@@ -12,8 +12,14 @@ const data = z.object({
 	released: date.optional(),
 	bpm: z.number().min(10).max(1000).optional(),
 	length: z.number().min(0).optional(),
-	characteristic: shared.characteristic,
-	difficulty: shared.difficulty,
+	characteristic: z.preprocess((value) => {
+		if (typeof value === "string" && ["No Arrows", "One Saber", "360 Degree", "90 Degree"].includes(value)) return value.replace(" ", "");
+		return value;
+	}, shared.characteristic),
+	difficulty: z.preprocess((value) => {
+		if (typeof value === "string" && ["Expert+"].includes(value)) return "ExpertPlus";
+		return value;
+	}, shared.difficulty),
 	colorNotes: entity.extend({}).optional(),
 	bombNotes: entity.extend({}).optional(),
 	obstacles: entity.extend({}).optional(),

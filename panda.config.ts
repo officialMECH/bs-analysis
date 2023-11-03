@@ -143,7 +143,7 @@ export default defineConfig({
 						["Normal"]: { value: { base: "{colors.yellow.200}", _osDark: "{colors.yellow.800}" } },
 						["Hard"]: { value: { base: "{colors.orange.200}", _osDark: "{colors.orange.800}" } },
 						["Expert"]: { value: { base: "{colors.red.200}", _osDark: "{colors.red.800}" } },
-						["Expert+"]: { value: { base: "{colors.purple.200}", _osDark: "{colors.purple.800}" } },
+						["ExpertPlus"]: { value: { base: "{colors.purple.200}", _osDark: "{colors.purple.800}" } },
 					},
 				},
 			},
