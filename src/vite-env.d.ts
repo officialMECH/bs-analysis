@@ -7,4 +7,7 @@ declare module "@tanstack/react-table" {
 		characteristic: SortingFn<unknown>;
 		difficulty: SortingFn<unknown>;
 	}
+	interface ColumnMeta {
+		type?: string;
+	}
 }

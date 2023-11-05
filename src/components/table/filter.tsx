@@ -24,10 +24,10 @@ function Input<T extends string | number | readonly string[]>({ value: initialVa
 }
 
 export default function Filter<T, V>({ column, table }: Props<T, V>) {
-	const name = column.getFilterFn()?.name;
-	const first = table.getPreFilteredRowModel().flatRows[0].getValue(column.id);
+	const { meta } = column.columnDef;
+	const rows = table.getPreFilteredRowModel().flatRows;
 
-	if (typeof first === "number" || name === "inNumberRange") {
+	if (meta?.type === "number" || rows.some((r) => typeof r.getValue(column.id) === "number")) {
 		const value = column.getFilterValue() as [number, number] | undefined;
 		return (
 			<div className={styles.wrapper}>
@@ -41,7 +41,7 @@ export default function Filter<T, V>({ column, table }: Props<T, V>) {
 	return (
 		<div className={styles.wrapper}>
 			<Input list={column.id + "list"} value={value} setValue={(value) => column.setFilterValue(value)} placeholder={`Search...`} />
-			{name === "equals" && (
+			{meta?.type === "list" && (
 				<datalist id={column.id + "list"}>
 					{values.map((x: string) => (
 						<option key={x} value={x} />
