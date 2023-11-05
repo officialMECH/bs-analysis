@@ -1,6 +1,6 @@
 import { Field, Tabs } from "$/components";
 import Spinner from "$/components/spinner";
-import { createLevelIndex, fromEntries, parsers, resolveLevelStats } from "$/helpers";
+import { formatters, fromEntries, parsers, resolveLevelStats } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { scrollable } from "$/styles/patterns";
@@ -107,7 +107,7 @@ export default function ArchiveDataForm({ onSubmit }: Props) {
 				<summary>Entries ({data.length})</summary>
 				<pre className={styles.container}>
 					{JSON.stringify(
-						data.reduce((r, x) => ({ ...r, [`${x.id}/${createLevelIndex(x)}`]: x }), {}),
+						data.reduce((r, x) => ({ ...r, [formatters.id(x)]: x }), {}),
 						null,
 						2
 					)}

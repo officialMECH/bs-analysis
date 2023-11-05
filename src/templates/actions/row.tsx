@@ -6,16 +6,18 @@ import { cx } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
 import { IData } from "$/types";
 import { common, omit, prune } from "$/utils";
+import { Table } from "@tanstack/react-table";
 import { Fragment } from "react";
 import { DataForm } from "../form";
 
-interface Props {
+interface Props<T> {
+	table: Table<T>;
 	ids: string[];
 	onSubmit?: (update: IData) => void;
 	onDelete?: (ids: string[]) => void;
 }
 
-export default function RowActions({ ids, onSubmit, onDelete }: Props) {
+export default function RowActions<T>({ table, ids, onSubmit, onDelete }: Props<T>) {
 	const { key } = useParams("/:key");
 	const { state, dispatch } = useDataset(key);
 	if (!state) throw Error("The dataset does not exist.");
@@ -46,6 +48,7 @@ export default function RowActions({ ids, onSubmit, onDelete }: Props) {
 		});
 		if (onSubmit) onSubmit(update);
 		close();
+		table.setRowSelection({});
 	}
 
 	function handleDelete() {
@@ -54,6 +57,7 @@ export default function RowActions({ ids, onSubmit, onDelete }: Props) {
 		const data = state.data.filter((x) => !entries.some((d) => x.id === d.id && x.characteristic === d.characteristic && x.difficulty === d.difficulty));
 		dispatch({ type: "UPDATE", payload: { id: key, dataset: { ...state, data }, overwrite: true } });
 		if (onDelete) onDelete(ids);
+		table.setRowSelection({});
 	}
 
 	if (ids.length <= 0) return null;

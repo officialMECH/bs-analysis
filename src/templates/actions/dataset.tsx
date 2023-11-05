@@ -1,6 +1,6 @@
 import { Dialog, Icon, UnstyledInput } from "$/components";
 import { datasets } from "$/constants";
-import { createLevelIndex, parsers, sort } from "$/helpers";
+import { formatters, parsers, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { cx } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
@@ -40,7 +40,7 @@ export default function DatasetActions({ id }: PropsWithChildren<Props>) {
 		data = data.sort((a, b) => sort.string(a.id, b.id));
 		data = data.sort((a, b) => (a.released && b.released ? sort.released(a.released, b.released) : 0));
 		data = state.data.reduce((record, value) => {
-			return { ...record, [`${value.id}/${createLevelIndex(value)}`]: value };
+			return { ...record, [formatters.id(value)]: value };
 		}, {});
 		parsers.dataset.raw({ id, object: { ...state, data } }, (id, dataset) => {
 			const blob = new Blob([JSON.stringify(dataset, null, event.shiftKey ? 0 : 2)], { type: "application/json" });

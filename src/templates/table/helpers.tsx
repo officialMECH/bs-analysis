@@ -26,7 +26,7 @@ export const columns = [
 			const { rows } = c.table.getFilteredSelectedRowModel();
 			return (
 				<Table.Cell {...c} className={vstack({ gap: 0 })}>
-					<RowActions ids={rows.map((r) => r.id)} onDelete={() => c.table.setRowSelection(() => ({}))} />
+					<RowActions table={c.table} ids={rows.map((r) => r.id)} />
 				</Table.Cell>
 			);
 		},
