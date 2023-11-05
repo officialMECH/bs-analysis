@@ -18,7 +18,7 @@ export default {
 	colorNotes: <img src={note} title="Color Notes" style={{ width: "1.25rem" }} />,
 	bombNotes: <img src={bomb} title="Bomb Notes" style={{ width: "1.25rem" }} />,
 	obstacles: <img src={obstacle} title="Obstacles" style={{ width: "1.25rem" }} />,
-	sliders: <img src={arc} title="Arcs" style={{ width: "1rem" }} />,
+	sliders: <img src={arc} title="Arcs" style={{ width: "1.25rem" }} />,
 	burstSliders: <i title="Chains" className="fa-solid fa-link" />,
 	basicBeatmapEvents: <i title="Basic Events" className="fa-solid fa-cube" />,
 	colorBoostBeatmapEvents: <i title="Boost Events" className="fa-solid fa-bolt" />,
