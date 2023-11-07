@@ -83,7 +83,7 @@ export const columns = [
 		meta: { type: "number" },
 		filterFn: "inNumberRange",
 		header: (c) => <Table.Cell {...c}>Length</Table.Cell>,
-		cell: (c) => <Table.AccessorCell {...c} transform={(value) => (value ? formatDuration(value) : undefined)} />,
+		cell: (c) => <Table.AccessorCell {...c} transform={(value) => (value ? formatDuration(Math.floor(value)) : undefined)} />,
 	}),
 	helper.accessor((r) => r.characteristic, {
 		id: "characteristic",
