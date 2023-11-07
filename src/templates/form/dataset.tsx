@@ -2,7 +2,7 @@ import { TField } from "$/components";
 import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
 import { css } from "$/styles/css";
-import { IDataset, artificial, schemas } from "$/types";
+import { IDataset, schemas } from "$/types";
 import { omit } from "$/utils";
 import { useForm } from "@tanstack/react-form";
 import { Fragment } from "react";
@@ -26,7 +26,7 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 	const F = useForm({
 		defaultValues: { id: initial?.id ?? "", ...initial },
 		onChange: (values, formApi) => {
-			formApi.setFieldValue("name", artificial<typeof values.name>(schemas.dataset.shape.name).parse(values.name));
+			formApi.setFieldValue("name", schemas.artificial.string(schemas.dataset.shape.name).parse(values.name));
 			return undefined;
 		},
 	});
@@ -35,9 +35,9 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 		const id = values.id;
 		const update: IDataset = {
 			...omit(values, "id"),
-			name: artificial<IDataset["name"]>(schemas.dataset.shape.name).parse(values.name),
-			contributors: artificial<IDataset["contributors"]>(schemas.dataset.shape.contributors).parse(values.contributors),
-			description: artificial<IDataset["description"]>(schemas.dataset.shape.name).parse(values.description),
+			name: schemas.artificial.string(schemas.dataset.shape.name).parse(values.name),
+			contributors: schemas.dataset.shape.contributors.parse(values.contributors),
+			description: schemas.artificial.string(schemas.dataset.shape.description).parse(values.description),
 			data: state[id]?.data ?? [],
 		};
 		if (!initial && state[id]) {
