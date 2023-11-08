@@ -57,7 +57,7 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 						<F.Field name="id" onChange={(x) => validate(x, schemas.id)} children={(field) => <TField.String field={field} heading="ID" />} />
 					</Form.Row>
 				)}
-				<Form.Row>
+				<Form.Row size="lg">
 					<F.Field name="name" onChange={(x) => validate(x, schemas.dataset.shape.name)} children={(field) => <TField.String field={field} heading="Name" />} />
 					<F.Field name="contributors" onChange={(x) => validate(x, schemas.dataset.shape.contributors)} children={(field) => <TField.Array field={field} heading="Contributor(s)" />} />
 				</Form.Row>

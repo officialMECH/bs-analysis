@@ -1,4 +1,4 @@
-import { css } from "$/styles/css";
+import { css, cva } from "$/styles/css";
 import { vstack } from "$/styles/patterns";
 import { Fragment, PropsWithChildren } from "react";
 
@@ -16,10 +16,10 @@ function Template({ title, children }: PropsWithChildren<Props>) {
 	);
 }
 
-function Row({ children }: PropsWithChildren) {
+function Row({ children, size = "sm" }: PropsWithChildren<{ size?: "sm" | "md" | "lg" | "xl" }>) {
 	return (
 		<Fragment>
-			<div className={styles.row}>{children}</div>
+			<div className={styles.row({ size })}>{children}</div>
 		</Fragment>
 	);
 }
@@ -34,11 +34,21 @@ const styles = {
 		alignItems: "start",
 		gap: 4,
 	}),
-	row: css({
-		display: "grid",
-		width: "full",
-		gridTemplateColumns: "repeat(auto-fit, minmax(56px, 1fr))",
-		gridRowGap: 4,
-		gridColumnGap: 2,
+	row: cva({
+		base: {
+			display: "grid",
+			width: "full",
+			gridTemplateColumns: "repeat(auto-fit, minmax(48px, 1fr))",
+			gridRowGap: 4,
+			gridColumnGap: 2,
+		},
+		variants: {
+			size: {
+				sm: { gridTemplateColumns: "repeat(auto-fit, minmax(48px, 1fr))" },
+				md: { gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))" },
+				lg: { gridTemplateColumns: "repeat(auto-fit, minmax(144px, 1fr))" },
+				xl: { gridTemplateColumns: "repeat(auto-fit, minmax(192px, 1fr))" },
+			},
+		},
 	}),
 };

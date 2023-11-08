@@ -9,18 +9,17 @@ interface Props {
 export default function Icon({ asChild, variant, children, className, ...delegated }: AsChildProps<"i"> & Props) {
 	const As = asChild ? Slot : "i";
 	return (
-		<As tabIndex={0} className={cx(wrapper({ variant }), className && className)} {...delegated}>
+		<As tabIndex={0} className={cx(wrapper({ variant }), className)} {...delegated}>
 			{children}
 		</As>
 	);
 }
 
 const wrapper = cva({
-	base: { cursor: "pointer" },
 	variants: {
 		variant: {
-			primary: { color: "primary" },
-			danger: { color: "danger" },
+			primary: { color: "primary", cursor: "pointer" },
+			danger: { color: "danger", cursor: "pointer" },
 		},
 	},
 });

@@ -89,7 +89,7 @@ export default function ManualDataForm({ initial, disable = {}, onSubmit }: Prop
 		<F.Provider>
 			<Form.Template title={initial ? "Edit Entry" : "Create Entry"}>
 				{!initial && (
-					<Form.Row>
+					<Form.Row size="md">
 						<F.Field name="id" onChange={(x) => validate(x, schemas.data.shape.id)} children={(field) => <TField.String field={field} heading="ID" />} />
 						<F.Field
 							name="characteristic"
@@ -111,7 +111,7 @@ export default function ManualDataForm({ initial, disable = {}, onSubmit }: Prop
 						/>
 					</Form.Row>
 				)}
-				<Form.Row>
+				<Form.Row size="md">
 					<F.Field name="title" onChange={(x) => validate(x, schemas.artificial.string(schemas.data.shape.title))} children={(field) => <TField.String field={field} heading="Title" disabled={disable?.[field.name]} />} />
 					<F.Field name="pack" onChange={(x) => validate(x, schemas.artificial.string(schemas.data.shape.pack))} children={(field) => <TField.String field={field} heading="Pack" disabled={disable?.[field.name]} />} />
 					{/* @ts-ignore */}
@@ -138,7 +138,7 @@ export default function ManualDataForm({ initial, disable = {}, onSubmit }: Prop
 					<F.Field name="jumpSpeed" onChange={(x) => validate(x, schemas.artificial.number(schemas.data.shape.jumpSpeed))} children={(field) => <TField.Number center field={field} heading={icons.jumpSpeed} disabled={disable?.[field.name]} />} />
 					<F.Field name="jumpOffset" onChange={(x) => validate(x, schemas.artificial.number(schemas.data.shape.jumpOffset))} children={(field) => <TField.Number center field={field} heading={icons.jumpOffset} disabled={disable?.[field.name]} />} />
 				</Form.Row>
-				<Form.Row>
+				<Form.Row size="lg">
 					<F.Field name="mappers" onChange={(x) => validate(x, schemas.data.shape.mappers)} children={(field) => <TField.Array field={field} heading="Mapper(s)" disabled={disable?.[field.name]} />} />
 					<F.Field name="lighters" onChange={(x) => validate(x, schemas.data.shape.lighters)} children={(field) => <TField.Array field={field} heading="Lighter(s)" disabled={disable?.[field.name]} />} />
 				</Form.Row>
