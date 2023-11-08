@@ -41,7 +41,10 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 	}
 };
 
-const storage = Object.entries(localStorage).reduce((record: State, [key, value]: [string, string]) => ({ ...record, [key]: JSON.parse(value) as T }), {});
+const storage = Object.entries(localStorage).reduce((record: State, [key, value]: [string, string]) => {
+	const parsed = schemas.dataset.parse(JSON.parse(value));
+	return { ...record, [key]: parsed as T };
+}, {});
 
 const Context = createContext<{ state: State; dispatch: Dispatch<Actions> }>({ state: {}, dispatch: () => null });
 

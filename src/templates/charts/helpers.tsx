@@ -1,6 +1,7 @@
+import { css } from "$/styles/css";
 import { flex, hstack, vstack } from "$/styles/patterns";
 import { IData, IDataset, schemas } from "$/types";
-import { predicates } from "$/utils";
+import { omit, predicates } from "$/utils";
 import { EChartsOption } from "echarts";
 
 export interface ChartProps {
@@ -14,10 +15,22 @@ type Chart = (dataset: IDataset<IData[]>, transformer: (data: IData) => string |
 
 const template: EChartsOption = {
 	animation: false,
-	tooltip: {},
+	tooltip: { confine: true },
 	legend: {
+		type: "scroll",
 		orient: "horizontal",
 		bottom: 0,
+	},
+	visualMap: {
+		textStyle: { fontFamily: "monospace" },
+	},
+	xAxis: {
+		axisTick: { alignWithLabel: true },
+		axisLabel: { fontFamily: "monospace" },
+	},
+	yAxis: {
+		axisTick: { alignWithLabel: true },
+		axisLabel: { fontFamily: "monospace" },
 	},
 };
 
@@ -26,7 +39,7 @@ export const base = {
 		const data = dataset.data.filter((x) => filter(x));
 		const series = data.length === 0 ? [] : data.map(transformer).filter(predicates.unique);
 		return {
-			...template,
+			...omit(template, "xAxis", "yAxis", "visualMap"),
 			...options,
 			title: { ...template.title, ...options?.title },
 			legend: { show: false },
@@ -47,10 +60,10 @@ export const base = {
 		const difficulties = Object.values(schemas.difficulty.Values);
 		const titles = data.map((x) => x.title ?? x.id).filter(predicates.unique);
 		return {
-			...template,
+			...omit(template, "visualMap"),
 			...options,
-			xAxis: { type: "category", axisTick: { show: false }, axisLabel: { show: false }, data: titles },
-			yAxis: {},
+			xAxis: { ...template.xAxis, type: "category", axisTick: { show: false }, axisLabel: { show: false }, data: titles },
+			yAxis: { ...template.yAxis },
 			dataZoom: [
 				{ type: "inside", yAxisIndex: 0, filterMode: "none" },
 				{ type: "slider", xAxisIndex: 0, filterMode: "none", bottom: 40 },
@@ -62,7 +75,7 @@ export const base = {
 					name: difficulty,
 					data: data.length === 0 ? [] : values.map((x) => [titles.indexOf(x.title ?? x.id), transformer(x)!]),
 					markLine: {
-						data: [{ type: "average", name: "Average" }],
+						data: [{ type: "average", name: "Average", label: { fontFamily: "monospace" } }],
 					},
 				};
 			}),
@@ -85,9 +98,9 @@ export const base = {
 		return {
 			...template,
 			...options,
-			xAxis: { type: "category", data: ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"] },
-			yAxis: { type: "category", data: ["Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"] },
-			visualMap: { min: 0, max: Math.max(...totals), calculable: true, orient: "horizontal", left: "center" },
+			xAxis: { ...template.xAxis, type: "category", data: ["12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"] },
+			yAxis: { ...template.yAxis, type: "category", data: ["Sat", "Fri", "Thu", "Wed", "Tue", "Mon", "Sun"] },
+			visualMap: { ...template.visualMap, min: 0, max: Math.max(...totals), calculable: true, orient: "horizontal", left: "center" },
 			series: {
 				type: "heatmap",
 				data: cells.map((cell, i) => [cell.hours, cell.day, totals[i]]),
@@ -97,7 +110,8 @@ export const base = {
 } satisfies Record<string, Chart>;
 
 export const styles = {
-	wrapper: flex({ margin: 4, width: "full", direction: "column", gap: 4 }),
+	wrapper: flex({ marginY: 4, width: "full", direction: "column", gap: 4 }),
 	column: vstack(),
-	row: hstack(),
+	row: hstack({ justifyContent: "center", flex: 1, width: "full" }),
+	select: css({ minWidth: 24 }),
 };

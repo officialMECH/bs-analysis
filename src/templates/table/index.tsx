@@ -1,10 +1,11 @@
 import { Dialog, Icon, Table } from "$/components";
-import { createLevelIndex, parsers, sort } from "$/helpers";
+import { formatters, parsers, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { hstack, vstack } from "$/styles/patterns";
 import { Characteristic, Difficulty, IData } from "$/types";
 import { ColumnFiltersState, RowSelectionState, SortingState, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { icons } from "..";
 import ArchiveDataForm from "../form/archive";
 import ManualDataForm from "../form/level";
@@ -17,6 +18,7 @@ interface Props {
 
 export default function DataTable({ id, data }: Props) {
 	const { state, dispatch } = useDataset(id);
+	const location = useLocation();
 
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -72,7 +74,7 @@ export default function DataTable({ id, data }: Props) {
 			},
 		},
 		getCoreRowModel: getCoreRowModel(),
-		getRowId: (row, index) => (row.id ? `${row.id}/${createLevelIndex(row)}` : index.toString()),
+		getRowId: (row, index) => (row.id ? formatters.id(row) : index.toString()),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
@@ -84,11 +86,14 @@ export default function DataTable({ id, data }: Props) {
 		debugTable: import.meta.env.DEV,
 	});
 
+	useEffect(() => setRowSelection({}), [location]);
+
 	function handleSubmit(updates: IData[], close: () => void) {
 		parsers.dataset.raw({ id, object: { ...state, data: state!.data.concat(updates), updated: new Date().toISOString() } }, (id, dataset) => {
 			dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } });
 		});
 		close();
+		setRowSelection(updates.reduce((r, x) => ({ ...r, [formatters.id(x)]: true }), {}));
 	}
 
 	return (

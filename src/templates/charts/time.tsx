@@ -13,7 +13,7 @@ export default function TimeCharts({ id, show, theme, height }: ChartProps) {
 	if (charts.length === 0) return null;
 
 	return (
-		<div className={styles.row}>
+		<div className={styles.column}>
 			<Chart style={{ height }} theme={theme} option={charts[0]!}></Chart>
 		</div>
 	);

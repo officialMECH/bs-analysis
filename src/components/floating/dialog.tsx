@@ -53,7 +53,7 @@ const styles = {
 	wrapper: css({
 		position: "fixed",
 		zIndex: 1,
-		paddingY: 10,
+		padding: 8,
 		left: 0,
 		top: 0,
 		width: "full",

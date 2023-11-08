@@ -1,3 +1,6 @@
+import { IData } from "$/types";
+import { createLevelIndex } from "./resolvers.helpers";
+
 export default {
 	array: (values: string | (string | number)[]) => {
 		if (typeof values === "string") values = values.trim().split(",");
@@ -7,4 +10,5 @@ export default {
 		}, null);
 		return formatted.join(" ");
 	},
+	id: (data: IData) => `${data.id}/${createLevelIndex(data)}`,
 };

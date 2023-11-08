@@ -16,7 +16,7 @@ export default function Charts({ id }: Props) {
 		<details open={show} onToggle={(e) => setShow(e.currentTarget.open)}>
 			<summary>Charts</summary>
 			<div className={styles.wrapper}>
-				<PieCharts id={id} show={show} theme={dark ? "dark" : "light"} height={200} />
+				<PieCharts id={id} show={show} theme={dark ? "dark" : "light"} height={150} />
 				<LevelCharts id={id} show={show} theme={dark ? "dark" : "light"} height={300} />
 				<TimeCharts id={id} show={show} theme={dark ? "dark" : "light"} height={300} />
 			</div>

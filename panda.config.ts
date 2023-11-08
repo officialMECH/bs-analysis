@@ -28,21 +28,28 @@ export default defineConfig({
 				color: "indigo.400",
 			},
 		},
-		button: {
+		"button, input, select, textarea": {
 			backgroundColor: "element",
+			color: "text",
 			border: "1px solid transparent",
-			paddingY: 1,
-			paddingX: 4,
-			borderRadius: "md",
-			cursor: "pointer",
 			transition: "border-color 0.25s",
 			"&:not([disabled]):hover": {
 				borderColor: "primary",
 			},
-			"&:disabled": {
-				opacity: 0.5,
+			"&[disabled]": {
+				backgroundColor: "container",
+				color: "subtext",
 				cursor: "not-allowed",
 			},
+			"&[disabled] > *": {
+				cursor: "not-allowed",
+			},
+		},
+		button: {
+			paddingY: 1,
+			paddingX: 4,
+			borderRadius: "md",
+			cursor: "pointer",
 		},
 		"code, pre": {
 			fontFamily: "monospace",
@@ -61,6 +68,10 @@ export default defineConfig({
 				alignItems: "center",
 				fontWeight: "bold",
 				fontSize: "xl",
+				listStyle: "none",
+			},
+			"& summary::-webkit-details-marker": {
+				display: "none",
 			},
 			"& summary::after": {
 				fontFamily: "system",
@@ -85,18 +96,9 @@ export default defineConfig({
 			marginY: 4,
 		},
 		"input, select, textarea": {
-			backgroundColor: "element",
-			border: "1px solid transparent",
-			transition: "border-color 0.25s",
 			paddingY: 0.5,
-			fontSize: "sm",
-			"&:not([disabled]):hover": {
-				borderColor: "primary",
-			},
-			"&[disabled]": { backgroundColor: "container" },
-		},
-		"input, textarea": {
 			paddingX: 1,
+			fontSize: "sm",
 			fontWeight: "normal",
 			"&::placeholder": {
 				fontSize: "xs",
@@ -112,6 +114,7 @@ export default defineConfig({
 		},
 		select: {
 			paddingX: "0.5em",
+			cursor: "pointer",
 			WebkitAppearance: "none",
 		},
 		table: {
@@ -143,7 +146,7 @@ export default defineConfig({
 						["Normal"]: { value: { base: "{colors.yellow.200}", _osDark: "{colors.yellow.800}" } },
 						["Hard"]: { value: { base: "{colors.orange.200}", _osDark: "{colors.orange.800}" } },
 						["Expert"]: { value: { base: "{colors.red.200}", _osDark: "{colors.red.800}" } },
-						["Expert+"]: { value: { base: "{colors.purple.200}", _osDark: "{colors.purple.800}" } },
+						["ExpertPlus"]: { value: { base: "{colors.purple.200}", _osDark: "{colors.purple.800}" } },
 					},
 				},
 			},

@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { default as prompt } from "prompts";
 import slugify from "slugify";
-import { CHARACTERISTICS, DIFFICULTIES, config, createLevelIndex, extract, resolveLevelStats } from "./helpers.js";
+import { config, createLevelIndex, extract, resolveLevelStats } from "./helpers.js";
 
 const { details, input, metadata, output, minify } = await config(false, [
 	{ name: "input", type: "text", message: "Map Archive (File or URL)", hint: ".zip" }, //
@@ -16,8 +16,8 @@ const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(e
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const { info, level } = entry;
-	const characteristic = CHARACTERISTICS[level.beatmap._beatmapCharacteristicName];
-	const difficulty = DIFFICULTIES[level.beatmap._difficulty];
+	const characteristic = level.beatmap._beatmapCharacteristicName;
+	const difficulty = level.beatmap._difficulty;
 	const bid = createLevelIndex({ characteristic, difficulty });
 	const title = info._songName;
 	const { sid } = await id;

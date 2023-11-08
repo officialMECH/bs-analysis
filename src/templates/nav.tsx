@@ -105,13 +105,20 @@ const styles = {
 		}),
 		variants: {
 			center: {
-				true: wrap.raw({ justifyContent: "center" }),
-				false: hstack.raw({ gap: 2, justifyContent: "space-between" }),
+				true: wrap.raw({
+					justifyContent: "center",
+				}),
+				false: hstack.raw({
+					gap: 6,
+					justifyContent: "space-between",
+				}),
 			},
 		},
 	}),
 	list: wrap({}),
-	row: hstack({ gap: 3 }),
+	row: hstack({
+		gap: 3,
+	}),
 	select: css({
 		fontSize: "md",
 		fontWeight: "bold",
@@ -126,5 +133,7 @@ const styles = {
 			backgroundColor: "indigo.400",
 		},
 	}),
-	icon: css({ fontSize: "2xl" }),
+	icon: css({
+		fontSize: "2xl",
+	}),
 };

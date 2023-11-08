@@ -5,23 +5,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { default as prompt } from "prompts";
 
-export const CHARACTERISTICS = {
-	["Standard"]: "Standard",
-	["OneSaber"]: "One Saber",
-	["NoArrows"]: "No Arrows",
-	["360Degree"]: "360 Degree",
-	["90Degree"]: "90 Degree",
-	["Legacy"]: "Legacy",
-	["Lightshow"]: "Lightshow",
-	["Lawless"]: "Lawless",
-};
-export const DIFFICULTIES = {
-	["Easy"]: "Easy",
-	["Normal"]: "Normal",
-	["Hard"]: "Hard",
-	["Expert"]: "Expert",
-	["ExpertPlus"]: "Expert+",
-};
+export const CHARACTERISTICS = ["Standard", "OneSaber", "NoArrows", "360Degree", "90Degree", "Legacy", "Lightshow", "Lawless"];
+export const DIFFICULTIES = ["Easy", "Normal", "Hard", "Expert", "ExpertPlus"];
 
 export const nonempty = (x) => x !== "";
 export const delay = (x) => Promise.resolve(setTimeout(() => {}, x));
@@ -57,8 +42,8 @@ export async function config(required, prompts) {
 }
 
 export function createLevelIndex(data) {
-	const c = Object.values(CHARACTERISTICS).indexOf(data.characteristic);
-	const d = Object.values(DIFFICULTIES).indexOf(data.difficulty);
+	const c = CHARACTERISTICS.indexOf[data.characteristic];
+	const d = DIFFICULTIES.indexOf[data.difficulty];
 	return c * 5 + d;
 }
 

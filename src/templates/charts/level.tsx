@@ -33,12 +33,12 @@ export default function LevelCharts({ id, show, theme, height }: ChartProps) {
 		<div className={styles.column}>
 			<Chart style={{ height }} theme={theme} option={charts[idx]!}></Chart>
 			<div className={styles.row}>
-				<select disabled={pack === "All" && packs.length < 2} value={pack} onChange={(e) => setPack(e.target.value)}>
+				<select className={styles.select} disabled={pack === "All" && packs.length < 2} value={pack} onChange={(e) => setPack(e.target.value)}>
 					{["All", ...packs, pack].filter(predicates.unique).map((x) => (
 						<option key={x}>{x}</option>
 					))}
 				</select>
-				<select value={characteristic} onChange={(e) => setCharacteristic(e.target.value)}>
+				<select className={styles.select} value={characteristic} onChange={(e) => setCharacteristic(e.target.value)}>
 					{Object.values(schemas.characteristic.Values).map((x) => (
 						<option key={x}>{x}</option>
 					))}

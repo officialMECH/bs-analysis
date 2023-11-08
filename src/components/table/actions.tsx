@@ -39,6 +39,7 @@ export default function Actions<D>({ table, header }: Props<D>) {
 const styles = {
 	actions: center({ gap: 1, color: "neutral" }),
 	icon: cva({
+		base: { cursor: "pointer" },
 		variants: {
 			active: {
 				true: { color: "text" },
