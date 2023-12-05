@@ -42,8 +42,8 @@ export async function config(required, prompts) {
 }
 
 export function createLevelIndex(data) {
-	const c = CHARACTERISTICS.indexOf[data.characteristic];
-	const d = DIFFICULTIES.indexOf[data.difficulty];
+	const c = CHARACTERISTICS.indexOf(data.characteristic);
+	const d = DIFFICULTIES.indexOf(data.difficulty);
 	return c * 5 + d;
 }
 
