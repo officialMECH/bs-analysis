@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { default as prompt } from "prompts";
 
-export const CHARACTERISTICS = ["Standard", "OneSaber", "NoArrows", "360Degree", "90Degree", "Legacy", "Lightshow", "Lawless"];
+export const CHARACTERISTICS = ["Standard", "NoArrows", "OneSaber", "Legacy", "360Degree", "90Degree", "Lightshow", "Lawless"];
 export const DIFFICULTIES = ["Easy", "Normal", "Hard", "Expert", "ExpertPlus"];
 
 export const nonempty = (x) => x !== "";
