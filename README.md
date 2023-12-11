@@ -4,11 +4,11 @@ This is a web application that provides a comprehensive interface for statistica
 
 ## Getting Started
 
-The **OST/DLC** dataset is available by default from within the application. You can use the controls at the top-right of the Overview/Data pages to freely override a built-in dataset with new metadata, or likewise refresh the dataset to pull the latest updates from the repository.
+The **OST/DLC** dataset is available by default from within the application. You can use the controls at the top-right of the Overview/Data pages to freely override the contents of any built-in dataset, or likewise refresh the dataset to pull the latest updates from this repository.
 
-**We currently don't have plans to support any additional built-in datasets at this time**, but you're welcome to share any custom datasets you've made in the corresponding [Discussions](https://github.com/officialMECH/bs-analysis/discussions/categories/community-datasets) feed.
+**We currently don't have plans to support any additional built-in datasets**, but you're welcome to share any custom datasets you've made in the corresponding [Discussions](https://github.com/officialMECH/bs-analysis/discussions/categories/community-datasets) feed.
 
-If you'd like to create your own datasets, [generator scripts](./scripts/README.md) are available which will allow you to create a dataset from a multitude of sources through the command line. Support for generating datasets in-app will be available in the near future.
+You can also create and modify your own _custom datasets_ from directly within the application, or alternatively use the provided [generator scripts](./scripts) to generate a custom dataset from a variety of external sources, such as local files and external spreadsheets.
 
 ## Want to Contribute?
 

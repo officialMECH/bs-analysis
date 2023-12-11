@@ -1,6 +1,6 @@
 # Generator Scripts
 
-These scripts will provide a means of generating datasets that are compatible with the web app from a variety of sources. There are plans to eventually have support for creating new datasets from within the app, but this should hopefully serve as a temporary solution.
+While the web app _does_ offer native support for creating and modifying datasets, these specialized scripts can provide a means of generating compatible datasets from a variety of external sources, such as local files or external spreadsheets.
 
 [Node.js](https://nodejs.dev/en/learn/) is required to compile/run these scripts. You can install dependencies using [Yarn](https://yarnpkg.com/getting-started) (if you're cloning locally) or your preferred package manager (if you'd rather yoink these scripts and use them in your own preferred engine/framework).
 
@@ -117,6 +117,7 @@ The `tsv` field provides the necessary parameters to parse each cell of the tabl
 | lightColorEventBoxGroups       | entity   |
 | lightRotationEventBoxGroups    | entity   |
 | lightTranslationEventBoxGroups | entity   |
+| vfxEventBoxGroups              | entity   |
 | waypoints                      | entity   |
 | basicEventTypesWithKeywords    | entity   |
 | jumpSpeed                      | number   |
