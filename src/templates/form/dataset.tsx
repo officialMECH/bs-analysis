@@ -5,8 +5,8 @@ import { css } from "$/styles/css";
 import { IDataset, schemas } from "$/types";
 import { omit } from "$/utils";
 import { useForm } from "@tanstack/react-form";
+import { zodValidator } from "@tanstack/zod-form-adapter";
 import { Fragment } from "react";
-import { Schema } from "zod";
 import { Form } from ".";
 
 interface Props {
@@ -17,18 +17,13 @@ interface Props {
 export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 	const { state, dispatch } = useDatasets();
 
-	function validate<O>(x: unknown, schema: Schema<O>) {
-		const parsed = schema.safeParse(x);
-		if (!parsed.success) return parsed.error.issues[0].message;
-		return;
-	}
-
 	const F = useForm({
+		validatorAdapter: zodValidator,
 		defaultValues: { id: initial?.id ?? "", ...initial },
 	});
 
 	function handleSubmit(values: typeof F.state.values) {
-		const id = values.id;
+		const id = schemas.id.parse(values.id);
 		const update: IDataset = {
 			...omit(values, "id"),
 			name: schemas.artificial.string(schemas.dataset.shape.name).parse(values.name),
@@ -50,15 +45,15 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 			<Form.Template title={initial ? "Edit Dataset" : "Create Dataset"}>
 				{!initial && (
 					<Form.Row>
-						<F.Field name="id" validators={{ onChange: (x) => validate(x, schemas.id) }} children={(field) => <TField.String field={field} heading="ID" />} />
+						<F.Field name="id" validators={{ onChange: schemas.id }} children={(field) => <TField.String field={field} heading="ID" />} />
 					</Form.Row>
 				)}
 				<Form.Row size="lg">
-					<F.Field name="name" validators={{ onChange: (x) => validate(x, schemas.dataset.shape.name) }} children={(field) => <TField.String field={field} heading="Name" />} />
-					<F.Field name="contributors" validators={{ onChange: (x) => validate(x, schemas.dataset.shape.contributors) }} children={(field) => <TField.Array field={field} heading="Contributor(s)" />} />
+					<F.Field name="name" validators={{ onChange: schemas.dataset.shape.name }} children={(field) => <TField.String field={field} heading="Name" />} />
+					<F.Field name="contributors" validators={{ onChange: schemas.dataset.shape.contributors }} children={(field) => <TField.Array field={field} heading="Contributor(s)" />} />
 				</Form.Row>
 				<Form.Row>
-					<F.Field name="description" validators={{ onChange: (x) => validate(x, schemas.dataset.shape.description) }} children={(field) => <TField.Text field={field} heading="Description" />} />
+					<F.Field name="description" validators={{ onChange: schemas.dataset.shape.description }} children={(field) => <TField.Text field={field} heading="Description" />} />
 				</Form.Row>
 				<F.Subscribe
 					selector={() => F.state.canSubmit}

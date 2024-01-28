@@ -7,7 +7,7 @@ export const TField = {
 	String: <T, K extends DeepKeys<T>>({ field, disabled, ...wrapper }: Props<T, K>) => {
 		const [value, setValue] = useState(field?.state.value ?? "");
 		useEffect(() => {
-			field?.setValue(() => value as DeepValue<T, K>);
+			field?.handleChange(() => value as DeepValue<T, K>);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
@@ -18,7 +18,7 @@ export const TField = {
 	Number: <T, K extends DeepKeys<T>>({ field, disabled, ...wrapper }: Props<T, K>) => {
 		const [value, setValue] = useState(field?.state.value ?? "");
 		useEffect(() => {
-			field?.setValue(() => (value !== "" ? Number(value) : value) as DeepValue<T, K>);
+			field?.handleChange(() => (value !== "" ? Number(value) : value) as DeepValue<T, K>);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
@@ -29,7 +29,7 @@ export const TField = {
 	Text: <T, K extends DeepKeys<T>>({ field, disabled, ...wrapper }: Props<T, K>) => {
 		const [value, setValue] = useState(field?.state.value ?? "");
 		useEffect(() => {
-			field?.setValue(() => value as DeepValue<T, K>);
+			field?.handleChange(() => value as DeepValue<T, K>);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
@@ -40,7 +40,7 @@ export const TField = {
 	Enum: <T, K extends DeepKeys<T>>({ field, disabled, children, ...wrapper }: PropsWithChildren<Props<T, K>>) => {
 		const [value, setValue] = useState(field?.state.value ?? "");
 		useEffect(() => {
-			field?.setValue(() => value as DeepValue<T, K>);
+			field?.handleChange(() => value as DeepValue<T, K>);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>
@@ -55,7 +55,7 @@ export const TField = {
 	Array: <T, K extends DeepKeys<T>>({ field, disabled, ...wrapper }: Props<T, K>) => {
 		const [value, setValue] = useState(field?.getValue());
 		useEffect(() => {
-			field?.setValue(() => value as DeepValue<T, K>);
+			field?.handleChange(() => value as DeepValue<T, K>);
 		}, [field, value]);
 		return (
 			<Wrapper field={field} {...wrapper}>

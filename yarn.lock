@@ -1846,6 +1846,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/zod-form-adapter@npm:^0.13.4":
+  version: 0.13.4
+  resolution: "@tanstack/zod-form-adapter@npm:0.13.4"
+  dependencies:
+    "@tanstack/form-core": "npm:0.13.4"
+  peerDependencies:
+    zod: ^3.x
+  checksum: 318a49e8fd6a34031afd0216f23e7953e10b20cf34d73ea0b178c39e5f17067bcd0ac1c4d46a6f444b23310f36a7b36d2fcd60a03bc178852d6e6c2cf52fd103
+  languageName: node
+  linkType: hard
+
 "@tootallnate/once@npm:2":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
@@ -3483,6 +3494,7 @@ __metadata:
     "@radix-ui/react-slot": "npm:^1.0.2"
     "@tanstack/react-form": "npm:^0.13.4"
     "@tanstack/react-table": "npm:^8.11.7"
+    "@tanstack/zod-form-adapter": "npm:^0.13.4"
     "@types/file-saver": "npm:^2.0.7"
     "@types/node": "npm:^20.11.8"
     "@types/react": "npm:^18.2.48"

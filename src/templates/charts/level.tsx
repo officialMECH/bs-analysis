@@ -31,7 +31,7 @@ export default function LevelCharts({ id, show, theme, height }: ChartProps) {
 
 	return (
 		<div className={styles.column}>
-			<Chart style={{ height }} theme={theme} option={charts[idx]!}></Chart>
+			<Chart style={{ height }} theme={theme} option={charts[idx]}></Chart>
 			<div className={styles.row}>
 				<select className={styles.select} disabled={pack === "All" && packs.length < 2} value={pack} onChange={(e) => setPack(e.target.value)}>
 					{["All", ...packs, pack].filter(predicates.unique).map((x) => (

@@ -5,7 +5,8 @@ import { PropsWithChildren, ReactNode } from "react";
 import { Tooltip } from "..";
 
 export interface Props<T, K extends DeepKeys<T>> {
-	field?: FieldApi<T, K, undefined, undefined, DeepValue<T, K>>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	field?: FieldApi<T, K, any, any, DeepValue<T, K>>;
 	heading: ReactNode;
 	subheading?: string;
 	center?: boolean;
@@ -25,7 +26,7 @@ export default function Wrapper<T, K extends DeepKeys<T>>({ field, heading, subh
 					</Tooltip>
 				)}
 				{field && field.state.meta.errors.length > 0 && (
-					<Tooltip render={() => field?.state.meta.errors}>
+					<Tooltip render={() => field?.state.meta.errors.join(", ")}>
 						<i className={cx("fa-solid fa-triangle-exclamation", styles.error)} />
 					</Tooltip>
 				)}
