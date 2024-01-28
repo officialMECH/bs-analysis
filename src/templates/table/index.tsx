@@ -56,6 +56,7 @@ export default function DataTable({ id, data }: Props) {
 	const table = useReactTable<IData>({
 		data: data ?? [],
 		columns,
+		meta: { id },
 		state: { columnFilters, columnVisibility, rowSelection, sorting },
 		defaultColumn: {
 			minSize: 2,

@@ -2,7 +2,7 @@ import { Badge, Dialog, Icon, UnstyledInput } from "$/components";
 import { metadata } from "$/constants";
 import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
-import { Path, useNavigate } from "$/router";
+import { Link, Path, useNavigate } from "$/router";
 import { css, cva, cx } from "$/styles/css";
 import { hstack, scrollable, wrap } from "$/styles/patterns";
 import { ChangeEvent, Fragment, useState } from "react";
@@ -38,7 +38,7 @@ export default function Nav({ layout = "basic" }: Props) {
 			<div className={styles.row}>
 				{layout !== "home" && (
 					<Icon asChild className={cx("fa-solid fa-home", styles.icon)}>
-						<a href={import.meta.env.BASE_URL} />
+						<Link to={"/"} />
 					</Icon>
 				)}
 				<Icon asChild title="Repository" className={cx("fa-brands fa-github", styles.icon)}>
@@ -72,10 +72,10 @@ export default function Nav({ layout = "basic" }: Props) {
 				{["data", "level"].includes(layout) && (
 					<Fragment>
 						<Icon asChild title="Overview" className={cx("fa-solid fa-circle-info", styles.icon)}>
-							<a href={import.meta.env.BASE_URL.concat(current)} />
+							<Link to={"/:key"} params={{ key: current }} />
 						</Icon>
 						<Icon asChild title="Data" className={cx("fa-solid fa-table", styles.icon)}>
-							<a href={import.meta.env.BASE_URL.concat(`${current}/data`)} />
+							<Link to={"/:key/data"} params={{ key: current }} />
 						</Icon>
 					</Fragment>
 				)}

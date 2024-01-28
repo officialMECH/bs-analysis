@@ -1,11 +1,11 @@
 import { css, cva, cx } from "$/styles/css";
 import { hstack, scrollable, vstack } from "$/styles/patterns";
-import { DeepKeys, FieldApi } from "@tanstack/react-form";
+import { DeepKeys, DeepValue, FieldApi } from "@tanstack/react-form";
 import { PropsWithChildren, ReactNode } from "react";
 import { Tooltip } from "..";
 
-export interface Props<T, V> {
-	field?: FieldApi<T, DeepKeys<T>, V>;
+export interface Props<T, K extends DeepKeys<T>> {
+	field?: FieldApi<T, K, undefined, undefined, DeepValue<T, K>>;
 	heading: ReactNode;
 	subheading?: string;
 	center?: boolean;
@@ -13,7 +13,7 @@ export interface Props<T, V> {
 	tooltip?: () => ReactNode;
 }
 
-export default function Wrapper<T, V>({ field, heading, subheading, center, tooltip, children }: PropsWithChildren<Props<T, V>>) {
+export default function Wrapper<T, K extends DeepKeys<T>>({ field, heading, subheading, center, tooltip, children }: PropsWithChildren<Props<T, K>>) {
 	return (
 		<div className={styles.group}>
 			<h2 className={styles.heading({ center })}>
@@ -24,8 +24,8 @@ export default function Wrapper<T, V>({ field, heading, subheading, center, tool
 						<i className={cx("fa-solid fa-question-circle", styles.tooltip)} />
 					</Tooltip>
 				)}
-				{field && field?.state.meta.touchedErrors.length > 0 && (
-					<Tooltip render={() => field?.state.meta.touchedErrors}>
+				{field && field.state.meta.errors.length > 0 && (
+					<Tooltip render={() => field?.state.meta.errors}>
 						<i className={cx("fa-solid fa-triangle-exclamation", styles.error)} />
 					</Tooltip>
 				)}

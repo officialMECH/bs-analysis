@@ -1,5 +1,6 @@
 import { Checkbox, Icon, Table } from "$/components";
 import { calc, formatDuration, formatters } from "$/helpers";
+import { Link } from "$/router";
 import { vstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
 import { IData, schemas } from "$/types";
@@ -30,14 +31,17 @@ export const columns = [
 				</Table.Cell>
 			);
 		},
-		cell: (c) => (
-			<Table.Cell {...c}>
-				<Checkbox id={c.row.id} checked={c.row.getIsSelected()} onChange={c.row.getToggleSelectedHandler()} />
-				<Icon className="fa-solid fa-external-link" asChild>
-					<a href={`./level/${c.row.id}`} />
-				</Icon>
-			</Table.Cell>
-		),
+		cell: (c) => {
+			const [sid, bid] = c.row.id.split("/");
+			return (
+				<Table.Cell {...c}>
+					<Checkbox id={c.row.id} checked={c.row.getIsSelected()} onChange={c.row.getToggleSelectedHandler()} />
+					<Icon className="fa-solid fa-external-link" asChild>
+						<Link to={"/:key/level/:sid/:bid"} params={{ key: c.table.options.meta!.id, sid, bid }} />
+					</Icon>
+				</Table.Cell>
+			);
+		},
 	}),
 	helper.accessor((r) => r.id, {
 		id: "id",

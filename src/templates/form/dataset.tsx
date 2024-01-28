@@ -25,10 +25,6 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 
 	const F = useForm({
 		defaultValues: { id: initial?.id ?? "", ...initial },
-		onChange: (values, formApi) => {
-			formApi.setFieldValue("name", schemas.artificial.string(schemas.dataset.shape.name).parse(values.name));
-			return undefined;
-		},
 	});
 
 	function handleSubmit(values: typeof F.state.values) {
@@ -54,15 +50,15 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 			<Form.Template title={initial ? "Edit Dataset" : "Create Dataset"}>
 				{!initial && (
 					<Form.Row>
-						<F.Field name="id" onChange={(x) => validate(x, schemas.id)} children={(field) => <TField.String field={field} heading="ID" />} />
+						<F.Field name="id" validators={{ onChange: (x) => validate(x, schemas.id) }} children={(field) => <TField.String field={field} heading="ID" />} />
 					</Form.Row>
 				)}
 				<Form.Row size="lg">
-					<F.Field name="name" onChange={(x) => validate(x, schemas.dataset.shape.name)} children={(field) => <TField.String field={field} heading="Name" />} />
-					<F.Field name="contributors" onChange={(x) => validate(x, schemas.dataset.shape.contributors)} children={(field) => <TField.Array field={field} heading="Contributor(s)" />} />
+					<F.Field name="name" validators={{ onChange: (x) => validate(x, schemas.dataset.shape.name) }} children={(field) => <TField.String field={field} heading="Name" />} />
+					<F.Field name="contributors" validators={{ onChange: (x) => validate(x, schemas.dataset.shape.contributors) }} children={(field) => <TField.Array field={field} heading="Contributor(s)" />} />
 				</Form.Row>
 				<Form.Row>
-					<F.Field name="description" onChange={(x) => validate(x, schemas.dataset.shape.description)} children={(field) => <TField.Text field={field} heading="Description" />} />
+					<F.Field name="description" validators={{ onChange: (x) => validate(x, schemas.dataset.shape.description) }} children={(field) => <TField.Text field={field} heading="Description" />} />
 				</Form.Row>
 				<F.Subscribe
 					selector={() => F.state.canSubmit}
@@ -76,7 +72,7 @@ export default function ManualDatasetForm({ initial, onSubmit }: Props) {
 						);
 					}}
 				/>
-				{F.state.formError && <small className={styles.error}>{F.state.formError}</small>}
+				{F.state.errors.length > 0 && <small className={styles.error}>{F.state.errors}</small>}
 			</Form.Template>
 		</F.Provider>
 	);
