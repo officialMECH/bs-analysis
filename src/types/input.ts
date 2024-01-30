@@ -1,8 +1,8 @@
-import { ZodSchema, z } from "zod";
+import { BaseSchema, Output, literal, string, transform, union } from "valibot";
 
 // HACK: undefined input values are pain, this is my personal hell
-function artificial<T, S extends ZodSchema>(schema: S, transformer = (x: z.infer<S>) => x as T) {
-	return z.union([schema, z.literal("")]).transform((x) => {
+function artificial<T, S extends BaseSchema>(schema: S, transformer = (x: Output<S>) => x as T) {
+	return transform(union([schema, literal("")]), (x) => {
 		if (typeof x === "string" && x === "") return undefined;
 		if (Array.isArray(x) && x.length === 0) return undefined;
 		return x !== "" ? transformer(x) : undefined;
@@ -11,7 +11,7 @@ function artificial<T, S extends ZodSchema>(schema: S, transformer = (x: z.infer
 
 export default {
 	refine: artificial,
-	string: (schema: ZodSchema = z.string()) => artificial(schema, (x) => String(x)),
-	number: (schema: ZodSchema = z.string()) => artificial(schema, (x) => Number(x)),
-	entity: (schema: ZodSchema = z.string()) => artificial(schema, (x) => ({ total: Number(x) })),
+	string: (schema: BaseSchema = string()) => artificial(schema, (x) => String(x)),
+	number: (schema: BaseSchema = string()) => artificial(schema, (x) => Number(x)),
+	entity: (schema: BaseSchema = string()) => artificial(schema, (x) => ({ total: Number(x) })),
 };

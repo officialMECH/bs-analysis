@@ -1,13 +1,14 @@
 import { Checkbox, Icon, Table } from "$/components";
+import { characteristics, difficulties } from "$/constants/beatmap";
 import { calc, formatDuration, formatters } from "$/helpers";
 import { Link } from "$/router";
 import { vstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
-import { IData, schemas } from "$/types";
+import { IEntry } from "$/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import RowActions from "../actions/row";
 
-const helper = createColumnHelper<IData>();
+const helper = createColumnHelper<IEntry>();
 const size = { sm: 4, md: 6, lg: 10 };
 
 export const columns = [
@@ -96,7 +97,7 @@ export const columns = [
 		filterFn: "equals",
 		sortingFn: "characteristic",
 		header: (c) => <Table.Cell {...c}>Characteristic</Table.Cell>,
-		cell: (c) => <Table.AccessorCell {...c} background={() => token(`colors.container`)} validate={(value) => !!value && Object.values(schemas.characteristic.Values).includes(value)} transform={(value, valid) => (!value ? "MISSING" : !valid ? "INVALID" : value)} />,
+		cell: (c) => <Table.AccessorCell {...c} background={() => token(`colors.container`)} validate={(value) => !!value && characteristics.includes(value)} transform={(value, valid) => (!value ? "MISSING" : value)} />,
 	}),
 	helper.accessor((r) => r.difficulty, {
 		id: "difficulty",
@@ -105,7 +106,7 @@ export const columns = [
 		filterFn: "equals",
 		sortingFn: "difficulty",
 		header: (c) => <Table.Cell {...c}>Difficulty</Table.Cell>,
-		cell: (c) => <Table.AccessorCell {...c} background={(value) => token(`colors.difficulty.${value}`)} validate={(value) => !!value && Object.values(schemas.difficulty.Values).includes(value)} transform={(value, valid) => (!value ? "MISSING" : !valid ? "INVALID" : value)} />,
+		cell: (c) => <Table.AccessorCell {...c} background={(value) => token(`colors.difficulty.${value}`)} validate={(value) => !!value && difficulties.includes(value)} transform={(value, valid) => (!value ? "MISSING" : value)} />,
 	}),
 	helper.accessor((r) => calc.nps(r), {
 		id: "nps",

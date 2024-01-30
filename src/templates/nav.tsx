@@ -5,6 +5,7 @@ import { useDatasets } from "$/hooks";
 import { Link, Path, useNavigate } from "$/router";
 import { css, cva, cx } from "$/styles/css";
 import { hstack, scrollable, wrap } from "$/styles/patterns";
+import { IDataset } from "$/types";
 import { ChangeEvent, Fragment, useState } from "react";
 import ManualDatasetForm from "./form/dataset";
 
@@ -29,7 +30,7 @@ export default function Nav({ layout = "basic" }: Props) {
 		const files = event.target.files;
 		if (!files) return;
 		for (let i = 0; i < files.length; i++) {
-			parsers.dataset.file(files[i], (id, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
+			parsers.text.file<IDataset>(files[i], (id, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
 		}
 	}
 

@@ -1,6 +1,7 @@
+import { difficulties } from "$/constants/beatmap";
 import { css } from "$/styles/css";
 import { flex, hstack, vstack } from "$/styles/patterns";
-import { IData, IDataset, schemas } from "$/types";
+import { IDataset, IEntry } from "$/types";
 import { omit, predicates } from "$/utils";
 import { EChartsOption } from "echarts";
 
@@ -11,7 +12,7 @@ export interface ChartProps {
 	height?: number;
 }
 
-type Chart = (dataset: IDataset<IData[]>, transformer: (data: IData) => string | number | Date | undefined, options?: EChartsOption, filter?: (data: IData) => boolean) => EChartsOption | null;
+type Chart = (dataset: IDataset<IEntry[]>, transformer: (data: IEntry) => string | number | Date | undefined, options?: EChartsOption, filter?: (data: IEntry) => boolean) => EChartsOption | null;
 
 const template: EChartsOption = {
 	animation: false,
@@ -57,7 +58,6 @@ export const base = {
 	},
 	level: (dataset, transformer, options, filter = () => true) => {
 		const data = dataset.data.filter((x) => filter(x) && transformer(x) !== undefined);
-		const difficulties = Object.values(schemas.difficulty.Values);
 		const titles = data.map((x) => x.title ?? x.id).filter(predicates.unique);
 		return {
 			...omit(template, "visualMap"),

@@ -1,24 +1,10 @@
-import { Entry, IDataset, schemas } from "$/types";
+import { Entry } from "$/types";
 import JSZip from "jszip";
 
 const resolvers = {
 	file: (filename: string) => filename.split(".")[0],
 	url: (url: string) => url.split("?")[0].split("/")[url.split("/").length - 1].split(".")[0],
 };
-
-function parseDataset(data: { id: string; object: unknown }, callback: (id: string, value: IDataset) => void) {
-	const result = schemas.dataset.safeParse(data.object);
-	if (result.success) return callback(data.id, result.data);
-	// filter out union errors, as they always flag an error regardless of whether they already passed validation
-	const union = result.error.issues.find((issue) => issue.code === "invalid_union");
-	if (union && union.code === "invalid_union") {
-		const errors = union.unionErrors.filter((ue) => !ue.issues.some((ui) => ui.path.length === 1 && ui.path[0] === "data"));
-		errors.forEach((e) => {
-			throw e;
-		});
-	}
-	throw result.error;
-}
 
 async function parseAudio(audio: Blob): Promise<AudioBuffer | undefined> {
 	// @ts-ignore
@@ -61,21 +47,20 @@ async function parseArchive(data: { id: string; buffer: ArrayBuffer }, callback:
 }
 
 export default {
-	dataset: {
-		raw: parseDataset,
-		file: (file: File, callback: (id: string, value: IDataset) => void) => {
+	text: {
+		file: <T>(file: File, callback: (id: string, value: T) => void) => {
 			const id = resolvers.file(file.name);
-			void file.text().then((contents) => parseDataset({ id, object: JSON.parse(contents) }, callback));
+			void file.text().then((contents) => callback(id, JSON.parse(contents) as T));
 		},
-		url: (url: string, callback: (id: string, value: IDataset) => void) => {
+		url: <T>(url: string, callback: (id: string, value: T) => void, onStart?: () => void) => {
 			const id = resolvers.url(url);
+			if (onStart) onStart();
 			void fetch(url).then((response) => {
-				void response.text().then((contents) => parseDataset({ id, object: JSON.parse(contents) }, callback));
+				void response.text().then((contents) => callback(id, JSON.parse(contents) as T));
 			});
 		},
 	},
 	archive: {
-		raw: parseArchive,
 		file: (file: File, callback: (id: string, value: Entry<unknown>[]) => void) => {
 			const id = resolvers.file(file.name);
 			void file.arrayBuffer().then((contents) => parseArchive({ id, buffer: contents }, callback));

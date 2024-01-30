@@ -62,31 +62,18 @@ export function importDuration(value) {
 export async function extract(buffer) {
 	const zip = await JSZip.loadAsync(buffer);
 	const files = Object.values(zip.files);
-	const entries = await Promise.all(files.filter((entry) => entry.name.endsWith(".dat")));
+	const entries = await Promise.all(files);
 	const formatted = await Promise.all(
 		entries.map(async (entry) => {
-			const file = await entry.async("text");
-			return { name: entry.name, contents: JSON.parse(file) };
+			if (entry.name.endsWith(".dat")) {
+				const text = await entry.async("text");
+				return { name: entry.name, contents: JSON.parse(text) };
+			}
+			const buffer = await entry.async("arraybuffer");
+			return { name: entry.name, contents: buffer };
 		})
 	);
 	return fromEntries(formatted);
-}
-
-/**
- * @param {string} id
- * @param {{ name: string, contents: unknown }[]} entries
- */
-export function fromEntries(entries) {
-	const info = entries.find((e) => e.name.toLowerCase() === "info.dat");
-	const beatmaps = info.contents._difficultyBeatmapSets.flatMap((s) => s._difficultyBeatmaps.map((x) => ({ ...x, ...s })));
-	/** @type {{ name: string, contents: { beatmap: unknown, data: unknown } }[]} */
-	const levels = beatmaps.map((beatmap) => {
-		const entry = entries.find((entry) => entry.name === beatmap._beatmapFilename);
-		if (!entry) throw Error("");
-		return { name: entry.name, contents: { beatmap, data: entry.contents } };
-	});
-	const valid = levels.filter((x) => x !== undefined);
-	return valid.map((level) => ({ name: level.name, info: info.contents, level: level.contents }));
 }
 
 export const isV1 = (data) => {
@@ -105,7 +92,41 @@ export const isV3 = (data) => {
 	return version.split(".")[0] == 3;
 };
 
-export function resolveLevelStats(data, details = false) {
+/**
+ * @param {string} id
+ * @param {{ name: string, contents: unknown }[]} entries
+ */
+export function fromEntries(entries) {
+	const entry = entries.find((e) => e.name.toLowerCase() === "info.dat");
+	if (isV2(entry.contents)) {
+		const info = entry.contents;
+		const levels = info._difficultyBeatmapSets.flatMap((s) => s._difficultyBeatmaps.map((x) => ({ ...omit(s, "_difficultyBeatmaps"), ...x })));
+		/** @type {{ name: string, contents: unknown, data: unknown }[]} */
+		const beatmaps = levels.map((beatmap) => {
+			const entry = entries.find((e) => e.name === beatmap._beatmapFilename);
+			if (!entry) throw Error();
+			return { name: entry.name, data: { ...beatmap }, contents: entry.contents };
+		});
+		return beatmaps.map((level) => {
+			return {
+				name: level.name,
+				contents: {
+					beatmap: level.contents,
+				},
+				data: {
+					title: info._songName,
+					bpm: info._beatsPerMinute,
+					characteristic: level.data._beatmapCharacteristicName,
+					difficulty: level.data._difficulty,
+					jumpSpeed: level.data._noteJumpMovementSpeed,
+					jumpOffset: level.data._noteJumpStartBeatOffset,
+				},
+			};
+		});
+	}
+}
+
+export function resolveBeatmapStats(data, details = false) {
 	if (isV1(data) || isV2(data)) {
 		const colorNotes = data._notes.filter((x) => x && [0, 1].includes(x._type));
 		const bombNotes = data._notes.filter((x) => x && [3].includes(x._type));

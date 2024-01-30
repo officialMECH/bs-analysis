@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { default as prompt } from "prompts";
 import slugify from "slugify";
-import { config, createLevelIndex, extract, resolveLevelStats } from "./helpers.js";
+import { config, createLevelIndex, extract, resolveBeatmapStats } from "./helpers.js";
 
 const { details, input, metadata, output, minify } = await config(false, [
 	{ name: "input", type: "text", message: "Map Archive (File or URL)", hint: ".zip" }, //
@@ -12,24 +12,19 @@ const { details, input, metadata, output, minify } = await config(false, [
 const source = input.startsWith("http") ? await fetch(input).then((r) => r.arrayBuffer()) : readFileSync(input.replaceAll('"', "")).buffer;
 const entries = await extract(source);
 
-const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(entries[0].info._songName) });
+const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(entries[0].contents.title) });
 
 const dataset = await entries.reduce(async (record, entry) => {
-	const { info, level } = entry;
-	const characteristic = level.beatmap._beatmapCharacteristicName;
-	const difficulty = level.beatmap._difficulty;
-	const bid = createLevelIndex({ characteristic, difficulty });
-	const title = info._songName;
+	const {
+		contents: { beatmap },
+		data: metadata,
+	} = entry;
+	const bid = createLevelIndex({ characteristic: contents.characteristic, difficulty: contents.difficulty });
 	const { sid } = await id;
 	const data = {
 		id: sid,
-		title,
-		bpm: Number(info._beatsPerMinute.toFixed(3)),
-		characteristic,
-		difficulty,
-		...resolveLevelStats(level.data, details),
-		jumpSpeed: level.beatmap._noteJumpMovementSpeed,
-		jumpOffset: level.beatmap._noteJumpStartBeatOffset,
+		...metadata,
+		...resolveBeatmapStats(beatmap, details),
 	};
 	return { ...(await record), [`${sid}/${bid}`]: data };
 }, Promise.resolve({}));

@@ -19,7 +19,7 @@
 		"@radix-ui/react-slot": "^1.0.2",
 		"@tanstack/react-form": "^0.13.4",
 		"@tanstack/react-table": "^8.11.7",
-		"@tanstack/zod-form-adapter": "^0.13.4",
+		"@tanstack/valibot-form-adapter": "^0.13.4",
 		"echarts": "^5.4.3",
 		"file-saver": "^2.0.5",
 		"jszip": "^3.10.1",
@@ -27,7 +27,7 @@
 		"react-dom": "^18.2.0",
 		"react-router-dom": "^6.21.3",
 		"slugify": "^1.6.6",
-		"zod": "^3.22.4"
+		"valibot": "^0.27.1"
 	},
 	"devDependencies": {
 		"@pandacss/dev": "^0.17.5",

@@ -1,22 +1,22 @@
 import { Field, Tabs } from "$/components";
 import Spinner from "$/components/spinner";
-import { formatters, fromEntries, parsers, resolveLevelStats } from "$/helpers";
+import { formatters, fromEntries, parsers, resolveBeatmapStats } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { scrollable } from "$/styles/patterns";
-import { Entry, IData } from "$/types";
+import { Entry, IEntry } from "$/types";
 import { ChangeEvent, useEffect, useState } from "react";
 import slugify from "slugify";
 import { Form } from ".";
 
 interface Props {
-	onSubmit?: (update: IData[]) => void;
+	onSubmit?: (update: IEntry[]) => void;
 }
 
 export default function ArchiveDataForm({ onSubmit }: Props) {
 	const { key } = useParams("/:key");
 	const { state } = useDataset(key);
-	const [data, setData] = useState<IData[]>([]);
+	const [data, setData] = useState<IEntry[]>([]);
 	const [fetching, setFetching] = useState(false);
 	const [id, setId] = useState("");
 	const [url, setURL] = useState("");
@@ -27,18 +27,12 @@ export default function ArchiveDataForm({ onSubmit }: Props) {
 	}
 
 	function process(sid: string, entries: Entry<unknown>[]) {
-		const data = fromEntries(entries).map(({ audio, info, level }) => {
+		const data = fromEntries(entries).map(({ contents: { beatmap }, data: metadata }) => {
 			return {
 				id: id === "" ? slugify(sid) : id,
-				title: info._songName,
-				bpm: Number(info._beatsPerMinute.toFixed(3)),
-				length: audio ? Number(audio.duration.toFixed(3)) : undefined,
-				characteristic: level.beatmap._beatmapCharacteristicName,
-				difficulty: level.beatmap._difficulty,
-				...resolveLevelStats(level.data),
-				jumpSpeed: level.beatmap._noteJumpMovementSpeed,
-				jumpOffset: level.beatmap._noteJumpStartBeatOffset,
-			};
+				...metadata,
+				...resolveBeatmapStats(beatmap),
+			} as IEntry;
 		});
 		setId(sid);
 		setData(data);

@@ -1,17 +1,17 @@
 import { Dialog, Icon } from "$/components";
-import { parsers, resolveLevelIndex } from "$/helpers";
+import { resolveLevelIndex } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { cx } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
-import { IData } from "$/types";
+import { IEntry } from "$/types";
 import { omit } from "$/utils";
 import { Fragment } from "react";
 import { DataForm } from "../form";
 
 interface Props {
 	id: string;
-	onSubmit?: (update: IData) => void;
+	onSubmit?: (update: IEntry) => void;
 	onDelete?: (id: string) => void;
 }
 
@@ -30,12 +30,11 @@ export default function LevelActions({ id, onSubmit, onDelete }: Props) {
 	}
 	const entry = getData(id);
 
-	function handleSubmit(update: IData, close: () => void) {
+	function handleSubmit(update: IEntry, close: () => void) {
 		const { id, characteristic, difficulty } = entry;
 		const updated = { id, characteristic, difficulty, ...omit(update, "id", "characteristic", "difficulty") };
-		parsers.dataset.raw({ id: key, object: { ...state, data: { ...state!.data.concat(updated), updated }, updated: new Date().toISOString() } }, (id, dataset) => {
-			dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } });
-		});
+		const dataset = { ...state, data: { ...state!.data.concat(updated), updated }, updated: new Date().toISOString() };
+		dispatch({ type: "UPDATE", payload: { id: key, dataset, overwrite: true } });
 		if (onSubmit) onSubmit(update);
 		close();
 	}

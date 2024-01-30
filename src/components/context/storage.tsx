@@ -1,9 +1,10 @@
 import { datasets } from "$/constants";
-import { IData, IDataset, PayloadAction, schemas } from "$/types";
+import { IDataset, IEntry, PayloadAction, schemas } from "$/types";
 import { omit } from "$/utils";
 import { Dispatch, PropsWithChildren, Reducer, createContext, useEffect, useReducer } from "react";
+import { is } from "valibot";
 
-type T = IDataset<IData[]> | undefined;
+type T = IDataset<IEntry[]> | undefined;
 type State = Record<string, T>;
 type Actions = PayloadAction<{ id: string; dataset: IDataset; overwrite?: boolean }, "UPDATE"> | PayloadAction<{ id: string }, "DELETE"> | PayloadAction<{ id: string }, "DOWNLOAD">;
 
@@ -15,17 +16,14 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 			if (exists && !overwrite) return state;
 			const data = Object.values(dataset.data);
 			const valid = data.filter((entry, index, array) => {
-				const result = schemas.data.safeParse(entry);
-				if (!result.success) {
-					console.error(result.error);
-				}
+				if (!is(schemas.entry, entry)) return false;
 				const match = array.find((x, i) => i > index && x.id === entry.id && x.characteristic === entry.characteristic && x.difficulty === entry.difficulty);
 				// if duplicate data exists, forward all data into the latest entry and remove earlier instances
-				if (result.success && match) {
-					array[array.indexOf(match)] = { ...result.data, ...match };
+				if (match) {
+					array[array.indexOf(match)] = { ...entry, ...match };
 					return false;
 				}
-				return result.success;
+				return true;
 			});
 			localStorage.setItem(id, JSON.stringify({ ...dataset, data: valid }));
 			return { ...state, [id]: { ...dataset, data: valid } };
@@ -42,8 +40,7 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 };
 
 const storage = Object.entries(localStorage).reduce((record: State, [key, value]: [string, string]) => {
-	const parsed = schemas.dataset.parse(JSON.parse(value));
-	return { ...record, [key]: parsed as T };
+	return { ...record, [key]: JSON.parse(value) as T };
 }, {});
 
 const Context = createContext<{ state: State; dispatch: Dispatch<Actions> }>({ state: {}, dispatch: () => null });
@@ -53,7 +50,7 @@ function StorageProvider({ children }: PropsWithChildren) {
 	useEffect(() => {
 		Object.entries(datasets).forEach(([key, contents]) => {
 			const name = key.split("/")[key.split("/").length - 1].split(".")[0];
-			dispatch({ type: "UPDATE", payload: { id: name, dataset: schemas.dataset.parse(contents), overwrite: false } });
+			dispatch({ type: "UPDATE", payload: { id: name, dataset: contents.default, overwrite: false } });
 		});
 	}, []);
 	return <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>;

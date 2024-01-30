@@ -1,7 +1,8 @@
 import { Chart, Icon } from "$/components";
+import { characteristics } from "$/constants/beatmap";
 import { calc } from "$/helpers";
 import { useDataset } from "$/hooks";
-import { IData, schemas } from "$/types";
+import { IEntry } from "$/types";
 import { predicates } from "$/utils";
 import { useState } from "react";
 import { ChartProps, base, styles } from "./helpers";
@@ -15,7 +16,7 @@ export default function LevelCharts({ id, show, theme, height }: ChartProps) {
 
 	if (!show) return null;
 
-	const filter = (x: IData) => {
+	const filter = (x: IEntry) => {
 		const withPack = pack !== "All" ? x.pack === pack : true;
 		return withPack && x.characteristic === characteristic;
 	};
@@ -39,7 +40,7 @@ export default function LevelCharts({ id, show, theme, height }: ChartProps) {
 					))}
 				</select>
 				<select className={styles.select} value={characteristic} onChange={(e) => setCharacteristic(e.target.value)}>
-					{Object.values(schemas.characteristic.Values).map((x) => (
+					{characteristics.map((x) => (
 						<option key={x}>{x}</option>
 					))}
 				</select>

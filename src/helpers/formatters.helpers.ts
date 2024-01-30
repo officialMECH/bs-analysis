@@ -1,4 +1,4 @@
-import { IData } from "$/types";
+import { IEntry } from "$/types";
 import { createLevelIndex } from "./resolvers.helpers";
 
 export default {
@@ -10,5 +10,5 @@ export default {
 		}, null);
 		return formatted.join(" ");
 	},
-	id: (data: IData) => `${data.id}/${createLevelIndex(data)}`,
+	id: (data: IEntry) => `${data.id}/${createLevelIndex(data)}`,
 };
