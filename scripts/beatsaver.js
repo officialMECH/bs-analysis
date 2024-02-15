@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { writeFileSync } from "node:fs";
-import { config, createLevelIndex, extract, nonempty, resolveBeatmapStats } from "./helpers.js";
+import { config, createLevelIndex, extract, nonempty, resolveAudioStats, resolveBeatmapStats, resolveLightshowStats } from "./helpers.js";
 
 const { details, users, ids, beatsaver, metadata, output, minify } = await config(false, [
 	{ name: "users", type: "list", message: "User ID(s)" },
@@ -53,7 +53,7 @@ const entries = await Promise.all(
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const {
-		contents: { beatmap },
+		contents: { audio, beatmap, lightshow },
 		data: metadata,
 		detail,
 	} = entry;
@@ -62,7 +62,9 @@ const dataset = await entries.reduce(async (record, entry) => {
 		id: detail.id,
 		length: detail.metadata.duration,
 		...metadata,
-		...resolveBeatmapStats(beatmap, details),
+		...resolveAudioStats(audio?.contents ?? {}, details),
+		...resolveBeatmapStats(beatmap?.contents ?? {}, details),
+		...resolveLightshowStats(lightshow?.contents ?? {}, details),
 		released: new Date(detail.updatedAt).toISOString(),
 	};
 	return { ...(await record), [`${detail.id}/${bid}`]: data };

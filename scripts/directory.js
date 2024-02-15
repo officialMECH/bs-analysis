@@ -4,7 +4,7 @@ import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { default as prompt } from "prompts";
 import slugify from "slugify";
-import { config, createLevelIndex, fromEntries, resolveBeatmapStats } from "./helpers.js";
+import { config, createLevelIndex, fromEntries, resolveAudioStats, resolveBeatmapStats, resolveLightshowStats } from "./helpers.js";
 
 const { details, directory, metadata, output, minify } = await config(false, [
 	{ name: "directory", type: "text", message: "Directory" }, //
@@ -17,7 +17,7 @@ const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(e
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const {
-		contents: { beatmap },
+		contents: { audio, beatmap, lightshow },
 		data: metadata,
 	} = entry;
 	const bid = createLevelIndex({ characteristic: contents.characteristic, difficulty: contents.difficulty });
@@ -25,7 +25,9 @@ const dataset = await entries.reduce(async (record, entry) => {
 	const data = {
 		id: sid,
 		...metadata,
-		...resolveBeatmapStats(beatmap, details),
+		...resolveAudioStats(audio?.contents ?? {}, details),
+		...resolveBeatmapStats(beatmap?.contents ?? {}, details),
+		...resolveLightshowStats(lightshow?.contents ?? {}, details),
 	};
 	return { ...(await record), [`${sid}/${bid}`]: data };
 }, Promise.resolve({}));

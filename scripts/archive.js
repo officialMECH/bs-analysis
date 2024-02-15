@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { default as prompt } from "prompts";
 import slugify from "slugify";
-import { config, createLevelIndex, extract, resolveBeatmapStats } from "./helpers.js";
+import { config, createLevelIndex, extract, resolveAudioStats, resolveBeatmapStats, resolveLightshowStats } from "./helpers.js";
 
 const { details, input, metadata, output, minify } = await config(false, [
 	{ name: "input", type: "text", message: "Map Archive (File or URL)", hint: ".zip" }, //
@@ -16,7 +16,7 @@ const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(e
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const {
-		contents: { beatmap },
+		contents: { audio, beatmap, lightshow },
 		data: metadata,
 	} = entry;
 	const bid = createLevelIndex({ characteristic: contents.characteristic, difficulty: contents.difficulty });
@@ -24,7 +24,9 @@ const dataset = await entries.reduce(async (record, entry) => {
 	const data = {
 		id: sid,
 		...metadata,
-		...resolveBeatmapStats(beatmap, details),
+		...resolveAudioStats(audio?.contents ?? {}, details),
+		...resolveBeatmapStats(beatmap?.contents ?? {}, details),
+		...resolveLightshowStats(lightshow?.contents ?? {}, details),
 	};
 	return { ...(await record), [`${sid}/${bid}`]: data };
 }, Promise.resolve({}));

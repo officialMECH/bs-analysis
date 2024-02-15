@@ -1,5 +1,5 @@
 import { characteristics, difficulties } from "$/constants/beatmap";
-import { Characteristic, Difficulty, schemas } from "$/types";
+import { Characteristic, Difficulty, IEntry, schemas } from "$/types";
 import { omit, predicates } from "$/utils";
 import { is } from "valibot";
 
@@ -20,29 +20,38 @@ interface FileEntry<T> {
 	contents: T;
 }
 
-export function fromEntries(entries: FileEntry<unknown>[]) {
-	const entry = entries.find((e) => e.name.toLowerCase() === "info.dat");
-	if (!entry) throw Error();
-	if (is(schemas.v2.info, entry.contents)) {
-		const info = entry.contents;
-		const audio = entries.find((e) => e.name === info._songFilename)?.contents as AudioBuffer | undefined;
-		const beatmaps = info._difficultyBeatmapSets.flatMap((s) => s._difficultyBeatmaps.map((x) => ({ ...omit(s, "_difficultyBeatmaps"), ...x })));
-		const levels = beatmaps.map((beatmap) => {
-			const entry = entries.find((e) => e.name === beatmap._beatmapFilename);
-			if (!entry) throw Error();
-			return { name: entry.name, contents: entry.contents, data: { ...beatmap } };
+interface BeatmapEntry {
+	name: string;
+	contents: {
+		audio?: FileEntry<unknown>;
+		beatmap?: FileEntry<unknown>;
+		lightshow?: FileEntry<unknown>;
+	};
+	data: Partial<IEntry>;
+}
+
+export function fromEntries(entries: FileEntry<unknown>[], filenames = { info: "Info.dat", audio: "BPMInfo.dat" }): BeatmapEntry[] {
+	const info = entries.find((e) => e.name.toLowerCase() === filenames.info.toLowerCase());
+	if (!info) throw Error();
+	if (is(schemas.v2.info, info.contents)) {
+		const data = info.contents;
+		const song = entries.find((e) => e.name === data._songFilename)?.contents as AudioBuffer | undefined;
+		const audio = entries.find((e) => e.name.toLowerCase() === filenames.audio.toLowerCase());
+		const l = data._difficultyBeatmapSets.flatMap((s) => s._difficultyBeatmaps.map((x) => ({ ...omit(s, "_difficultyBeatmaps"), ...x })));
+		const levels = l.map((level) => {
+			const beatmap = entries.find((e) => e.name === level._beatmapFilename);
+			if (!beatmap) throw Error(`Missing beatmap file for ${level._beatmapCharacteristicName}/${level._difficulty}`);
+			return { name: beatmap.name, contents: { audio, beatmap }, data: { ...level } };
 		});
 		const valid = levels.filter((x) => x !== undefined);
 		return valid.map((level) => {
 			return {
 				name: level.name,
-				contents: {
-					beatmap: level.contents,
-				},
+				contents: level.contents,
 				data: {
-					title: info._songName,
-					bpm: info._beatsPerMinute,
-					length: audio ? Number(audio?.duration.toFixed(3)) : undefined,
+					title: data._songName,
+					bpm: data._beatsPerMinute,
+					length: song ? Number(song?.duration.toFixed(3)) : undefined,
 					characteristic: level.data._beatmapCharacteristicName,
 					difficulty: level.data._difficulty,
 					jumpSpeed: level.data._noteJumpMovementSpeed,
@@ -51,7 +60,47 @@ export function fromEntries(entries: FileEntry<unknown>[]) {
 			};
 		});
 	}
+	if (is(schemas.v4.info, info.contents)) {
+		const data = info.contents;
+		const song = entries.find((e) => e.name === data.audio.songFilename)?.contents as AudioBuffer | undefined;
+		const audio = entries.find((e) => e.name === data.audio.audioDataFilename);
+		if (!audio) throw Error(`Missing audio file`);
+		const levels = data.difficultyBeatmaps.map((level) => {
+			const beatmap = entries.find((e) => e.name === level.beatmapDataFilename);
+			const lightshow = entries.find((e) => e.name === level.lightshowDataFilename);
+			if (!beatmap) throw Error(`Missing beatmap file for ${level.characteristic}/${level.difficulty}`);
+			if (!lightshow) throw Error(`Missing lightshow file for ${level.characteristic}/${level.difficulty}`);
+			return { name: beatmap.name, contents: { audio, beatmap, lightshow }, data: { ...level } };
+		});
+		const valid = levels.filter((x) => x !== undefined);
+		return valid.map((level) => {
+			return {
+				name: level.name,
+				contents: level.contents,
+				data: {
+					title: data.song.title,
+					bpm: data.audio.bpm,
+					length: song ? Number(song.duration.toFixed(3)) : data.audio.songDuration,
+					characteristic: level.data.characteristic,
+					difficulty: level.data.difficulty,
+					jumpSpeed: level.data.noteJumpMovementSpeed,
+					jumpOffset: level.data.noteJumpStartBeatOffset,
+					mappers: level.data.beatmapAuthors.mappers,
+					lighters: level.data.beatmapAuthors.lighters,
+				},
+			};
+		});
+	}
 	throw Error("The file provided is not a valid map file.");
+}
+
+export function resolveAudioStats(data: unknown, details = false) {
+	if (is(schemas.v4.audio, data)) {
+		return {
+			bpmEvents: { total: data.bpmData.length },
+		};
+	}
+	return {};
 }
 
 export function resolveBeatmapStats(data: unknown, details = false) {
@@ -94,4 +143,31 @@ export function resolveBeatmapStats(data: unknown, details = false) {
 			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
 		};
 	}
+	if (is(schemas.v4.beatmap, data)) {
+		return {
+			colorNotes: { total: data.colorNotes.length },
+			bombNotes: { total: data.bombNotes.length },
+			obstacles: { total: data.obstacles.length },
+			sliders: { total: data.arcs.length },
+			burstSliders: { total: data.chains.length },
+			rotationEvents: { total: data.spawnRotations.length },
+		};
+	}
+	return {};
+}
+
+export function resolveLightshowStats(data: unknown, details = false) {
+	if (is(schemas.v4.lightshow, data)) {
+		return {
+			basicBeatmapEvents: { total: data.basicEvents.length },
+			colorBoostBeatmapEvents: { total: data.colorBoostEvents.length },
+			lightColorEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 1).length },
+			lightRotationEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 2).length },
+			lightTranslationEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 3).length },
+			vfxEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 4).length },
+			waypoints: { total: data.waypoints.length },
+			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
+		};
+	}
+	return {};
 }

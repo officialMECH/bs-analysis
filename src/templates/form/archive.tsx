@@ -1,6 +1,6 @@
 import { Field, Tabs } from "$/components";
 import Spinner from "$/components/spinner";
-import { formatters, fromEntries, parsers, resolveBeatmapStats } from "$/helpers";
+import { formatters, fromEntries, parsers, resolveAudioStats, resolveBeatmapStats, resolveLightshowStats } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { scrollable } from "$/styles/patterns";
@@ -27,11 +27,13 @@ export default function ArchiveDataForm({ onSubmit }: Props) {
 	}
 
 	function process(sid: string, entries: Entry<unknown>[]) {
-		const data = fromEntries(entries).map(({ contents: { beatmap }, data: metadata }) => {
+		const data = fromEntries(entries).map(({ contents: { audio, beatmap, lightshow }, data: metadata }) => {
 			return {
 				id: id === "" ? slugify(sid) : id,
 				...metadata,
-				...resolveBeatmapStats(beatmap),
+				...resolveAudioStats(audio?.contents ?? {}),
+				...resolveBeatmapStats(beatmap?.contents ?? {}),
+				...resolveLightshowStats(lightshow?.contents ?? {}),
 			} as IEntry;
 		});
 		setId(sid);
