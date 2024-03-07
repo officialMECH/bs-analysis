@@ -49,6 +49,7 @@ export const columns = [
 		size: size.md,
 		meta: { type: "list" },
 		filterFn: "equals",
+		sortingFn: "text",
 		header: (c) => <Table.Cell {...c}>ID</Table.Cell>,
 		cell: (c) => <Table.AccessorCell {...c} color={() => token("colors.subtext")} />,
 	}),

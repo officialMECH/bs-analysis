@@ -168,7 +168,7 @@ export function fromEntries(entries, filenames = { info: "Info.dat", audio: "BPM
 export function resolveAudioStats(data, details = false) {
 	if (isV4(data)) {
 		return {
-			bpmEvents: { total: data.bpmData.length },
+			bpmEvents: { total: data.bpmData?.length ?? 0 },
 		};
 	}
 	return {};
@@ -216,12 +216,12 @@ export function resolveBeatmapStats(data, details = false) {
 	}
 	if (isV4(data)) {
 		return {
-			colorNotes: { total: data.colorNotes.length ?? 0 },
-			bombNotes: { total: data.bombNotes.length ?? 0 },
-			obstacles: { total: data.obstacles.length ?? 0 },
-			sliders: { total: data.arcs.length ?? 0 },
-			burstSliders: { total: data.chains.length ?? 0 },
-			rotationEvents: { total: data.spawnRotations.length ?? 0 },
+			colorNotes: { total: data.colorNotes?.length ?? 0 },
+			bombNotes: { total: data.bombNotes?.length ?? 0 },
+			obstacles: { total: data.obstacles?.length ?? 0 },
+			sliders: { total: data.arcs?.length ?? 0 },
+			burstSliders: { total: data.chains?.length ?? 0 },
+			rotationEvents: { total: data.spawnRotations?.length ?? 0 },
 		};
 	}
 	return {};
@@ -230,14 +230,14 @@ export function resolveBeatmapStats(data, details = false) {
 export function resolveLightshowStats(data, details = false) {
 	if (isV4(data)) {
 		return {
-			basicBeatmapEvents: { total: data.basicEvents.length ?? 0 },
-			colorBoostEvents: { total: data.colorBoostEvents.length ?? 0 },
-			lightColorEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 1).length ?? 0 },
-			lightRotationEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 2).length ?? 0 },
-			lightTranslationEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 3).length ?? 0 },
-			vfxEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 4).length ?? 0 },
-			waypoints: { total: data.waypoints.length ?? 0 },
-			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
+			basicBeatmapEvents: { total: data.basicEvents?.length ?? 0 },
+			colorBoostBeatmapEvents: { total: data.colorBoostEvents?.length ?? 0 },
+			lightColorEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 1).length ?? 0 },
+			lightRotationEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 2).length ?? 0 },
+			lightTranslationEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 3).length ?? 0 },
+			vfxEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 4).length ?? 0 },
+			waypoints: { total: data.waypoints?.length ?? 0 },
+			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords?.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
 		};
 	}
 	return {};

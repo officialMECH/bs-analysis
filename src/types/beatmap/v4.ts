@@ -1,4 +1,4 @@
-import { array, number, object, string } from "valibot";
+import { array, number, object, optional, string } from "valibot";
 import { list } from "../helpers";
 import shared from "../shared";
 
@@ -30,23 +30,23 @@ export default {
 	}),
 	audio: object({
 		version: string(),
-		bpmData: array(object({})),
+		bpmData: optional(array(object({}))),
 	}),
 	beatmap: object({
 		version: string(),
-		colorNotes: array(object({})),
-		bombNotes: array(object({})),
-		obstacles: array(object({})),
-		chains: array(object({})),
-		arcs: array(object({})),
-		spawnRotations: array(object({})),
+		colorNotes: optional(array(object({}))),
+		bombNotes: optional(array(object({}))),
+		obstacles: optional(array(object({}))),
+		chains: optional(array(object({}))),
+		arcs: optional(array(object({}))),
+		spawnRotations: optional(array(object({}))),
 	}),
 	lightshow: object({
 		version: string(),
-		waypoints: array(object({})),
-		basicEvents: array(object({})),
-		colorBoostEvents: array(object({})),
-		eventBoxGroups: array(object({ t: list([0, 1, 2, 3, 4]) })),
-		basicEventTypesWithKeywords: object({ d: array(object({ e: array(number()) })) }),
+		waypoints: optional(array(object({}))),
+		basicEvents: optional(array(object({}))),
+		colorBoostEvents: optional(array(object({}))),
+		eventBoxGroups: optional(array(object({ t: list([0, 1, 2, 3, 4]) }))),
+		basicEventTypesWithKeywords: optional(object({ d: array(object({ e: array(number()) })) })),
 	}),
 };

@@ -97,7 +97,7 @@ export function fromEntries(entries: FileEntry<unknown>[], filenames = { info: "
 export function resolveAudioStats(data: unknown, details = false) {
 	if (is(schemas.v4.audio, data)) {
 		return {
-			bpmEvents: { total: data.bpmData.length },
+			bpmEvents: { total: data.bpmData?.length ?? 0 },
 		};
 	}
 	return {};
@@ -145,12 +145,12 @@ export function resolveBeatmapStats(data: unknown, details = false) {
 	}
 	if (is(schemas.v4.beatmap, data)) {
 		return {
-			colorNotes: { total: data.colorNotes.length },
-			bombNotes: { total: data.bombNotes.length },
-			obstacles: { total: data.obstacles.length },
-			sliders: { total: data.arcs.length },
-			burstSliders: { total: data.chains.length },
-			rotationEvents: { total: data.spawnRotations.length },
+			colorNotes: { total: data.colorNotes?.length ?? 0 },
+			bombNotes: { total: data.bombNotes?.length ?? 0 },
+			obstacles: { total: data.obstacles?.length ?? 0 },
+			sliders: { total: data.arcs?.length ?? 0 },
+			burstSliders: { total: data.chains?.length ?? 0 },
+			rotationEvents: { total: data.spawnRotations?.length ?? 0 },
 		};
 	}
 	return {};
@@ -159,14 +159,14 @@ export function resolveBeatmapStats(data: unknown, details = false) {
 export function resolveLightshowStats(data: unknown, details = false) {
 	if (is(schemas.v4.lightshow, data)) {
 		return {
-			basicBeatmapEvents: { total: data.basicEvents.length },
-			colorBoostBeatmapEvents: { total: data.colorBoostEvents.length },
-			lightColorEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 1).length },
-			lightRotationEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 2).length },
-			lightTranslationEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 3).length },
-			vfxEventBoxGroups: { total: data.eventBoxGroups.filter((x) => x.t === 4).length },
-			waypoints: { total: data.waypoints.length },
-			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
+			basicBeatmapEvents: { total: data.basicEvents?.length ?? 0 },
+			colorBoostBeatmapEvents: { total: data.colorBoostEvents?.length ?? 0 },
+			lightColorEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 1).length ?? 0 },
+			lightRotationEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 2).length ?? 0 },
+			lightTranslationEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 3).length ?? 0 },
+			vfxEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 4).length ?? 0 },
+			waypoints: { total: data.waypoints?.length ?? 0 },
+			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords?.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
 		};
 	}
 	return {};
