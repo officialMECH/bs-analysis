@@ -1,12 +1,14 @@
 import { Checkbox, Icon, Table } from "$/components";
+import { characteristics, difficulties } from "$/constants/beatmap";
 import { calc, formatDuration, formatters } from "$/helpers";
+import { Link } from "$/router";
 import { vstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
-import { IData, schemas } from "$/types";
+import { IEntry } from "$/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import RowActions from "../actions/row";
 
-const helper = createColumnHelper<IData>();
+const helper = createColumnHelper<IEntry>();
 const size = { sm: 4, md: 6, lg: 10 };
 
 export const columns = [
@@ -30,20 +32,24 @@ export const columns = [
 				</Table.Cell>
 			);
 		},
-		cell: (c) => (
-			<Table.Cell {...c}>
-				<Checkbox id={c.row.id} checked={c.row.getIsSelected()} onChange={c.row.getToggleSelectedHandler()} />
-				<Icon className="fa-solid fa-external-link" asChild>
-					<a href={`./level/${c.row.id}`} />
-				</Icon>
-			</Table.Cell>
-		),
+		cell: (c) => {
+			const [sid, bid] = c.row.id.split("/");
+			return (
+				<Table.Cell {...c}>
+					<Checkbox id={c.row.id} checked={c.row.getIsSelected()} onChange={c.row.getToggleSelectedHandler()} />
+					<Icon className="fa-solid fa-external-link" asChild>
+						<Link to={"/:key/level/:sid/:bid"} params={{ key: c.table.options.meta!.id, sid, bid }} />
+					</Icon>
+				</Table.Cell>
+			);
+		},
 	}),
 	helper.accessor((r) => r.id, {
 		id: "id",
 		size: size.md,
 		meta: { type: "list" },
 		filterFn: "equals",
+		sortingFn: "text",
 		header: (c) => <Table.Cell {...c}>ID</Table.Cell>,
 		cell: (c) => <Table.AccessorCell {...c} color={() => token("colors.subtext")} />,
 	}),
@@ -92,7 +98,7 @@ export const columns = [
 		filterFn: "equals",
 		sortingFn: "characteristic",
 		header: (c) => <Table.Cell {...c}>Characteristic</Table.Cell>,
-		cell: (c) => <Table.AccessorCell {...c} background={() => token(`colors.container`)} validate={(value) => !!value && Object.values(schemas.characteristic.Values).includes(value)} transform={(value, valid) => (!value ? "MISSING" : !valid ? "INVALID" : value)} />,
+		cell: (c) => <Table.AccessorCell {...c} background={() => token(`colors.container`)} validate={(value) => !!value && characteristics.includes(value)} transform={(value, valid) => (!value ? "MISSING" : value)} />,
 	}),
 	helper.accessor((r) => r.difficulty, {
 		id: "difficulty",
@@ -101,7 +107,7 @@ export const columns = [
 		filterFn: "equals",
 		sortingFn: "difficulty",
 		header: (c) => <Table.Cell {...c}>Difficulty</Table.Cell>,
-		cell: (c) => <Table.AccessorCell {...c} background={(value) => token(`colors.difficulty.${value}`)} validate={(value) => !!value && Object.values(schemas.difficulty.Values).includes(value)} transform={(value, valid) => (!value ? "MISSING" : !valid ? "INVALID" : value)} />,
+		cell: (c) => <Table.AccessorCell {...c} background={(value) => token(`colors.difficulty.${value}`)} validate={(value) => !!value && difficulties.includes(value)} transform={(value, valid) => (!value ? "MISSING" : value)} />,
 	}),
 	helper.accessor((r) => calc.nps(r), {
 		id: "nps",

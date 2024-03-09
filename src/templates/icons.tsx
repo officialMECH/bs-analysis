@@ -1,5 +1,6 @@
 import arc from "/images/arc.png";
 import bomb from "/images/bomb.png";
+import chain from "/images/chain.png";
 import metronome from "/images/metronome.png";
 import note from "/images/note.png";
 import nps from "/images/nps.png";
@@ -19,7 +20,7 @@ export default {
 	bombNotes: <img src={bomb} title="Bomb Notes" style={{ width: "1.25rem" }} />,
 	obstacles: <img src={obstacle} title="Obstacles" style={{ width: "1.25rem" }} />,
 	sliders: <img src={arc} title="Arcs" style={{ width: "1.25rem" }} />,
-	burstSliders: <i title="Chains" className="fa-solid fa-link" />,
+	burstSliders: <img src={chain} title="Chains" style={{ width: "1.25rem" }} />,
 	basicBeatmapEvents: <i title="Basic Events" className="fa-solid fa-cube" />,
 	colorBoostBeatmapEvents: <i title="Boost Events" className="fa-solid fa-bolt" />,
 	rotationEvents: <i title="Rotation Events" className="fa-solid fa-compass" />,

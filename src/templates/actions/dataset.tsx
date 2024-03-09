@@ -4,7 +4,7 @@ import { formatters, parsers, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { cx } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
-import { IData, schemas } from "$/types";
+import { IDataset, IEntry } from "$/types";
 import saveAs from "file-saver";
 import { ChangeEvent, Fragment, MouseEvent, PropsWithChildren } from "react";
 import { DatasetForm } from "../form";
@@ -25,27 +25,25 @@ export default function DatasetActions({ id }: PropsWithChildren<Props>) {
 	function handleRefresh() {
 		const entry = Object.entries(datasets).find(([key]) => internal(key));
 		if (!entry) return;
-		dispatch({ type: "UPDATE", payload: { id, dataset: schemas.dataset.parse(entry[1]), overwrite: true } });
+		dispatch({ type: "UPDATE", payload: { id, dataset: entry[1].default, overwrite: true } });
 	}
 	function handleOverwrite(event: ChangeEvent<HTMLInputElement>) {
 		const files = event.target.files;
 		if (!files) return;
-		parsers.dataset.file(files[0], (_, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
+		parsers.text.file<IDataset>(files[0], (_, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
 	}
 	function handleDownload(event: MouseEvent<HTMLButtonElement>) {
 		if (!state) return;
 		event.preventDefault();
-		let data: IData[] | Record<string, IData> = state.data;
+		let data: IEntry[] | Record<string, IEntry> = state.data;
 		data = data.sort((a, b) => sort.level(a, b));
 		data = data.sort((a, b) => sort.string(a.id, b.id));
 		data = data.sort((a, b) => (a.released && b.released ? sort.released(a.released, b.released) : 0));
 		data = state.data.reduce((record, value) => {
 			return { ...record, [formatters.id(value)]: value };
 		}, {});
-		parsers.dataset.raw({ id, object: { ...state, data } }, (id, dataset) => {
-			const blob = new Blob([JSON.stringify(dataset, null, event.shiftKey ? 0 : 2)], { type: "application/json" });
-			saveAs(blob, `${id}.json`);
-		});
+		const blob = new Blob([JSON.stringify({ ...state, data }, null, event.shiftKey ? 0 : 2)], { type: "application/json" });
+		saveAs(blob, `${id}.json`);
 	}
 	function handleDelete() {
 		if (!confirm("Are you sure you want to delete this dataset?")) return;

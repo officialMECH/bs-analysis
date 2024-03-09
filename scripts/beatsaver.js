@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { writeFileSync } from "node:fs";
-import { config, createLevelIndex, extract, nonempty, resolveLevelStats } from "./helpers.js";
+import { config, createLevelIndex, extract, nonempty, resolveAudioStats, resolveBeatmapStats, resolveLightshowStats } from "./helpers.js";
 
 const { details, users, ids, beatsaver, metadata, output, minify } = await config(false, [
 	{ name: "users", type: "list", message: "User ID(s)" },
@@ -52,22 +52,20 @@ const entries = await Promise.all(
 ).then((x) => x.flat());
 
 const dataset = await entries.reduce(async (record, entry) => {
-	const { detail, info, level } = entry;
-	const characteristic = level.beatmap._beatmapCharacteristicName;
-	const difficulty = level.beatmap._difficulty;
-	const bid = createLevelIndex({ characteristic, difficulty });
-	const title = info._songName ?? detail.metadata.songName;
+	const {
+		contents: { audio, beatmap, lightshow },
+		data: metadata,
+		detail,
+	} = entry;
+	const bid = createLevelIndex({ characteristic: contents.characteristic, difficulty: contents.difficulty });
 	const data = {
 		id: detail.id,
-		title,
-		released: new Date(detail.updatedAt).toISOString(),
 		length: detail.metadata.duration,
-		bpm: Number((info._beatsPerMinute ?? detail.metadata.bpm).toFixed(3)),
-		characteristic,
-		difficulty,
-		...resolveLevelStats(level.data, details),
-		jumpSpeed: level.beatmap._noteJumpMovementSpeed,
-		jumpOffset: level.beatmap._noteJumpStartBeatOffset,
+		...metadata,
+		...resolveAudioStats(audio?.contents ?? {}, details),
+		...resolveBeatmapStats(beatmap?.contents ?? {}, details),
+		...resolveLightshowStats(lightshow?.contents ?? {}, details),
+		released: new Date(detail.updatedAt).toISOString(),
 	};
 	return { ...(await record), [`${detail.id}/${bid}`]: data };
 }, Promise.resolve({}));

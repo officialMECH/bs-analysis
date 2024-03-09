@@ -6,7 +6,7 @@ import { css, cva } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
 import { Content, LevelActions, Stub } from "$/templates";
-import { IData } from "$/types";
+import { IEntry } from "$/types";
 import { predicates } from "$/utils";
 import { Fragment } from "react";
 
@@ -19,7 +19,7 @@ export default function Page() {
 	});
 	useTitle(data ? `${data.title ?? data.id} [${data.characteristic} ${data.difficulty}]` : "Unknown Level");
 
-	function mappers(data: Pick<IData, "mappers" | "lighters">) {
+	function mappers(data: Pick<IEntry, "mappers" | "lighters">) {
 		const values = [...(data.mappers ?? []), ...(data.lighters ?? [])].filter(predicates.unique);
 		return values.map((mapper, i) => {
 			const isMapper = data.mappers && data.mappers.includes(mapper);

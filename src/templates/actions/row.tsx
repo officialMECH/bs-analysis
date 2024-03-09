@@ -1,10 +1,10 @@
 import { Dialog, Icon } from "$/components";
-import { parsers, resolveLevelIndex } from "$/helpers";
+import { resolveLevelIndex } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
 import { cx } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
-import { IData } from "$/types";
+import { IEntry } from "$/types";
 import { common, omit, prune } from "$/utils";
 import { Table } from "@tanstack/react-table";
 import { Fragment } from "react";
@@ -13,7 +13,7 @@ import { DataForm } from "../form";
 interface Props<T> {
 	table: Table<T>;
 	ids: string[];
-	onSubmit?: (update: IData) => void;
+	onSubmit?: (update: IEntry) => void;
 	onDelete?: (ids: string[]) => void;
 }
 
@@ -34,18 +34,17 @@ export default function RowActions<T>({ table, ids, onSubmit, onDelete }: Props<
 
 	const entries = ids.map((id) => getData(id));
 	// merge data from all entries to collect all possible keys
-	const merged = entries.reduce((r, x) => ({ ...r, ...x }), {}) as Partial<IData>;
+	const merged = entries.reduce((r, x) => ({ ...r, ...x }), {}) as Partial<IEntry>;
 	// save all properties that are shared across all entries
-	const shared = entries.reduce((current, data) => common<IData>(current, data), entries[0]);
+	const shared = entries.reduce((current, data) => common<IEntry>(current, data), entries[0]);
 	// omit shared keys between selected entries
-	const different = omit({ ...prune(merged) }, ...(Object.keys(prune(shared ?? {})) as (keyof IData)[]));
+	const different = omit({ ...prune(merged) }, ...(Object.keys(prune(shared ?? {})) as (keyof IEntry)[]));
 	const disable = Object.keys(different).reduce((r, key) => ({ ...r, [key]: true }), {});
 
-	function handleSubmit(update: IData, close: () => void) {
-		const updated = entries.map((x) => ({ ...x, ...omit(update, "id", "characteristic", "difficulty", ...(Object.keys(different) as (keyof IData)[])) }));
-		parsers.dataset.raw({ id: key, object: { ...state, data: state!.data.concat(...updated), updated: new Date().toISOString() } }, (id, dataset) => {
-			dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } });
-		});
+	function handleSubmit(update: IEntry, close: () => void) {
+		const updated = entries.map((x) => ({ ...x, ...omit(update, "id", "characteristic", "difficulty", ...(Object.keys(different) as (keyof IEntry)[])) }));
+		const dataset = { ...state, data: state!.data.concat(...updated), updated: new Date().toISOString() };
+		dispatch({ type: "UPDATE", payload: { id: key, dataset, overwrite: true } });
 		if (onSubmit) onSubmit(update);
 		close();
 		table.setRowSelection({});

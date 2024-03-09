@@ -1,8 +1,8 @@
 import { Dialog, Icon, Table } from "$/components";
-import { formatters, parsers, sort } from "$/helpers";
+import { formatters, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { hstack, vstack } from "$/styles/patterns";
-import { Characteristic, Difficulty, IData } from "$/types";
+import { Characteristic, Difficulty, IEntry } from "$/types";
 import { ColumnFiltersState, RowSelectionState, SortingState, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -13,7 +13,7 @@ import { columns } from "./helpers";
 
 interface Props {
 	id: string;
-	data: IData[];
+	data: IEntry[];
 }
 
 export default function DataTable({ id, data }: Props) {
@@ -53,9 +53,10 @@ export default function DataTable({ id, data }: Props) {
 		{ id: "difficulty", desc: false },
 	]);
 
-	const table = useReactTable<IData>({
+	const table = useReactTable<IEntry>({
 		data: data ?? [],
 		columns,
+		meta: { id },
 		state: { columnFilters, columnVisibility, rowSelection, sorting },
 		defaultColumn: {
 			minSize: 2,
@@ -88,10 +89,9 @@ export default function DataTable({ id, data }: Props) {
 
 	useEffect(() => setRowSelection({}), [location]);
 
-	function handleSubmit(updates: IData[], close: () => void) {
-		parsers.dataset.raw({ id, object: { ...state, data: state!.data.concat(updates), updated: new Date().toISOString() } }, (id, dataset) => {
-			dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } });
-		});
+	function handleSubmit(updates: IEntry[], close: () => void) {
+		const dataset = { ...state, data: state!.data.concat(updates), updated: new Date().toISOString() };
+		dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } });
 		close();
 		setRowSelection(updates.reduce((r, x) => ({ ...r, [formatters.id(x)]: true }), {}));
 	}

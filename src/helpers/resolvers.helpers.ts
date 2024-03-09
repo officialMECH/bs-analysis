@@ -1,19 +1,18 @@
-import { Characteristic, Difficulty, schemas } from "$/types";
-import { predicates } from "$/utils";
+import { characteristics, difficulties } from "$/constants/beatmap";
+import { Characteristic, Difficulty, IEntry, schemas } from "$/types";
+import { omit, predicates } from "$/utils";
+import { is } from "valibot";
 
 export function createLevelIndex(data: { characteristic: Characteristic; difficulty: Difficulty }) {
-	const c = Object.values(schemas.characteristic.Values).indexOf(data.characteristic);
-	const d = Object.values(schemas.difficulty.Values).indexOf(data.difficulty);
+	const c = characteristics.indexOf(data.characteristic);
+	const d = difficulties.indexOf(data.difficulty);
 	return c * 5 + d;
 }
 
 export function resolveLevelIndex(value: number) {
 	const c = Math.floor(value / 5);
 	const d = value % 5;
-	return {
-		characteristic: Object.values(schemas.characteristic.Values)[c],
-		difficulty: Object.values(schemas.difficulty.Values)[d],
-	};
+	return { characteristic: characteristics[c], difficulty: difficulties[d] };
 }
 
 interface FileEntry<T> {
@@ -21,64 +20,154 @@ interface FileEntry<T> {
 	contents: T;
 }
 
-export function fromEntries(entries: FileEntry<unknown>[]) {
-	const entry = entries.find((e) => e.name.toLowerCase() === "info.dat");
-	if (!entry) throw Error("");
-	const info = schemas.metadata.info.parse(entry.contents);
-	const beatmaps = info._difficultyBeatmapSets.flatMap((s) => s._difficultyBeatmaps.map((x) => ({ ...x, ...s })));
-	const audio = entries.find((e) => e.name === info._songFilename);
-	if (!audio) throw Error("");
-	const levels = beatmaps.map((beatmap) => {
-		const entry = entries.find((e) => e.name === beatmap._beatmapFilename);
-		if (!entry) throw Error("");
-		return { name: entry.name, contents: { beatmap, data: entry.contents } };
-	});
-	const valid = levels.filter((x) => x !== undefined);
-	return valid.map((level) => {
-		return { name: level.name, audio: audio.contents as AudioBuffer | undefined, info: info, level: level.contents };
-	});
+interface BeatmapEntry {
+	name: string;
+	contents: {
+		audio?: FileEntry<unknown>;
+		beatmap?: FileEntry<unknown>;
+		lightshow?: FileEntry<unknown>;
+	};
+	data: Partial<IEntry>;
 }
 
-export function resolveLevelStats(data: unknown, details = false) {
-	const isV2 = schemas.metadata.v2.safeParse(data);
-	const isV3 = schemas.metadata.v3.safeParse(data);
-	if (isV2.success) {
-		const colorNotes = isV2.data._notes.filter((x) => x && [0, 1].includes(x._type));
-		const bombNotes = isV2.data._notes.filter((x) => x && [3].includes(x._type));
-		const basicBeatmapEvents = isV2.data._events.filter((x) => x && ![5, 14, 15, 100].includes(x._type));
-		const colorBoostBeatmapEvents = isV2.data._events.filter((x) => x && [5].includes(x._type));
-		const rotationEvents = isV2.data._events.filter((x) => x && [14, 15].includes(x._type));
-		const bpmEvents = isV2.data._events.filter((x) => x && [100].includes(x._type));
+export function fromEntries(entries: FileEntry<unknown>[], filenames = { info: "Info.dat", audio: "BPMInfo.dat" }): BeatmapEntry[] {
+	const info = entries.find((e) => e.name.toLowerCase() === filenames.info.toLowerCase());
+	if (!info) throw Error();
+	if (is(schemas.v2.info, info.contents)) {
+		const data = info.contents;
+		const song = entries.find((e) => e.name === data._songFilename)?.contents as AudioBuffer | undefined;
+		const audio = entries.find((e) => e.name.toLowerCase() === filenames.audio.toLowerCase());
+		const l = data._difficultyBeatmapSets.flatMap((s) => s._difficultyBeatmaps.map((x) => ({ ...omit(s, "_difficultyBeatmaps"), ...x })));
+		const levels = l.map((level) => {
+			const beatmap = entries.find((e) => e.name === level._beatmapFilename);
+			if (!beatmap) throw Error(`Missing beatmap file for ${level._beatmapCharacteristicName}/${level._difficulty}`);
+			return { name: beatmap.name, contents: { audio, beatmap }, data: { ...level } };
+		});
+		const valid = levels.filter((x) => x !== undefined);
+		return valid.map((level) => {
+			return {
+				name: level.name,
+				contents: level.contents,
+				data: {
+					title: data._songName,
+					bpm: data._beatsPerMinute,
+					length: song ? Number(song?.duration.toFixed(3)) : undefined,
+					characteristic: level.data._beatmapCharacteristicName,
+					difficulty: level.data._difficulty,
+					jumpSpeed: level.data._noteJumpMovementSpeed,
+					jumpOffset: level.data._noteJumpStartBeatOffset,
+				},
+			};
+		});
+	}
+	if (is(schemas.v4.info, info.contents)) {
+		const data = info.contents;
+		const song = entries.find((e) => e.name === data.audio.songFilename)?.contents as AudioBuffer | undefined;
+		const audio = entries.find((e) => e.name === data.audio.audioDataFilename);
+		if (!audio) throw Error(`Missing audio file`);
+		const levels = data.difficultyBeatmaps.map((level) => {
+			const beatmap = entries.find((e) => e.name === level.beatmapDataFilename);
+			const lightshow = entries.find((e) => e.name === level.lightshowDataFilename);
+			if (!beatmap) throw Error(`Missing beatmap file for ${level.characteristic}/${level.difficulty}`);
+			if (!lightshow) throw Error(`Missing lightshow file for ${level.characteristic}/${level.difficulty}`);
+			return { name: beatmap.name, contents: { audio, beatmap, lightshow }, data: { ...level } };
+		});
+		const valid = levels.filter((x) => x !== undefined);
+		return valid.map((level) => {
+			return {
+				name: level.name,
+				contents: level.contents,
+				data: {
+					title: data.song.title,
+					bpm: data.audio.bpm,
+					length: song ? Number(song.duration.toFixed(3)) : data.audio.songDuration,
+					characteristic: level.data.characteristic,
+					difficulty: level.data.difficulty,
+					jumpSpeed: level.data.noteJumpMovementSpeed,
+					jumpOffset: level.data.noteJumpStartBeatOffset,
+					mappers: level.data.beatmapAuthors.mappers,
+					lighters: level.data.beatmapAuthors.lighters,
+				},
+			};
+		});
+	}
+	throw Error("The file provided is not a valid map file.");
+}
+
+export function resolveAudioStats(data: unknown, details = false) {
+	if (is(schemas.v4.audio, data)) {
+		return {
+			bpmEvents: { total: data.bpmData?.length ?? 0 },
+		};
+	}
+	return {};
+}
+
+export function resolveBeatmapStats(data: unknown, details = false) {
+	if (is(schemas.v2.beatmap, data)) {
+		const colorNotes = data._notes.filter((x) => x && [0, 1].includes(x._type));
+		const bombNotes = data._notes.filter((x) => x && [3].includes(x._type));
+		const basicBeatmapEvents = data._events.filter((x) => x && ![5, 14, 15, 100].includes(x._type));
+		const colorBoostBeatmapEvents = data._events.filter((x) => x && [5].includes(x._type));
+		const rotationEvents = data._events.filter((x) => x && [14, 15].includes(x._type));
+		const bpmEvents = data._events.filter((x) => x && [100].includes(x._type));
 		return {
 			colorNotes: { total: colorNotes.length },
 			bombNotes: { total: bombNotes.length },
-			obstacles: { total: isV2.data._obstacles.length },
-			sliders: isV2.data._sliders ? { total: isV2.data._sliders.length } : undefined,
+			obstacles: { total: data._obstacles.length },
+			sliders: data._sliders ? { total: data._sliders.length } : undefined,
 			basicBeatmapEvents: { total: basicBeatmapEvents.length },
 			colorBoostBeatmapEvents: { total: colorBoostBeatmapEvents.length },
 			rotationEvents: { total: rotationEvents.length },
 			bpmEvents: { total: bpmEvents.length },
-			waypoints: isV2.data._waypoints ? { total: isV2.data._waypoints.length } : undefined,
-			basicEventTypesWithKeywords: isV2.data._specialEventsKeywordFilters ? { total: isV2.data._specialEventsKeywordFilters._keywords?.map((filter) => filter._specialEvents).filter(predicates.unique).length ?? 0 } : undefined,
+			waypoints: data._waypoints ? { total: data._waypoints.length } : undefined,
+			basicEventTypesWithKeywords: data._specialEventsKeywordFilters ? { total: data._specialEventsKeywordFilters._keywords?.map((filter) => filter._specialEvents).filter(predicates.unique).length ?? 0 } : undefined,
 		};
 	}
-	if (isV3.success) {
+	if (is(schemas.v3.beatmap, data)) {
 		return {
-			colorNotes: { total: isV3.data.colorNotes.length },
-			bombNotes: { total: isV3.data.bombNotes.length },
-			obstacles: { total: isV3.data.obstacles.length },
-			sliders: { total: isV3.data.sliders.length },
-			burstSliders: { total: isV3.data.burstSliders.length },
-			basicBeatmapEvents: { total: isV3.data.basicBeatmapEvents.length },
-			colorBoostBeatmapEvents: { total: isV3.data.colorBoostBeatmapEvents.length },
-			rotationEvents: { total: isV3.data.rotationEvents.length },
-			bpmEvents: { total: isV3.data.bpmEvents.length },
-			lightColorEventBoxGroups: { total: isV3.data.lightColorEventBoxGroups.length },
-			lightRotationEventBoxGroups: { total: isV3.data.lightRotationEventBoxGroups.length },
-			lightTranslationEventBoxGroups: isV3.data.lightTranslationEventBoxGroups ? { total: isV3.data.lightTranslationEventBoxGroups.length } : undefined,
-			vfxEventBoxGroups: isV3.data.vfxEventBoxGroups ? { total: isV3.data.vfxEventBoxGroups.length } : undefined,
-			waypoints: { total: isV3.data.waypoints.length },
-			basicEventTypesWithKeywords: { total: isV3.data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
+			colorNotes: { total: data.colorNotes.length },
+			bombNotes: { total: data.bombNotes.length },
+			obstacles: { total: data.obstacles.length },
+			sliders: { total: data.sliders.length },
+			burstSliders: { total: data.burstSliders.length },
+			basicBeatmapEvents: { total: data.basicBeatmapEvents.length },
+			colorBoostBeatmapEvents: { total: data.colorBoostBeatmapEvents.length },
+			rotationEvents: { total: data.rotationEvents.length },
+			bpmEvents: { total: data.bpmEvents.length },
+			lightColorEventBoxGroups: { total: data.lightColorEventBoxGroups.length },
+			lightRotationEventBoxGroups: { total: data.lightRotationEventBoxGroups.length },
+			lightTranslationEventBoxGroups: data.lightTranslationEventBoxGroups ? { total: data.lightTranslationEventBoxGroups.length } : undefined,
+			vfxEventBoxGroups: data.vfxEventBoxGroups ? { total: data.vfxEventBoxGroups.length } : undefined,
+			waypoints: { total: data.waypoints.length },
+			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
 		};
 	}
+	if (is(schemas.v4.beatmap, data)) {
+		return {
+			colorNotes: { total: data.colorNotes?.length ?? 0 },
+			bombNotes: { total: data.bombNotes?.length ?? 0 },
+			obstacles: { total: data.obstacles?.length ?? 0 },
+			sliders: { total: data.arcs?.length ?? 0 },
+			burstSliders: { total: data.chains?.length ?? 0 },
+			rotationEvents: { total: data.spawnRotations?.length ?? 0 },
+		};
+	}
+	return {};
+}
+
+export function resolveLightshowStats(data: unknown, details = false) {
+	if (is(schemas.v4.lightshow, data)) {
+		return {
+			basicBeatmapEvents: { total: data.basicEvents?.length ?? 0 },
+			colorBoostBeatmapEvents: { total: data.colorBoostEvents?.length ?? 0 },
+			lightColorEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 1).length ?? 0 },
+			lightRotationEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 2).length ?? 0 },
+			lightTranslationEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 3).length ?? 0 },
+			vfxEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 4).length ?? 0 },
+			waypoints: { total: data.waypoints?.length ?? 0 },
+			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords?.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
+		};
+	}
+	return {};
 }

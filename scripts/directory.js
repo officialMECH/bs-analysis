@@ -4,7 +4,7 @@ import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { default as prompt } from "prompts";
 import slugify from "slugify";
-import { config, createLevelIndex, fromEntries, resolveLevelStats } from "./helpers.js";
+import { config, createLevelIndex, fromEntries, resolveAudioStats, resolveBeatmapStats, resolveLightshowStats } from "./helpers.js";
 
 const { details, directory, metadata, output, minify } = await config(false, [
 	{ name: "directory", type: "text", message: "Directory" }, //
@@ -13,24 +13,21 @@ const { details, directory, metadata, output, minify } = await config(false, [
 const files = readdirSync(directory, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith(".dat"));
 const entries = fromEntries(files.map((entry) => ({ name: entry.name, contents: JSON.parse(readFileSync(join(directory, entry.name), { encoding: "utf-8" })) })));
 
-const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(entries[0].info._songName) });
+const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(entries[0].contents.title) });
 
 const dataset = await entries.reduce(async (record, entry) => {
-	const { info, level } = entry;
-	const characteristic = level.beatmap._beatmapCharacteristicName;
-	const difficulty = level.beatmap._difficulty;
-	const bid = createLevelIndex({ characteristic, difficulty });
-	const title = info._songName;
+	const {
+		contents: { audio, beatmap, lightshow },
+		data: metadata,
+	} = entry;
+	const bid = createLevelIndex({ characteristic: contents.characteristic, difficulty: contents.difficulty });
 	const { sid } = await id;
 	const data = {
 		id: sid,
-		title,
-		bpm: Number(info._beatsPerMinute.toFixed(3)),
-		characteristic,
-		difficulty,
-		...resolveLevelStats(level.data, details),
-		jumpSpeed: level.beatmap._noteJumpMovementSpeed,
-		jumpOffset: level.beatmap._noteJumpStartBeatOffset,
+		...metadata,
+		...resolveAudioStats(audio?.contents ?? {}, details),
+		...resolveBeatmapStats(beatmap?.contents ?? {}, details),
+		...resolveLightshowStats(lightshow?.contents ?? {}, details),
 	};
 	return { ...(await record), [`${sid}/${bid}`]: data };
 }, Promise.resolve({}));
