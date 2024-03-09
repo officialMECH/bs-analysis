@@ -65,7 +65,7 @@ export async function extract(buffer) {
 	const entries = await Promise.all(files);
 	const formatted = await Promise.all(
 		entries.map(async (entry) => {
-			if (entry.name.endsWith(".dat")) {
+			if ([".json", ".dat", ".audio", ".beatmap", ".lightshow"].some((x) => entry.name.endsWith(x))) {
 				const text = await entry.async("text");
 				return { name: entry.name, contents: JSON.parse(text) };
 			}

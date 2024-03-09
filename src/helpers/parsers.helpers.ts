@@ -35,7 +35,7 @@ async function parseArchive(data: { id: string; buffer: ArrayBuffer }, callback:
 				const file = await entry.async("blob");
 				return { name: entry.name, contents: file } as Entry<Blob>;
 			}
-			if ([".dat"].some((x) => entry.name.endsWith(x))) {
+			if ([".json", ".dat", ".audio", ".beatmap", ".lightshow"].some((x) => entry.name.endsWith(x))) {
 				const file = await entry.async("text");
 				const contents = JSON.parse(file) as unknown;
 				return { name: entry.name, contents: contents } as Entry<typeof contents>;
