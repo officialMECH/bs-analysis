@@ -40,6 +40,7 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 };
 
 const storage = Object.entries(localStorage).reduce((record: State, [key, value]: [string, string]) => {
+	if (!is(schemas.dataset, value)) return record;
 	return { ...record, [key]: JSON.parse(value) as T };
 }, {});
 
