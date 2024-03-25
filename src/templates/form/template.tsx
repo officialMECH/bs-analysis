@@ -1,17 +1,19 @@
 import { css, cva } from "$/styles/css";
 import { vstack } from "$/styles/patterns";
-import { Fragment, PropsWithChildren } from "react";
+import { FormHTMLAttributes, Fragment, PropsWithChildren } from "react";
 
 interface Props {
 	title?: string;
 }
 
-function Template({ title, children }: PropsWithChildren<Props>) {
+function Template({ title, children, ...rest }: PropsWithChildren<Props> & FormHTMLAttributes<HTMLElement>) {
 	return (
 		<Fragment>
 			<h2 className={styles.title}>{title}</h2>
 			<hr />
-			<div className={styles.contents}>{children}</div>
+			<form className={styles.contents} {...rest}>
+				{children}
+			</form>
 		</Fragment>
 	);
 }

@@ -1,3 +1,14 @@
+export function pick<T extends object, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
+	const draft = { ...obj };
+	keys.forEach((key) => (draft[key] = obj[key]));
+	return draft;
+}
+export function omit<T extends object, K extends keyof T>(obj: T, ...keys: K[]): Omit<T, K> {
+	const draft = { ...obj };
+	keys.forEach((key) => delete draft[key]);
+	return draft;
+}
+
 export function common<T extends Record<string, unknown>>(a: T, b: T): T {
 	const result = Object.keys(a).reduce((result: T, key: keyof typeof a) => {
 		const value = a[key];

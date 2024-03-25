@@ -40,7 +40,6 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 };
 
 const storage = Object.entries(localStorage).reduce((record: State, [key, value]: [string, string]) => {
-	if (!is(schemas.dataset, value)) return record;
 	return { ...record, [key]: JSON.parse(value) as T };
 }, {});
 
@@ -51,6 +50,7 @@ function StorageProvider({ children }: PropsWithChildren) {
 	useEffect(() => {
 		Object.entries(datasets).forEach(([key, contents]) => {
 			const name = key.split("/")[key.split("/").length - 1].split(".")[0];
+			if (!is(schemas.dataset, contents.default)) return;
 			dispatch({ type: "UPDATE", payload: { id: name, dataset: contents.default, overwrite: false } });
 		});
 	}, []);
