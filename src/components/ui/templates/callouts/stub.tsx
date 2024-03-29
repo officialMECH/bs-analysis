@@ -1,9 +1,11 @@
 import { Callout } from "$/components/ui/molecules";
 import { metadata } from "$/constants";
+import { ComponentPropsWithoutRef } from "react";
 
-function Component() {
-	return (
-		<Callout title="INFO">
+export default {
+	variant: "info",
+	children: (
+		<p>
 			This is a stub section.
 			<br />
 			If you have suggestions for content you'd like to see included here, join the{" "}
@@ -11,8 +13,6 @@ function Component() {
 				discussions
 			</a>{" "}
 			and leave your thoughts!
-		</Callout>
-	);
-}
-
-export { Component };
+		</p>
+	),
+} as ComponentPropsWithoutRef<typeof Callout>;

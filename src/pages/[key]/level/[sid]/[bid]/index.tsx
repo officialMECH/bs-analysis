@@ -1,6 +1,7 @@
 import { Badge } from "$/components/ui/atoms";
+import { Callout } from "$/components/ui/molecules";
 import { Content } from "$/components/ui/organisms";
-import { LevelActions, Stub } from "$/components/ui/templates";
+import { LevelActions, callouts } from "$/components/ui/templates";
 import { resolveLevelIndex } from "$/helpers";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
@@ -59,7 +60,7 @@ export default function Page() {
 	}
 	return (
 		<Content title={<Title />} layout={"level"}>
-			{data ? <Stub /> : "This level is not available."}
+			{data ? <Callout {...callouts.stub} /> : "This level is not available."}
 		</Content>
 	);
 }
