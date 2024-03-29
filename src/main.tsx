@@ -3,7 +3,7 @@ import { registerTheme } from "echarts";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { StorageProvider } from "./components";
+import { Storage } from "./components/context";
 import "./index.css";
 
 const light = await import("$/assets/charts/light.json");
@@ -16,8 +16,8 @@ const root = document.getElementById("root")!;
 
 createRoot(root).render(
 	<StrictMode>
-		<StorageProvider>
+		<Storage.Provider>
 			<RouterProvider router={createBrowserRouter(routes, { basename: import.meta.env.BASE_URL })} />
-		</StorageProvider>
+		</Storage.Provider>
 	</StrictMode>
 );

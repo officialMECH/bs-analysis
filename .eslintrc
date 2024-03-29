@@ -2,7 +2,7 @@
 	"root": true,
 	"env": { "browser": true, "es2020": true, "node": true },
 	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended"],
-	"ignorePatterns": ["dist", "package.json", "yarn.lock", "src/styles", "src/router.ts"],
+	"ignorePatterns": ["dist", "package.json", "yarn.lock", "index.html", "src/styles", "src/router.ts"],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"project": ["./tsconfig.json"],
@@ -14,5 +14,6 @@
 		"@typescript-eslint/ban-ts-comment": "off",
 		"@typescript-eslint/no-unused-vars": "warn",
 		"@typescript-eslint/no-explicit-any": "warn",
+		"@typescript-eslint/ban-types": "warn",
 	},
 }

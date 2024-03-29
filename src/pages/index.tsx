@@ -1,37 +1,12 @@
+import { Section } from "$/components/ui/molecules";
+import { Content, Feature, Profile } from "$/components/ui/organisms";
 import { css, cva } from "$/styles/css";
-import { flex, hstack, vstack } from "$/styles/patterns";
-import { Content, Profile } from "$/templates";
-import { PropsWithChildren } from "react";
-
-function Section({ heading, direction, gap = 8, children }: PropsWithChildren<{ heading?: string; gap?: number; direction?: "column" | "row" }>) {
-	return (
-		<section className={styles.section.wrapper}>
-			{heading && <h2 className={styles.heading({ size: 2 })}>{heading}</h2>}
-			<div className={styles.section.content({ direction })} style={{ gap: gap * 4 }}>
-				{children}
-			</div>
-		</section>
-	);
-}
-
-function Feature({ heading, icons, children }: PropsWithChildren<{ heading: string; icons: string[] }>) {
-	return (
-		<div className={styles.feature.wrapper}>
-			<h3 className={styles.heading({ size: 3 })}>{heading}</h3>
-			<p>{children}</p>
-			<div className={styles.feature.icons}>
-				{icons.map((name) => (
-					<i key={name} className={`fa-solid fa-${name}`} style={{ fontSize: 24 }} />
-				))}
-			</div>
-		</div>
-	);
-}
+import { faFile, faGlobe, faMagnifyingGlass, faTable, faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
 
 export default function App() {
 	return (
-		<Content layout={"home"} title={<span className={styles.title}>Beat Saber Map Analysis</span>}>
-			<Section direction="column" gap={0}>
+		<Content layout={"home"} title={<span className={cn.title}>Beat Saber Map Analysis</span>}>
+			<Section center direction="column" gap={0}>
 				<p>This website provides a comprehensive interface for statistical analysis of Beat Saber maps.</p>
 				<p>
 					This also serves as a successor to the{" "}
@@ -41,25 +16,25 @@ export default function App() {
 					, aiming to provide new capabilities and improvements:
 				</p>
 			</Section>
-			<Section>
-				<Feature heading="Better Coverage" icons={["magnifying-glass"]}>
+			<Section center direction="row">
+				<Feature title="Better Coverage" icons={[faMagnifyingGlass]}>
 					New pages are available for more comprehensive breakdowns.
 				</Feature>
-				<Feature heading="Custom Datasets" icons={["table", "file", "globe"]}>
+				<Feature title="Custom Datasets" icons={[faTable, faFile, faGlobe]}>
 					You can create your own arbitrary datasets from a variety of sources.
 				</Feature>
-				<Feature heading="New Presentation" icons={["wand-magic-sparkles"]}>
+				<Feature title="New Presentation" icons={[faWandMagicSparkles]}>
 					Better infrastructure makes it easier to present the info you need.
 				</Feature>
 			</Section>
-			<Section heading="Credits">
+			<Section center direction="row" heading="Credits">
 				<Profile name="officialMECH" role="Lead Developer, Maintainer" />
 			</Section>
 		</Content>
 	);
 }
 
-const styles = {
+const cn = {
 	title: css({
 		fontSize: "5xl",
 	}),
@@ -71,31 +46,4 @@ const styles = {
 			},
 		},
 	}),
-	section: {
-		wrapper: css({
-			textAlign: "center",
-		}),
-		content: cva({
-			base: flex.raw({
-				flexDirection: { base: "column", sm: "row" },
-				width: "full",
-				justifyContent: "center",
-			}),
-			variants: {
-				direction: {
-					column: { flexDirection: "column" },
-					row: { flexDirection: "row" },
-				},
-			},
-		}),
-	},
-	feature: {
-		wrapper: vstack({
-			width: "full",
-			textAlign: "center",
-		}),
-		icons: hstack({
-			gap: 4,
-		}),
-	},
 };

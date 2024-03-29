@@ -15,6 +15,11 @@ export default defineConfig({
 			maxWidth: "6xl",
 			marginX: "auto",
 		},
+		// HACK: radix-ui portals do not respect margin/padding values.
+		"body[data-scroll-locked]": {
+			padding: "0 !important",
+			marginX: "auto !important",
+		},
 		main: {
 			margin: 8,
 		},
@@ -27,29 +32,6 @@ export default defineConfig({
 			"&:hover": {
 				color: "indigo.400",
 			},
-		},
-		"button, input, select, textarea": {
-			backgroundColor: "element",
-			color: "text",
-			border: "1px solid transparent",
-			transition: "border-color 0.25s",
-			"&:not([disabled]):hover": {
-				borderColor: "primary",
-			},
-			"&[disabled]": {
-				backgroundColor: "container",
-				color: "subtext",
-				cursor: "not-allowed",
-			},
-			"&[disabled] > *": {
-				cursor: "not-allowed",
-			},
-		},
-		button: {
-			paddingY: 1,
-			paddingX: 4,
-			borderRadius: "md",
-			cursor: "pointer",
 		},
 		"code, pre": {
 			fontFamily: "monospace",
@@ -89,9 +71,6 @@ export default defineConfig({
 				marginX: 4,
 			},
 		},
-		"h1, h2, h3, h4, h5, h6": {
-			fontWeight: "bold",
-		},
 		hr: {
 			marginY: 4,
 		},
@@ -114,8 +93,6 @@ export default defineConfig({
 		},
 		select: {
 			paddingX: "0.5em",
-			cursor: "pointer",
-			WebkitAppearance: "none",
 		},
 		table: {
 			borderCollapse: "separate",
@@ -138,6 +115,7 @@ export default defineConfig({
 					text: { value: { base: "{colors.zinc.900}", _osDark: "{colors.zinc.100}" } },
 					subtext: { value: { base: "{colors.zinc.600}", _osDark: "{colors.zinc.400}" } },
 					neutral: { value: { base: "{colors.zinc.500}" } },
+					light: { value: { base: "{colors.zinc.800}", _osDark: "{colors.zinc.200}" } },
 					primary: { value: { base: "{colors.blue.500}" } },
 					danger: { value: { base: "{colors.red.600}" } },
 					link: { value: { base: "{colors.indigo.500}" } },
@@ -154,6 +132,33 @@ export default defineConfig({
 	},
 	patterns: {
 		extend: {
+			interactable: {
+				transform: ({ ...rest }) => {
+					return {
+						backgroundColor: rest.backgroundColor ?? "element",
+						color: "text",
+						border: rest.border ?? "1px solid transparent",
+						transition: "border-color 0.25s",
+						cursor: "pointer",
+						WebkitAppearance: "none",
+						['&[data-state="on"]']: {
+							backgroundColor: "primary",
+						},
+						"&:not([disabled]):hover": {
+							borderColor: "primary",
+						},
+						"&[disabled]": {
+							backgroundColor: "container",
+							color: "subtext",
+							cursor: "not-allowed",
+						},
+						"&[disabled] > *": {
+							cursor: "not-allowed",
+						},
+						...rest,
+					};
+				},
+			},
 			scrollable: {
 				description: "A container that allows for scrolling",
 				properties: {
