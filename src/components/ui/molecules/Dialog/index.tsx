@@ -3,7 +3,9 @@ import { css } from "$/styles/css";
 import { RenderProps } from "$/types";
 import { ComponentPropsWithoutRef } from "react";
 
-function Component({ render, children, ...rest }: ComponentPropsWithoutRef<typeof Builder.Root> & RenderProps) {
+interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
+
+function Component({ render, children, ...rest }: Props & RenderProps<{ close: (props?: Props) => void }>) {
 	return (
 		<Builder.Root {...rest}>
 			<Builder.Trigger asChild>{children}</Builder.Trigger>

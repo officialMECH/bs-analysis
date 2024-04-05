@@ -3,8 +3,11 @@ import { Checkbox as Builder } from "$/components/ui/builders";
 import { css, cx } from "$/styles/css";
 import { center, interactable } from "$/styles/patterns";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { ComponentPropsWithoutRef } from "react";
 
-function Component({ className, ...rest }: Builder.CheckboxProps) {
+interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
+
+function Component({ className, ...rest }: Props) {
 	return (
 		<Builder.Root className={cx(cn.root, className)} {...rest}>
 			<Builder.Indicator asChild className={cn.indicator}>

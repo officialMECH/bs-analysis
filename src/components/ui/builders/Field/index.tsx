@@ -5,7 +5,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
 import { Provider, useContext } from "./context";
 
-interface RootProps extends ComponentPropsWithoutRef<"div">, AsChildProps {
+interface RootProps {
 	id: string;
 }
 const Root = createPrimitive<"fieldset", ScopedProps<RootProps>>("fieldset", (Element, { __scope, asChild, id, ...rest }) => {

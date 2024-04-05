@@ -4,7 +4,9 @@ import { center, flex, wrap } from "$/styles/patterns";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ComponentPropsWithoutRef } from "react";
 
-function Component({ id, value = [], onValueChange, ...rest }: ComponentPropsWithoutRef<typeof Builder.Root>) {
+interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
+
+function Component({ id, value = [], onValueChange, ...rest }: Props) {
 	return (
 		<Builder.Root className={cn.root} style={{ width: "100%" }} value={value} onValueChange={onValueChange} {...rest}>
 			<Builder.List className={cn.list}>

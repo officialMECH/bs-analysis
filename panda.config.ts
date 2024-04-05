@@ -2,7 +2,7 @@ import { defineConfig } from "@pandacss/dev";
 
 export default defineConfig({
 	preflight: true,
-	include: ["./src/**/*.{js,jsx,ts,tsx}", "./pages/**/*.{js,jsx,ts,tsx}"],
+	include: ["./src/**/*.{js,jsx,ts,tsx}"],
 	exclude: [],
 	outdir: "src/styles",
 	globalCss: {
@@ -37,40 +37,6 @@ export default defineConfig({
 			fontFamily: "monospace",
 			fontSize: "md",
 		},
-		details: {
-			width: "full",
-			"& summary": {
-				paddingY: 2,
-				paddingX: 4,
-				backgroundColor: "element",
-				cursor: "pointer",
-				display: "flex",
-				justifyContent: "space-between",
-				gap: 8,
-				alignItems: "center",
-				fontWeight: "bold",
-				fontSize: "xl",
-				listStyle: "none",
-			},
-			"& summary::-webkit-details-marker": {
-				display: "none",
-			},
-			"& summary::after": {
-				fontFamily: "system",
-				content: '"▶"',
-			},
-			"&[open] summary::after": {
-				fontFamily: "system",
-				content: '"▼"',
-			},
-			"& summary > *": {
-				paddingY: 2,
-			},
-			"& section ": {
-				paddingY: 2,
-				marginX: 4,
-			},
-		},
 		hr: {
 			marginY: 4,
 		},
@@ -86,20 +52,6 @@ export default defineConfig({
 		},
 		p: {
 			marginBottom: 2,
-		},
-		pre: {
-			fontFamily: "monospace",
-			fontSize: "md",
-		},
-		select: {
-			paddingX: "0.5em",
-		},
-		table: {
-			borderCollapse: "separate",
-			borderSpacing: 0.5,
-			"& thead": {
-				fontWeight: "bold",
-			},
 		},
 	},
 	theme: {

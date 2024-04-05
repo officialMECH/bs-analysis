@@ -1,14 +1,13 @@
 import { css, cva, cx } from "$/styles/css";
 import { hstack, vstack } from "$/styles/patterns";
 import { RecipeVariantProps } from "$/styles/types";
-import { PropsWithChildren } from "react";
+import { ComponentPropsWithoutRef } from "react";
 
-interface Props {
-	title?: string;
-}
-function Component({ title, variant, children }: PropsWithChildren<Props> & RecipeVariantProps<typeof cn.root>) {
+interface Props extends ComponentPropsWithoutRef<"aside"> {}
+
+function Component({ title, variant, children, ...rest }: Props & RecipeVariantProps<typeof cn.root>) {
 	return (
-		<aside className={cx(cn.root({ variant }))}>
+		<aside className={cx(cn.root({ variant }))} {...rest}>
 			<span className={cx(cn.heading)}>{title ?? variant?.toUpperCase()}</span>
 			<small className={cx(cn.content)}>{children}</small>
 		</aside>

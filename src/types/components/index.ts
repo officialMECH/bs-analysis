@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 export type ScopedProps<P> = P & { __scope?: Scope };
 
 export interface RenderProps<P = {}> {
-	render: (props: { close: (props?: P) => void }) => ReactNode;
+	render: (props: P) => ReactNode;
 }
 
 export interface IField {

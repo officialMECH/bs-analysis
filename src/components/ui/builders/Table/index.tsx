@@ -5,12 +5,14 @@ import { scrollable } from "$/styles/patterns";
 const Root = createPrimitive("table", (Element, { asChild, ...rest }) => {
 	return (
 		<div className={cx(cn.wrapper)}>
-			<Element className={cx(cn.container)} {...rest} />
+			<Element className={cx(cn.root)} {...rest} />
 		</div>
 	);
 });
 
-const Header = createPrimitive("thead");
+const Header = createPrimitive("thead", (Element, { asChild, ...rest }) => {
+	return <Element className={cx(cn.header)} {...rest} />;
+});
 
 const Body = createPrimitive("tbody");
 
@@ -23,8 +25,17 @@ const Head = createPrimitive("th");
 const Cell = createPrimitive("td");
 
 const cn = {
-	wrapper: scrollable({ width: "full" }),
-	container: css({ margin: "auto" }),
+	wrapper: scrollable({
+		width: "full",
+	}),
+	root: css({
+		margin: "auto",
+		borderCollapse: "separate",
+		borderSpacing: 0.5,
+	}),
+	header: css({
+		fontWeight: "bold",
+	}),
 };
 
 export { Body, Cell, Footer, Head, Header, Root, Row };

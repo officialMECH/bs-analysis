@@ -1,10 +1,15 @@
 import { Icon } from "$/components/ui/atoms";
 import { css, cx } from "$/styles/css";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { ComponentProps } from "react";
+import { PropsWithChildren } from "react";
 
-function Component({ className }: ComponentProps<"i">) {
-	return <Icon icon={faSpinner} className={cx(cn.root, className)} />;
+interface Props extends PropsWithChildren {
+	loading?: boolean;
+}
+
+function Component({ children, loading }: Props) {
+	if (children && !loading) return children;
+	return <Icon icon={faSpinner} className={cx(cn.root)} />;
 }
 
 const cn = {

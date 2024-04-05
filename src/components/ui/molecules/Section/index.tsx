@@ -2,24 +2,23 @@ import { Heading } from "$/components/ui/atoms";
 import { cva } from "$/styles/css";
 import { flex } from "$/styles/patterns";
 import { RecipeVariantProps } from "$/styles/types";
-import { HTMLAttributes, forwardRef } from "react";
+import { ComponentPropsWithoutRef } from "react";
 
-interface Props {
+interface Props extends ComponentPropsWithoutRef<"section"> {
 	heading?: string;
-	center?: boolean;
 	gap?: number;
 }
 
-const Component = forwardRef<HTMLElement, HTMLAttributes<HTMLElement> & RecipeVariantProps<typeof cn.content> & Props>(({ heading, center, direction = "column", gap = 1, children }, ref) => {
+const Component = ({ heading, center, direction = "column", gap = 1, children, ...rest }: Props & RecipeVariantProps<typeof cn.content>) => {
 	return (
-		<section ref={ref} className={cn.root({ center })}>
+		<section className={cn.root({ center })} {...rest}>
 			{heading && <Heading size={2}>{heading}</Heading>}
 			<div className={cn.content({ direction, center })} style={{ gap: gap * 16 }}>
 				{children}
 			</div>
 		</section>
 	);
-});
+};
 
 const cn = {
 	root: cva({

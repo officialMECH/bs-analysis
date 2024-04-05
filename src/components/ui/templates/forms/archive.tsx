@@ -103,7 +103,7 @@ function Component({ onSubmit }: Props) {
 							<Field.Wrapper id="map-url" heading={"Source"} subheading="(URL)">
 								<Field.Input type="text" value={url} onChange={(e) => setURL(e.target.value)} />
 								<Button disabled={fetching} onClick={() => handleFetch()}>
-									{fetching ? <Spinner /> : "Fetch"}
+									<Spinner loading={fetching}>Fetch</Spinner>
 								</Button>
 							</Field.Wrapper>
 						),

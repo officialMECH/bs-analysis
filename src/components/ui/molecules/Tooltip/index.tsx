@@ -3,7 +3,9 @@ import { css } from "$/styles/css";
 import { RenderProps } from "$/types";
 import { ComponentPropsWithoutRef } from "react";
 
-function Component({ render, children, ...rest }: ComponentPropsWithoutRef<typeof Builder.Root> & RenderProps) {
+interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
+
+function Component({ render, children, ...rest }: Props & RenderProps) {
 	return (
 		<Builder.Provider>
 			<Builder.Root {...rest}>
@@ -11,7 +13,7 @@ function Component({ render, children, ...rest }: ComponentPropsWithoutRef<typeo
 					<span>{children}</span>
 				</Builder.Trigger>
 				<Builder.Content side="top" sideOffset={4} className={cn.content}>
-					{render({ close })}
+					{render({})}
 				</Builder.Content>
 			</Builder.Root>
 		</Builder.Provider>

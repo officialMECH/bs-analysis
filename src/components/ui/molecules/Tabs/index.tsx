@@ -1,9 +1,9 @@
 import { Tabs as Builder } from "$/components/ui/builders";
 import { css, cva } from "$/styles/css";
 import { flex, interactable, vstack } from "$/styles/patterns";
-import { Fragment, ReactNode } from "react";
+import { ComponentPropsWithoutRef, Fragment, ReactNode } from "react";
 
-interface Props extends Builder.TabsProps {
+interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {
 	items: Record<string, ReactNode>;
 }
 
