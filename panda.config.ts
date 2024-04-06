@@ -5,6 +5,7 @@ export default defineConfig({
 	include: ["./src/**/*.{js,jsx,ts,tsx}"],
 	exclude: [],
 	outdir: "src/styles",
+	importMap: ["$/styles"],
 	globalCss: {
 		html: {
 			backgroundColor: "background",
