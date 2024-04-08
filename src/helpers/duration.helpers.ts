@@ -4,7 +4,7 @@ export function importDuration(value: string) {
 		.split(":")
 		.reverse()
 		.map((e) => Number(e));
-	return (seconds ?? 0) + (minutes ?? 0) * 60 + (hours ?? 0) * 3600 + (milliseconds ? Number(milliseconds.padEnd(3, "0") ?? 0) / 1000 : 0);
+	return (seconds ?? 0) + (minutes ?? 0) * 60 + (hours ?? 0) * 3600 + (milliseconds ? Number(milliseconds.padEnd(milliseconds.length, "0") ?? 0) / Number("1".padEnd(milliseconds.length + 1, "0")) : 0);
 }
 
 export function formatDuration(x: number, precision = 0) {
