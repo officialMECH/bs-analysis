@@ -28,6 +28,7 @@ export default defineConfig({
 			borderColor: "white",
 		},
 		a: {
+			padding: 0,
 			color: "link",
 			transition: "color 0.25s",
 			"&:hover": {

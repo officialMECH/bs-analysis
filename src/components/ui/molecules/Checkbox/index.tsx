@@ -24,12 +24,13 @@ const cn = {
 			width: "1em",
 			height: "1em",
 			backgroundColor: "light",
+			borderRadius: "xs",
 		})
 	),
 	indicator: css({
 		position: "relative",
 		color: "container",
-		fontSize: "sm",
+		fontSize: "xs",
 	}),
 };
 

@@ -50,7 +50,7 @@ const cn = {
 		base: { cursor: "pointer" },
 		variants: {
 			active: {
-				true: { color: "text" },
+				true: { color: "{text}" },
 				false: { color: "neutral" },
 			},
 		},

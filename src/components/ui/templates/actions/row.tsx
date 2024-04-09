@@ -17,7 +17,7 @@ interface Props<T> {
 	onDelete?: (ids: string[]) => void;
 }
 
-function Component<T>({ table, ids, onSubmit, onDelete }: Props<T>) {
+function Component<T>({ table, ids, onSubmit, onDelete, ...rest }: Props<T>) {
 	const { key } = useParams("/:key");
 	const { state, dispatch } = useDataset(key);
 	if (!state) throw Error("The dataset does not exist.");
@@ -84,7 +84,7 @@ function Component<T>({ table, ids, onSubmit, onDelete }: Props<T>) {
 	}, [disable, handleDelete, handleSubmit, shared]);
 
 	if (ids.length <= 0) return null;
-	return <Actions items={items} />;
+	return <Actions items={items} spacing={2} />;
 }
 
 export { Component };

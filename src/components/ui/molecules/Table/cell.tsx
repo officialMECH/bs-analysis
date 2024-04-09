@@ -40,7 +40,6 @@ const cn = {
 		textAlign: "center",
 		gap: 1,
 		height: "fit-content",
-		"& > *": { paddingX: 1 },
 	}),
 	accessor: cva({
 		variants: {

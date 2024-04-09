@@ -4,7 +4,6 @@ import { RowActions } from "$/components/ui/templates";
 import { characteristics, difficulties } from "$/constants/beatmap";
 import { calc, formatDuration, formatters } from "$/helpers";
 import { Link } from "$/router";
-import { css } from "$/styles/css";
 import { center } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
 import { IEntry } from "$/types";
@@ -32,7 +31,7 @@ export const columns = [
 			return (
 				<Table.Cell context={c} className={center({ gap: 2 })}>
 					<Checkbox id={c.row.id} checked={c.row.getIsSelected()} onCheckedChange={(x) => c.row.toggleSelected(!!x)} />
-					<Link to={"/:key/level/:sid/:bid"} params={{ key: c.table.options.meta!.id, sid, bid }} className={css({ padding: 0 })}>
+					<Link to={"/:key/level/:sid/:bid"} params={{ key: c.table.options.meta!.id, sid, bid }}>
 						<Icon icon={faExternalLink} />
 					</Link>
 				</Table.Cell>

@@ -10,12 +10,13 @@ interface Item {
 }
 interface Props {
 	items: Record<string, Item>;
+	spacing?: number;
 }
 
-function Component({ items }: PropsWithChildren<Props>) {
+function Component({ items, spacing = 2 }: PropsWithChildren<Props>) {
 	const entries = useMemo(() => Object.entries(items), [items]);
 	return (
-		<div className={cn.row}>
+		<div className={cn.row} style={{ gap: `${spacing / 4}em` }}>
 			{entries.map(([key, { icon, render, condition }]) => {
 				if (condition && !condition()) return;
 				return <Fragment key={key}>{render(Icon, { key, icon: icon })}</Fragment>;
@@ -25,7 +26,7 @@ function Component({ items }: PropsWithChildren<Props>) {
 }
 
 const cn = {
-	row: hstack({ padding: 0, gap: 3 }),
+	row: hstack({ padding: 0 }),
 };
 
 export { Component, type Item };
