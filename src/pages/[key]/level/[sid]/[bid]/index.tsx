@@ -1,11 +1,13 @@
-import { Badge } from "$/components";
+import { Badge } from "$/components/ui/atoms";
+import { Callout } from "$/components/ui/molecules";
+import { Content } from "$/components/ui/organisms";
+import { LevelActions, callouts } from "$/components/ui/templates";
 import { resolveLevelIndex } from "$/helpers";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
 import { css, cva } from "$/styles/css";
 import { hstack } from "$/styles/patterns";
 import { token } from "$/styles/tokens";
-import { Content, LevelActions, Stub } from "$/templates";
 import { IEntry } from "$/types";
 import { predicates } from "$/utils";
 import { Fragment } from "react";
@@ -26,7 +28,7 @@ export default function Page() {
 			const isLighter = data.lighters && data.lighters.includes(mapper);
 			const type = isMapper && !isLighter ? "mapper" : isLighter && !isMapper ? "lighter" : "hybrid";
 			const Name = (
-				<a key={mapper} className={styles.mappers.name({ type })}>
+				<a key={mapper} className={cn.mappers.name({ type })}>
 					{mapper}
 				</a>
 			);
@@ -38,19 +40,19 @@ export default function Page() {
 	function Title() {
 		return (
 			<Fragment>
-				<div className={styles.title.wrapper}>
-					<span className={styles.title.name({ exists: !!data?.title })}>{data ? data.title ?? data.id : "Unknown Level"}</span>
+				<div className={cn.title.wrapper}>
+					<span className={cn.title.name({ exists: !!data?.title })}>{data ? data.title ?? data.id : "Unknown Level"}</span>
 					{data && (
 						<Fragment>
-							<div className={styles.level}>
+							<div className={cn.level}>
 								<Badge>{data.characteristic}</Badge>
 								<Badge color={token(`colors.difficulty.${data.difficulty}`)}>{data.difficulty}</Badge>
 							</div>
-							{(data.mappers || data.lighters) && mappers.length > 0 && <span className={styles.mappers.list}>[{mappers(data)}]</span>}
+							{(data.mappers || data.lighters) && mappers.length > 0 && <span className={cn.mappers.list}>[{mappers(data)}]</span>}
 						</Fragment>
 					)}
 				</div>
-				<div className={styles.title.wrapper}>
+				<div className={cn.title.wrapper}>
 					<LevelActions id={`${sid}/${bid}`} />
 				</div>
 			</Fragment>
@@ -58,12 +60,12 @@ export default function Page() {
 	}
 	return (
 		<Content title={<Title />} layout={"level"}>
-			{data ? <Stub /> : "This level is not available."}
+			{data ? <Callout {...callouts.stub} /> : "This level is not available."}
 		</Content>
 	);
 }
 
-const styles = {
+const cn = {
 	title: {
 		wrapper: hstack({ gap: 4 }),
 		name: cva({

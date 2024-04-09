@@ -2,9 +2,10 @@ import { defineConfig } from "@pandacss/dev";
 
 export default defineConfig({
 	preflight: true,
-	include: ["./src/**/*.{js,jsx,ts,tsx}", "./pages/**/*.{js,jsx,ts,tsx}"],
+	include: ["./src/**/*.{js,jsx,ts,tsx}"],
 	exclude: [],
 	outdir: "src/styles",
+	importMap: ["$/styles"],
 	globalCss: {
 		html: {
 			backgroundColor: "background",
@@ -15,6 +16,11 @@ export default defineConfig({
 			maxWidth: "6xl",
 			marginX: "auto",
 		},
+		// HACK: radix-ui portals do not respect margin/padding values.
+		"body[data-scroll-locked]": {
+			padding: "0 !important",
+			marginX: "auto !important",
+		},
 		main: {
 			margin: 8,
 		},
@@ -22,75 +28,16 @@ export default defineConfig({
 			borderColor: "white",
 		},
 		a: {
+			padding: 0,
 			color: "link",
 			transition: "color 0.25s",
 			"&:hover": {
 				color: "indigo.400",
 			},
 		},
-		"button, input, select, textarea": {
-			backgroundColor: "element",
-			color: "text",
-			border: "1px solid transparent",
-			transition: "border-color 0.25s",
-			"&:not([disabled]):hover": {
-				borderColor: "primary",
-			},
-			"&[disabled]": {
-				backgroundColor: "container",
-				color: "subtext",
-				cursor: "not-allowed",
-			},
-			"&[disabled] > *": {
-				cursor: "not-allowed",
-			},
-		},
-		button: {
-			paddingY: 1,
-			paddingX: 4,
-			borderRadius: "md",
-			cursor: "pointer",
-		},
 		"code, pre": {
 			fontFamily: "monospace",
 			fontSize: "md",
-		},
-		details: {
-			width: "full",
-			"& summary": {
-				paddingY: 2,
-				paddingX: 4,
-				backgroundColor: "element",
-				cursor: "pointer",
-				display: "flex",
-				justifyContent: "space-between",
-				gap: 8,
-				alignItems: "center",
-				fontWeight: "bold",
-				fontSize: "xl",
-				listStyle: "none",
-			},
-			"& summary::-webkit-details-marker": {
-				display: "none",
-			},
-			"& summary::after": {
-				fontFamily: "system",
-				content: '"▶"',
-			},
-			"&[open] summary::after": {
-				fontFamily: "system",
-				content: '"▼"',
-			},
-			"& summary > *": {
-				paddingY: 2,
-			},
-			"& section ": {
-				paddingY: 2,
-				marginX: 4,
-			},
-		},
-		"h1, h2, h3, h4, h5, h6": {
-			fontWeight: "bold",
 		},
 		hr: {
 			marginY: 4,
@@ -108,22 +55,6 @@ export default defineConfig({
 		p: {
 			marginBottom: 2,
 		},
-		pre: {
-			fontFamily: "monospace",
-			fontSize: "md",
-		},
-		select: {
-			paddingX: "0.5em",
-			cursor: "pointer",
-			WebkitAppearance: "none",
-		},
-		table: {
-			borderCollapse: "separate",
-			borderSpacing: 0.5,
-			"& thead": {
-				fontWeight: "bold",
-			},
-		},
 	},
 	theme: {
 		extend: {
@@ -138,6 +69,7 @@ export default defineConfig({
 					text: { value: { base: "{colors.zinc.900}", _osDark: "{colors.zinc.100}" } },
 					subtext: { value: { base: "{colors.zinc.600}", _osDark: "{colors.zinc.400}" } },
 					neutral: { value: { base: "{colors.zinc.500}" } },
+					light: { value: { base: "{colors.zinc.800}", _osDark: "{colors.zinc.200}" } },
 					primary: { value: { base: "{colors.blue.500}" } },
 					danger: { value: { base: "{colors.red.600}" } },
 					link: { value: { base: "{colors.indigo.500}" } },
@@ -154,6 +86,33 @@ export default defineConfig({
 	},
 	patterns: {
 		extend: {
+			interactable: {
+				transform: ({ ...rest }) => {
+					return {
+						backgroundColor: rest.backgroundColor ?? "element",
+						color: "text",
+						border: rest.border ?? "1px solid transparent",
+						transition: "border-color 0.25s",
+						cursor: "pointer",
+						WebkitAppearance: "none",
+						['&[data-state="on"]']: {
+							backgroundColor: "primary",
+						},
+						"&:not([disabled]):hover": {
+							borderColor: "primary",
+						},
+						"&[disabled]": {
+							backgroundColor: "container",
+							color: "subtext",
+							cursor: "not-allowed",
+						},
+						"&[disabled] > *": {
+							cursor: "not-allowed",
+						},
+						...rest,
+					};
+				},
+			},
 			scrollable: {
 				description: "A container that allows for scrolling",
 				properties: {
