@@ -2,7 +2,7 @@ import { datasets } from "$/constants";
 import { IDataset, IEntry, PayloadAction, schemas } from "$/types";
 import { omit } from "$/utils";
 import { Dispatch, PropsWithChildren, Reducer, createContext, useEffect, useReducer } from "react";
-import { is } from "valibot";
+import { is, parse } from "valibot";
 
 type T = IDataset<IEntry[]> | undefined;
 type State = Record<string, T>;
@@ -40,7 +40,15 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 };
 
 const storage = Object.entries(localStorage).reduce((record: State, [key, value]: [string, string]) => {
-	return { ...record, [key]: JSON.parse(value) as T };
+	try {
+		const serializable = JSON.parse(value);
+		const valid = parse(schemas.dataset, serializable);
+		if (!valid) throw value;
+		return { ...record, [key]: valid as T };
+	} catch (e) {
+		console.error(`An invalid value was set for the "${key}" dataset:`, value);
+		return record;
+	}
 }, {});
 
 const Context = createContext<{ state: State; dispatch: Dispatch<Actions> }>({ state: {}, dispatch: () => null });
