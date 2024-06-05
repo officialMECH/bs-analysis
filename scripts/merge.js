@@ -15,7 +15,7 @@ function sort([_a, a], [_b, b]) {
 }
 
 const dataset = files.reduce((original, entry) => {
-	if (entry.name === "config.json") return original;
+	if (entry.name.endsWith("config.json")) return original;
 	const path = join(directory, entry.name);
 	const raw = JSON.parse(readFileSync(path, { encoding: "utf-8" }));
 	return [original, raw.data].reduce((record, current) => {
