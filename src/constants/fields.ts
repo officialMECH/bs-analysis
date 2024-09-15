@@ -27,7 +27,7 @@ export const dataset = {
 	},
 	bpm: {
 		label: "BPM",
-		icon: createIcon("image", "/images/metronome.png"),
+		icon: createIcon("image", import.meta.env.BASE_URL + "images/metronome.png"),
 	},
 	length: {
 		label: "Length",
@@ -47,27 +47,27 @@ export const dataset = {
 	},
 	nps: {
 		label: "NPS",
-		icon: createIcon("image", "/images/nps.png"),
+		icon: createIcon("image", import.meta.env.BASE_URL + "images/nps.png"),
 	},
 	colorNotes: {
 		label: "Color Notes",
-		icon: createIcon("image", "/images/note.png"),
+		icon: createIcon("image", import.meta.env.BASE_URL + "images/note.png"),
 	},
 	bombNotes: {
 		label: "Bomb Notes",
-		icon: createIcon("image", "/images/bomb.png"),
+		icon: createIcon("image", import.meta.env.BASE_URL + "images/bomb.png"),
 	},
 	obstacles: {
 		label: "Obstacles",
-		icon: createIcon("image", "/images/obstacle.png"),
+		icon: createIcon("image", import.meta.env.BASE_URL + "images/obstacle.png"),
 	},
 	sliders: {
 		label: "Arcs",
-		icon: createIcon("image", "/images/arc.png"),
+		icon: createIcon("image", import.meta.env.BASE_URL + "images/arc.png"),
 	},
 	burstSliders: {
 		label: "Chains",
-		icon: createIcon("image", "/images/chain.png"),
+		icon: createIcon("image", import.meta.env.BASE_URL + "images/chain.png"),
 	},
 	basicBeatmapEvents: {
 		label: "Basic Events",
