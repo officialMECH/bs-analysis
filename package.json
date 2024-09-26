@@ -9,8 +9,7 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"test": "vitest",
-		"check": "biome check --no-errors-on-unmatched",
-		"ci": "biome ci --no-errors-on-unmatched"
+		"check": "biome check --no-errors-on-unmatched"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^6.5.2",
