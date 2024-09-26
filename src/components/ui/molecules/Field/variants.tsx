@@ -73,6 +73,5 @@ const Array = <T, K extends DeepKeys<T>>({ field, disabled, ...wrapper }: Props<
 		</Wrapper>
 	);
 };
-export { Array, Enum, NumberField as Number, String, Text };
 
 export { Array, Enum, NumberField as Number, String, Text };
