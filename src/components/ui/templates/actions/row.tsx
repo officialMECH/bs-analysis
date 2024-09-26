@@ -50,7 +50,7 @@ function Component<T>({ table, ids, onSubmit, onDelete, ...rest }: Props<T>) {
 			close();
 			table.setRowSelection({});
 		},
-		[different, dispatch, entries, key, onSubmit, state, table]
+		[different, dispatch, entries, key, onSubmit, state, table],
 	);
 
 	const handleDelete = useCallback(() => {

@@ -1,8 +1,8 @@
+import { URL, fileURLToPath } from "node:url";
 import generouted from "@generouted/react-router/plugin";
 import pandacss from "@pandacss/dev/postcss";
 import react from "@vitejs/plugin-react";
-import { fileURLToPath, URL } from "node:url";
-import { defineConfig, UserConfig } from "vite";
+import { UserConfig, defineConfig } from "vite";
 import { InlineConfig } from "vitest";
 
 interface ExtendedUserConfig extends UserConfig {

@@ -18,7 +18,7 @@ export default function Overview() {
 	function Title() {
 		return (
 			<Fragment>
-				<span className={cn.name({ exists: !!dataset?.name })}>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
+				<span className={cn.name({ exists: !!dataset?.name })}>{dataset ? (dataset.name ?? key) : "Unknown Dataset"}</span>
 				<DatasetActions id={key} />
 			</Fragment>
 		);

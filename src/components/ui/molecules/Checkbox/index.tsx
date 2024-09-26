@@ -25,7 +25,7 @@ const cn = {
 			height: "1em",
 			backgroundColor: "light",
 			borderRadius: "xs",
-		})
+		}),
 	),
 	indicator: css({
 		position: "relative",

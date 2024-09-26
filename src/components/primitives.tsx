@@ -1,6 +1,6 @@
 import { AsChildProps } from "$/types";
 import { Slot } from "@radix-ui/react-slot";
-import { ComponentPropsWithoutRef, ElementType, ForwardRefExoticComponent, ForwardedRef, forwardRef } from "react";
+import { ComponentPropsWithoutRef, ElementType, ForwardRefExoticComponent, ForwardedRef, JSX, forwardRef } from "react";
 
 type PrimitiveElement = ElementType | ForwardRefExoticComponent<any>;
 type PrimitiveProps<T extends ElementType> = ComponentPropsWithoutRef<T>;

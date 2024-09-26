@@ -13,18 +13,18 @@ const { details, directory, metadata, output, minify } = await config(false, [
 const files = readdirSync(directory, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith(".dat"));
 const entries = fromEntries(files.map((entry) => ({ name: entry.name, contents: JSON.parse(readFileSync(join(directory, entry.name), { encoding: "utf-8" })) })));
 
-const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(entries[0].contents.title) });
+const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(entries[0].data.title) });
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const {
 		contents: { audio, beatmap, lightshow },
-		data: metadata,
+		data: meta,
 	} = entry;
-	const bid = createLevelIndex({ characteristic: contents.characteristic, difficulty: contents.difficulty });
+	const bid = createLevelIndex({ characteristic: meta.characteristic, difficulty: meta.difficulty });
 	const { sid } = await id;
 	const data = {
 		id: sid,
-		...metadata,
+		...meta,
 		...resolveAudioStats(audio?.contents ?? {}, details),
 		...resolveBeatmapStats(beatmap?.contents ?? {}, details),
 		...resolveLightshowStats(lightshow?.contents ?? {}, details),

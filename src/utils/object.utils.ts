@@ -1,6 +1,8 @@
 export function pick<T extends object, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
 	const draft = { ...obj };
-	keys.forEach((key) => (draft[key] = obj[key]));
+	keys.forEach((key) => {
+		draft[key] = obj[key];
+	});
 	return draft;
 }
 export function omit<T extends object, K extends keyof T>(obj: T, ...keys: K[]): Omit<T, K> {
@@ -43,7 +45,7 @@ export function difference<T extends Record<string, unknown>>(a: T, b: T): [T, T
 				{ ...result[1], [key]: other },
 			];
 		},
-		[{}, {}] as [T, T]
+		[{}, {}] as [T, T],
 	);
 }
 

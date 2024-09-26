@@ -17,7 +17,7 @@ function Component({ id, files: defaultFiles, onFileChange, ...rest }: DropzoneO
 			if (rest.onDrop) handleDrop(acceptedFiles);
 			setFiles(acceptedFiles);
 		},
-		[rest.onDrop]
+		[rest.onDrop],
 	);
 
 	useEffect(() => {

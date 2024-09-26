@@ -40,7 +40,7 @@ function Component({ onSubmit }: Props) {
 			setId(sid);
 			setData(data);
 		},
-		[id]
+		[id],
 	);
 
 	function handleChangeFile(files: File[]) {
@@ -57,7 +57,7 @@ function Component({ onSubmit }: Props) {
 				process(sid, entries);
 				setFetching(false);
 			},
-			() => setFetching(true)
+			() => setFetching(true),
 		);
 	}
 
@@ -79,7 +79,7 @@ function Component({ onSubmit }: Props) {
 				{JSON.stringify(
 					data.reduce((r, x) => ({ ...r, [formatters.id(x)]: x }), {}),
 					null,
-					2
+					2,
 				)}
 			</pre>
 		);

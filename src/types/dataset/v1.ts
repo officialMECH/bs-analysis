@@ -9,7 +9,7 @@ const metadata = {
 			color: string(),
 			contributors: array(string()),
 			updated: string([isoTimestamp()]),
-		})
+		}),
 	),
 	entry: partial(
 		object({
@@ -37,7 +37,7 @@ const metadata = {
 			jumpOffset: number(),
 			mappers: array(string()),
 			lighters: array(string()),
-		})
+		}),
 	),
 } satisfies Record<string, ObjectSchema<ObjectEntries>>;
 

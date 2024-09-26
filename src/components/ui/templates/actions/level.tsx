@@ -39,7 +39,7 @@ function Component({ id, onSubmit, onDelete }: Props) {
 			if (onSubmit) onSubmit(update);
 			close();
 		},
-		[dispatch, entry, key, onSubmit, state]
+		[dispatch, entry, key, onSubmit, state],
 	);
 
 	const handleDelete = useCallback(
@@ -52,7 +52,7 @@ function Component({ id, onSubmit, onDelete }: Props) {
 			dispatch({ type: "UPDATE", payload: { id: key, dataset: { ...state, data }, overwrite: true } });
 			if (onDelete) onDelete(id);
 		},
-		[dispatch, key, onDelete, state]
+		[dispatch, key, onDelete, state],
 	);
 
 	const items = useMemo<Record<string, ActionItem>>(() => {

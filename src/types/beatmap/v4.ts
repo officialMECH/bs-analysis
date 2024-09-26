@@ -25,7 +25,7 @@ export default {
 				noteJumpStartBeatOffset: number(),
 				beatmapDataFilename: string(),
 				lightshowDataFilename: string(),
-			})
+			}),
 		),
 	}),
 	audio: object({

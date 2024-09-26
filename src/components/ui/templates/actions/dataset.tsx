@@ -22,7 +22,7 @@ function Component({ id }: PropsWithChildren<Props>) {
 			const name = key.split("/")[key.split("/").length - 1].split(".")[0];
 			return name === id;
 		},
-		[id]
+		[id],
 	);
 	const isInternal = Object.keys(datasets).some(internal);
 
@@ -38,7 +38,7 @@ function Component({ id }: PropsWithChildren<Props>) {
 			if (!files) return;
 			parsers.text.file<IDataset>(files[0], (_, dataset) => dispatch({ type: "UPDATE", payload: { id, dataset, overwrite: true } }));
 		},
-		[dispatch, id]
+		[dispatch, id],
 	);
 
 	const handleDownload = useCallback(
@@ -55,7 +55,7 @@ function Component({ id }: PropsWithChildren<Props>) {
 			const blob = new Blob([JSON.stringify({ ...state, data }, null, event.shiftKey ? 0 : 2)], { type: "application/json" });
 			saveAs(blob, `${id}.json`);
 		},
-		[id, state]
+		[id, state],
 	);
 
 	const handleDelete = useCallback(() => {

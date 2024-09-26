@@ -126,12 +126,28 @@ function Component({ initial, disable = {}, onSubmit }: Props) {
 				<F.Field name="colorBoostBeatmapEvents" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.colorBoostBeatmapEvents.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.colorBoostBeatmapEvents.icon} disabled={disable?.[field.name]} />} />
 				<F.Field name="rotationEvents" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.rotationEvents.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.rotationEvents.icon} disabled={disable?.[field.name]} />} />
 				<F.Field name="bpmEvents" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.bpmEvents.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.bpmEvents.icon} disabled={disable?.[field.name]} />} />
-				<F.Field name="lightColorEventBoxGroups" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.lightColorEventBoxGroups.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.lightColorEventBoxGroups.icon} disabled={disable?.[field.name]} />} />
-				<F.Field name="lightRotationEventBoxGroups" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.lightRotationEventBoxGroups.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.lightRotationEventBoxGroups.icon} disabled={disable?.[field.name]} />} />
-				<F.Field name="lightTranslationEventBoxGroups" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.lightTranslationEventBoxGroups.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.lightTranslationEventBoxGroups.icon} disabled={disable?.[field.name]} />} />
+				<F.Field
+					name="lightColorEventBoxGroups"
+					validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.lightColorEventBoxGroups.wrapped.entries.total) }}
+					children={(field) => <Field.Number center field={field} heading={fields.dataset.lightColorEventBoxGroups.icon} disabled={disable?.[field.name]} />}
+				/>
+				<F.Field
+					name="lightRotationEventBoxGroups"
+					validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.lightRotationEventBoxGroups.wrapped.entries.total) }}
+					children={(field) => <Field.Number center field={field} heading={fields.dataset.lightRotationEventBoxGroups.icon} disabled={disable?.[field.name]} />}
+				/>
+				<F.Field
+					name="lightTranslationEventBoxGroups"
+					validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.lightTranslationEventBoxGroups.wrapped.entries.total) }}
+					children={(field) => <Field.Number center field={field} heading={fields.dataset.lightTranslationEventBoxGroups.icon} disabled={disable?.[field.name]} />}
+				/>
 				<F.Field name="vfxEventBoxGroups" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.vfxEventBoxGroups.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.vfxEventBoxGroups.icon} disabled={disable?.[field.name]} />} />
 				<F.Field name="waypoints" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.waypoints.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.waypoints.icon} disabled={disable?.[field.name]} />} />
-				<F.Field name="basicEventTypesWithKeywords" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.basicEventTypesWithKeywords.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.basicEventTypesWithKeywords.icon} disabled={disable?.[field.name]} />} />
+				<F.Field
+					name="basicEventTypesWithKeywords"
+					validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.basicEventTypesWithKeywords.wrapped.entries.total) }}
+					children={(field) => <Field.Number center field={field} heading={fields.dataset.basicEventTypesWithKeywords.icon} disabled={disable?.[field.name]} />}
+				/>
 				<F.Field name="jumpSpeed" validators={{ onChange: schemas.artificial.number(schemas.entry.entries.jumpSpeed) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.jumpSpeed.icon} disabled={disable?.[field.name]} />} />
 				<F.Field name="jumpOffset" validators={{ onChange: schemas.artificial.number(schemas.entry.entries.jumpOffset) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.jumpOffset.icon} disabled={disable?.[field.name]} />} />
 			</Form.Row>

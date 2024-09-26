@@ -41,7 +41,7 @@ async function parseArchive(data: { id: string; buffer: ArrayBuffer }, callback:
 				return { name: entry.name, contents: contents } as Entry<typeof contents>;
 			}
 			throw Error(`Unsupported file found in .zip: ${entry.name}`);
-		})
+		}),
 	);
 	callback(data.id, formatted);
 }

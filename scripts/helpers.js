@@ -1,19 +1,21 @@
 /* eslint-disable */
 
-import JSZip from "jszip";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import JSZip from "jszip";
 import { default as prompt } from "prompts";
 
 export const CHARACTERISTICS = ["Standard", "NoArrows", "OneSaber", "Legacy", "360Degree", "90Degree", "Lightshow", "Lawless"];
 export const DIFFICULTIES = ["Easy", "Normal", "Hard", "Expert", "ExpertPlus"];
 
 export const nonempty = (x) => x !== "";
-export const delay = (x) => Promise.resolve(setTimeout(() => {}, x));
+export const delay = (x) => Promise.resolve(setTimeout(() => void {}, x));
 
 export function pick(obj, ...keys) {
 	const draft = {};
-	keys.forEach((key) => (draft[key] = obj[key]));
+	keys.forEach((key) => {
+		draft[key] = obj[key];
+	});
 	return draft;
 }
 export function omit(obj, ...keys) {
@@ -71,7 +73,7 @@ export async function extract(buffer) {
 			}
 			const buffer = await entry.async("arraybuffer");
 			return { name: entry.name, contents: buffer };
-		})
+		}),
 	);
 	return fromEntries(formatted);
 }
@@ -165,7 +167,7 @@ export function fromEntries(entries, filenames = { info: "Info.dat", audio: "BPM
 	throw Error("The file provided is not a valid map file.");
 }
 
-export function resolveAudioStats(data, details = false) {
+export function resolveAudioStats(data, _details = false) {
 	if (isV4(data)) {
 		return {
 			bpmEvents: { total: data.bpmData?.length ?? 0 },
@@ -174,7 +176,7 @@ export function resolveAudioStats(data, details = false) {
 	return {};
 }
 
-export function resolveBeatmapStats(data, details = false) {
+export function resolveBeatmapStats(data, _details = false) {
 	if (isV1(data) || isV2(data)) {
 		const colorNotes = data._notes.filter((x) => x && [0, 1].includes(x._type));
 		const bombNotes = data._notes.filter((x) => x && [3].includes(x._type));
@@ -227,7 +229,7 @@ export function resolveBeatmapStats(data, details = false) {
 	return {};
 }
 
-export function resolveLightshowStats(data, details = false) {
+export function resolveLightshowStats(data, _details = false) {
 	if (isV4(data)) {
 		return {
 			basicBeatmapEvents: { total: data.basicEvents?.length ?? 0 },

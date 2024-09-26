@@ -27,7 +27,7 @@ if (users.filter(nonempty).length > 0) {
 				search.docs.forEach((detail) => maps.push(detail));
 			}
 			return maps;
-		})
+		}),
 	).then((d) => d.flat());
 	maps.push(...fromUsers);
 }
@@ -37,7 +37,7 @@ if (ids.filter(nonempty).length > 0) {
 		await ids.filter(nonempty).map(async (id) => {
 			const map = await fetch(`https://api.beatsaver.com/maps/id/${id}`).then((r) => r.json());
 			return map;
-		})
+		}),
 	).then((d) => d.flat());
 	maps.push(...fromIds);
 }
@@ -48,20 +48,20 @@ const entries = await Promise.all(
 		const levels = await extract(buffer);
 		const entries = levels.map((level) => ({ detail, ...level }));
 		return entries;
-	})
+	}),
 ).then((x) => x.flat());
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const {
 		contents: { audio, beatmap, lightshow },
-		data: metadata,
+		data: meta,
 		detail,
 	} = entry;
-	const bid = createLevelIndex({ characteristic: contents.characteristic, difficulty: contents.difficulty });
+	const bid = createLevelIndex({ characteristic: meta.characteristic, difficulty: meta.difficulty });
 	const data = {
 		id: detail.id,
 		length: detail.metadata.duration,
-		...metadata,
+		...meta,
 		...resolveAudioStats(audio?.contents ?? {}, details),
 		...resolveBeatmapStats(beatmap?.contents ?? {}, details),
 		...resolveLightshowStats(lightshow?.contents ?? {}, details),

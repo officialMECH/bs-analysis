@@ -10,7 +10,7 @@ const Component = createDynamicPrimitive<"a", RecipeVariantProps<typeof cn.root>
 				{children}
 			</Element>
 		);
-	}
+	},
 );
 
 const cn = {

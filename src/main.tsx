@@ -19,5 +19,5 @@ createRoot(root).render(
 		<Storage.Provider>
 			<RouterProvider router={createBrowserRouter(routes, { basename: import.meta.env.BASE_URL })} />
 		</Storage.Provider>
-	</StrictMode>
+	</StrictMode>,
 );

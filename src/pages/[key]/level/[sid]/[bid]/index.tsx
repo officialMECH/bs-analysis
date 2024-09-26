@@ -41,7 +41,7 @@ export default function Page() {
 		return (
 			<Fragment>
 				<div className={cn.title.wrapper}>
-					<span className={cn.title.name({ exists: !!data?.title })}>{data ? data.title ?? data.id : "Unknown Level"}</span>
+					<span className={cn.title.name({ exists: !!data?.title })}>{data ? (data.title ?? data.id) : "Unknown Level"}</span>
 					{data && (
 						<Fragment>
 							<div className={cn.level}>

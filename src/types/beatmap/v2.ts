@@ -15,9 +15,9 @@ export default {
 						_beatmapFilename: string(),
 						_noteJumpMovementSpeed: number(),
 						_noteJumpStartBeatOffset: number(),
-					})
+					}),
 				),
-			})
+			}),
 		),
 	}),
 	beatmap: object({

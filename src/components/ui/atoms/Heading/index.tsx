@@ -9,7 +9,7 @@ const Component = createDynamicPrimitive<"h1", Props & RecipeVariantProps<typeof
 	({ size = 1 }) => arr[size - 1] as "h1",
 	(Element, { asChild, size = 1, className, ...rest }) => {
 		return <Element className={cx(cn.root({ size }), className)} {...rest} />;
-	}
+	},
 );
 
 export { Component };

@@ -7,13 +7,11 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"ignore": ["**/dist", "styled-system", "src/router.ts"]
+		"ignore": ["**/dist", "styled-system", "src/router.ts", "src/assets/datasets/*.json"]
 	},
 	"formatter": {
 		"enabled": true,
-		"formatWithErrors": false,
-		"lineWidth": 320,
-		"ignore": ["src/assets/datasets"]
+		"lineWidth": 320
 	},
 	"organizeImports": {
 		"enabled": true
@@ -51,7 +49,7 @@
 				"noUnsafeFinally": "error",
 				"noUnsafeOptionalChaining": "error",
 				"noUnusedLabels": "error",
-				"noUnusedVariables": "error",
+				"noUnusedVariables": "warn",
 				"useArrayLiterals": "off",
 				"useExhaustiveDependencies": "warn",
 				"useHookAtTopLevel": "error",
@@ -94,14 +92,6 @@
 				"useGetterReturn": "error",
 				"useValidTypeof": "error"
 			}
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"trailingCommas": "es5",
-			"semicolons": "asNeeded",
-			"bracketSameLine": false,
-			"quoteStyle": "single"
 		}
 	}
 }
