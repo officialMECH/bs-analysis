@@ -1,7 +1,7 @@
 import { Input } from "$/components/ui/atoms";
-import { css } from "$/styles/css";
-import { flex } from "$/styles/patterns";
 import { Column, Table } from "@tanstack/react-table";
+import { css } from "styled-system/css";
+import { flex } from "styled-system/patterns";
 
 interface Props<T, V> {
 	column: Column<T, V>;

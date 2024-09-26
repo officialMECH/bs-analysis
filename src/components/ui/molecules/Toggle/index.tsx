@@ -1,7 +1,7 @@
 import { Toggle as Builder } from "$/components/ui/builders";
-import { cx } from "$/styles/css";
-import { interactable } from "$/styles/patterns";
 import { ComponentPropsWithoutRef } from "react";
+import { cx } from "styled-system/css";
+import { interactable } from "styled-system/patterns";
 
 interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
 

@@ -1,7 +1,7 @@
 import { Heading } from "$/components/ui/atoms";
-import { cva } from "$/styles/css";
-import { hstack, scrollable, vstack } from "$/styles/patterns";
 import { Fragment, PropsWithChildren, ReactNode } from "react";
+import { cva } from "styled-system/css";
+import { hstack, scrollable, vstack } from "styled-system/patterns";
 import Nav from "./nav";
 
 interface Props {

@@ -2,8 +2,8 @@ import { Content, DatasetTable } from "$/components/ui/organisms";
 import { DatasetActions } from "$/components/ui/templates";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
-import { cva } from "$/styles/css";
 import { Fragment } from "react";
+import { cva } from "styled-system/css";
 
 export default function Data() {
 	const { key } = useParams("/:key");

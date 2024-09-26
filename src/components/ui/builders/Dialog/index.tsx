@@ -1,6 +1,6 @@
 import { createPrimitive } from "$/components/primitives";
-import { css, cx } from "$/styles/css";
 import * as Primitive from "@radix-ui/react-dialog";
+import { css, cx } from "styled-system/css";
 
 const Root = Primitive.Root;
 

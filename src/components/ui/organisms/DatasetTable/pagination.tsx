@@ -1,9 +1,9 @@
 import { Button, Icon, Input, Select } from "$/components/ui/atoms";
 import { useDataset } from "$/hooks";
-import { css } from "$/styles/css";
-import { hstack, vstack } from "$/styles/patterns";
 import { faAngleLeft, faAngleRight, faAnglesLeft, faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 import { Table } from "@tanstack/react-table";
+import { css } from "styled-system/css";
+import { hstack, vstack } from "styled-system/patterns";
 
 interface Props<T> {
 	id: string;

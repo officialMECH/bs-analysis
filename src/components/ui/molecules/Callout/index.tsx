@@ -1,7 +1,7 @@
-import { css, cva, cx } from "$/styles/css";
-import { hstack, vstack } from "$/styles/patterns";
-import { RecipeVariantProps } from "$/styles/types";
 import { ComponentPropsWithoutRef } from "react";
+import { css, cva, cx } from "styled-system/css";
+import { hstack, vstack } from "styled-system/patterns";
+import { RecipeVariantProps } from "styled-system/types";
 
 interface Props extends ComponentPropsWithoutRef<"aside"> {}
 
@@ -34,7 +34,7 @@ const cn = {
 		fontWeight: "bold",
 	}),
 	content: css({
-		"& :last-child": {
+		_last: {
 			marginY: 0,
 		},
 	}),

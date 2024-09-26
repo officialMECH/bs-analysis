@@ -1,7 +1,7 @@
 import { Section } from "$/components/ui/molecules";
 import { Content, Feature, Profile } from "$/components/ui/organisms";
-import { css, cva } from "$/styles/css";
 import { faFile, faGlobe, faMagnifyingGlass, faTable, faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
+import { css, cva } from "styled-system/css";
 
 export default function App() {
 	return (

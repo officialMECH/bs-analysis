@@ -5,12 +5,12 @@ import { metadata } from "$/constants";
 import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
 import { Link, Path, useNavigate } from "$/router";
-import { css, cva, cx } from "$/styles/css";
-import { hstack, scrollable, wrap } from "$/styles/patterns";
 import { IDataset } from "$/types";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faAdd, faCircleInfo, faHome, faTable, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { ChangeEvent, Fragment, useState } from "react";
+import { css, cva, cx } from "styled-system/css";
+import { hstack, scrollable, wrap } from "styled-system/patterns";
 
 interface Props {
 	layout?: "home" | "basic" | "data" | "level";
@@ -133,7 +133,7 @@ const cn = {
 		paddingX: 4,
 		cursor: "pointer",
 		transition: "background-color 0.25s",
-		"&:not([disabled]):hover": {
+		_hover: {
 			backgroundColor: "indigo.400",
 		},
 	}),

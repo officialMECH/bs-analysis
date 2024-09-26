@@ -1,11 +1,11 @@
 import { Icon } from "$/components/ui/atoms";
 import { Field as Builder } from "$/components/ui/builders";
 import { Tooltip } from "$/components/ui/molecules";
-import { css, cva, cx } from "$/styles/css";
-import { hstack, scrollable, vstack } from "$/styles/patterns";
 import { faQuestionCircle, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { DeepKeys, DeepValue, FieldApi } from "@tanstack/react-form";
 import { PropsWithChildren, ReactNode } from "react";
+import { css, cva, cx } from "styled-system/css";
+import { hstack, scrollable, vstack } from "styled-system/patterns";
 
 export interface Props<T, K extends DeepKeys<T>> {
 	id?: string;

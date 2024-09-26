@@ -5,12 +5,12 @@ import { fields } from "$/constants";
 import { characteristics, difficulties } from "$/constants/beatmap";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
-import { css } from "$/styles/css";
 import { IEntry, schemas } from "$/types";
 import { omit, pick } from "$/utils";
 import { useForm } from "@tanstack/react-form";
 import { valibotValidator } from "@tanstack/valibot-form-adapter";
 import { Fragment } from "react";
+import { css } from "styled-system/css";
 import { parse } from "valibot";
 
 interface Props {

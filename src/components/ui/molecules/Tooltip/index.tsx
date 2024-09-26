@@ -1,7 +1,7 @@
 import { Tooltip as Builder } from "$/components/ui/builders";
-import { css } from "$/styles/css";
 import { RenderProps } from "$/types";
 import { ComponentPropsWithoutRef } from "react";
+import { css } from "styled-system/css";
 
 interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
 

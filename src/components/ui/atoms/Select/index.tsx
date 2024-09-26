@@ -1,6 +1,6 @@
 import { createPrimitive } from "$/components/primitives";
-import { cx } from "$/styles/css";
-import { interactable } from "$/styles/patterns";
+import { cx } from "styled-system/css";
+import { interactable } from "styled-system/patterns";
 
 interface Props {}
 

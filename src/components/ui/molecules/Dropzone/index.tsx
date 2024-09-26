@@ -1,7 +1,7 @@
-import { css, cx } from "$/styles/css";
-import { center, interactable } from "$/styles/patterns";
 import { InputHTMLAttributes, ReactNode, useCallback, useEffect, useState } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
+import { css, cx } from "styled-system/css";
+import { center, interactable } from "styled-system/patterns";
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "accept"> {
 	files?: File[];

@@ -1,8 +1,8 @@
 import { Heading } from "$/components/ui/atoms";
-import { cva } from "$/styles/css";
-import { flex } from "$/styles/patterns";
-import { RecipeVariantProps } from "$/styles/types";
 import { ComponentPropsWithoutRef } from "react";
+import { cva } from "styled-system/css";
+import { flex } from "styled-system/patterns";
+import { RecipeVariantProps } from "styled-system/types";
 
 interface Props extends ComponentPropsWithoutRef<"section"> {
 	heading?: string;

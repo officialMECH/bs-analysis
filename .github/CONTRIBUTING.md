@@ -29,6 +29,6 @@ This project is bootstrapped with a modified [Vite](https://vitejs.dev/) + [Reac
 
 ### Other Specifications
 
-- [PandaCSS](https://panda-css.com/) is used as the primary styling engine. After running `yarn prepare` or making changes to the `panda.config.ts` file at runtime, the engine will autogenerate the contents of `src/styles` for use throughout the project.
+- [PandaCSS](https://panda-css.com/) is used as the primary styling engine. After running `yarn prepare` or making changes to the `panda.config.ts` file at runtime, the engine will autogenerate the contents of `./styled-system` for use throughout the project.
 - Similarly, routing is provided by [Generouted](https://github.com/oedotme/generouted), and will autogenerate the contents of the `src/router.ts` file at runtime.
 - ESLint and Prettier will automatically reformat your code when staging new commits to enforce a consistent coding style. If this does not work for some reason, you can run `yarn lint --fix` and `yarn format --write` respectively to manually run the linter/formatter on your code.

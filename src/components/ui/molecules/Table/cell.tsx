@@ -1,9 +1,9 @@
 import { Table } from "$/components/ui/builders";
-import { cva, cx } from "$/styles/css";
-import { scrollable } from "$/styles/patterns";
-import { token } from "$/styles/tokens";
 import { CellContext } from "@tanstack/react-table";
 import { ComponentPropsWithoutRef, ReactNode } from "react";
+import { cva, cx } from "styled-system/css";
+import { scrollable } from "styled-system/patterns";
+import { token } from "styled-system/tokens";
 
 interface Props<TData, TValue, ContextKeys extends keyof CellContext<TData, TValue>> extends ComponentPropsWithoutRef<typeof Table.Cell> {
 	context: Pick<CellContext<TData, TValue>, ContextKeys>;

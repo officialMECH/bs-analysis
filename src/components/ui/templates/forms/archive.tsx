@@ -4,10 +4,10 @@ import { Form } from "$/components/ui/organisms";
 import { formatters, fromEntries, parsers, resolveAudioStats, resolveBeatmapStats, resolveLightshowStats } from "$/helpers";
 import { useDataset } from "$/hooks";
 import { useParams } from "$/router";
-import { scrollable } from "$/styles/patterns";
 import { Entry, IEntry } from "$/types";
 import { useCallback, useEffect, useState } from "react";
 import slugify from "slugify";
+import { scrollable } from "styled-system/patterns";
 
 interface Props {
 	onSubmit?: (update: IEntry[]) => void;

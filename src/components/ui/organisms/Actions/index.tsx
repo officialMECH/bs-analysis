@@ -1,7 +1,7 @@
 import { Icon } from "$/components/ui/atoms";
-import { hstack } from "$/styles/patterns";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { ExoticComponent, Fragment, HTMLAttributes, PropsWithChildren, ReactNode, useMemo } from "react";
+import { hstack } from "styled-system/patterns";
 
 interface Item {
 	icon: IconProp;

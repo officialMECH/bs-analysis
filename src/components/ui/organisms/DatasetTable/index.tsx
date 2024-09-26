@@ -4,12 +4,12 @@ import { ArchiveDataForm, ManualDataForm, tables } from "$/components/ui/templat
 import { fields } from "$/constants";
 import { formatters, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
-import { hstack, vstack } from "$/styles/patterns";
 import { Characteristic, Difficulty, IEntry } from "$/types";
 import { faAdd, faArchive } from "@fortawesome/free-solid-svg-icons";
 import { ColumnFiltersState, RowSelectionState, SortingState, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { hstack, vstack } from "styled-system/patterns";
 import Pagination from "./pagination";
 import ToggleRow from "./toggle";
 

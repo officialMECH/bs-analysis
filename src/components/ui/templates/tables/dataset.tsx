@@ -4,11 +4,11 @@ import { RowActions } from "$/components/ui/templates";
 import { characteristics, difficulties } from "$/constants/beatmap";
 import { calc, formatDuration, formatters } from "$/helpers";
 import { Link } from "$/router";
-import { center } from "$/styles/patterns";
-import { token } from "$/styles/tokens";
 import { IEntry } from "$/types";
 import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { createColumnHelper } from "@tanstack/react-table";
+import { center } from "styled-system/patterns";
+import { token } from "styled-system/tokens";
 
 const helper = createColumnHelper<IEntry>();
 const size = { sm: 4, md: 6, lg: 10 };

@@ -1,7 +1,7 @@
 import { Tabs as Builder } from "$/components/ui/builders";
-import { css, cva } from "$/styles/css";
-import { flex, interactable, vstack } from "$/styles/patterns";
 import { ComponentPropsWithoutRef, Fragment, ReactNode } from "react";
+import { css, cva } from "styled-system/css";
+import { flex, interactable, vstack } from "styled-system/patterns";
 
 interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {
 	items: Record<string, ReactNode>;
