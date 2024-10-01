@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"ignore": ["**/dist", "styled-system", "src/router.ts", "src/assets/datasets/*.json"]
+		"ignore": [".yarn/*", "**/dist", "styled-system", "src/router.ts", "src/assets/datasets/*.json"]
 	},
 	"formatter": {
 		"enabled": true,
