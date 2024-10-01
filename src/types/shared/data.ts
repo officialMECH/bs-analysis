@@ -1,7 +1,10 @@
-import { ObjectEntries, date, minLength, minValue, number, object, string, transform } from "valibot";
+import { ObjectEntries, date, minLength, minValue, number, object, pipe, string, transform } from "valibot";
 
 export default {
-	id: string([minLength(1)]),
-	timestamp: transform(date(), (x) => x.toISOString()),
-	entity: (entries: ObjectEntries) => object({ total: number([minValue(0)]), ...entries }),
+	id: pipe(string(), minLength(1)),
+	timestamp: pipe(
+		date(),
+		transform((x) => x.toISOString()),
+	),
+	entity: (entries: ObjectEntries) => object({ total: pipe(number(), minValue(0)), ...entries }),
 };

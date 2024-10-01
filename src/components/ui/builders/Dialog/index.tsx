@@ -16,6 +16,8 @@ const Content = createPrimitive<typeof Primitive.Content>(Primitive.Content, (El
 	);
 });
 
+const Title = Primitive.Title;
+
 const cn = {
 	portal: css({
 		"&[data-lock-scroll]": {
@@ -32,4 +34,4 @@ const cn = {
 	content: css({}),
 };
 
-export { Content, Root, Trigger };
+export { Content, Root, Title, Trigger };

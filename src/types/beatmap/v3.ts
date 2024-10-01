@@ -1,4 +1,4 @@
-import { array, number, object, string, unknown } from "valibot";
+import { array, number, object, optional, string, unknown } from "valibot";
 
 export default {
 	beatmap: object({
@@ -14,9 +14,9 @@ export default {
 		bpmEvents: array(unknown()),
 		lightColorEventBoxGroups: array(unknown()),
 		lightRotationEventBoxGroups: array(unknown()),
-		lightTranslationEventBoxGroups: array(unknown()),
-		vfxEventBoxGroups: array(unknown()),
+		lightTranslationEventBoxGroups: optional(array(unknown())),
+		vfxEventBoxGroups: optional(array(unknown())),
 		waypoints: array(unknown()),
-		basicEventTypesWithKeywords: object({ d: array(object({ e: array(number()) })) }),
+		basicEventTypesWithKeywords: object({ d: optional(array(object({ e: array(number()) }))) }),
 	}),
 };

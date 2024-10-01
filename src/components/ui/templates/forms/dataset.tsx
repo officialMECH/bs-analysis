@@ -6,7 +6,7 @@ import { IDataset, IEntry, schemas } from "$/types";
 import { omit } from "$/utils";
 import { useForm } from "@tanstack/react-form";
 import { valibotValidator } from "@tanstack/valibot-form-adapter";
-import { Fragment } from "react";
+import { FormEvent, Fragment } from "react";
 import { css } from "styled-system/css";
 import { parse } from "valibot";
 
@@ -19,28 +19,33 @@ function Component({ initial, onSubmit }: Props) {
 	const { state, dispatch } = useDatasets();
 
 	const F = useForm({
-		validatorAdapter: valibotValidator,
+		validatorAdapter: valibotValidator(),
 		defaultValues: { id: initial?.id ?? "", ...initial },
+		onSubmit: ({ value }) => {
+			const id = parse(schemas.data.id, value.id);
+			const update: IDataset = {
+				...omit(value, "id"),
+				name: parse(schemas.artificial.string(schemas.metadata.v1.dataset.entries.name), value.name),
+				contributors: parse(schemas.metadata.v1.dataset.entries.contributors, value.contributors),
+				description: parse(schemas.artificial.string(schemas.metadata.v1.dataset.entries.description), value.description),
+				data: state[id]?.data ?? [],
+			};
+			if (!initial && state[id]) {
+				if (!confirm("This dataset already exists, so any existing data will be overwritten. Are you sure you want to continue?")) return;
+			}
+			dispatch({ type: "UPDATE", payload: { id, dataset: { ...update, updated: new Date().toISOString() }, overwrite: true } });
+			if (onSubmit) onSubmit(Object.values(update.data));
+		},
 	});
 
-	function handleSubmit(values: typeof F.state.values) {
-		const id = parse(schemas.data.id, values.id);
-		const update: IDataset = {
-			...omit(values, "id"),
-			name: parse(schemas.artificial.string(schemas.metadata.v1.dataset.entries.name), values.name),
-			contributors: parse(schemas.metadata.v1.dataset.entries.contributors, values.contributors),
-			description: parse(schemas.artificial.string(schemas.metadata.v1.dataset.entries.description), values.description),
-			data: state[id]?.data ?? [],
-		};
-		if (!initial && state[id]) {
-			if (!confirm("This dataset already exists, so any existing data will be overwritten. Are you sure you want to continue?")) return;
-		}
-		dispatch({ type: "UPDATE", payload: { id, dataset: { ...update, updated: new Date().toISOString() }, overwrite: true } });
-		if (onSubmit) onSubmit(Object.values(update.data));
+	function handleSubmit(event: FormEvent<HTMLElement>) {
+		event.preventDefault();
+		event.stopPropagation();
+		F.handleSubmit();
 	}
 
 	return (
-		<Form.Root title={initial ? "Edit Dataset" : "Create Dataset"}>
+		<Form.Root title={initial ? "Edit Dataset" : "Create Dataset"} onSubmit={handleSubmit}>
 			{!initial && (
 				<Form.Row>
 					<F.Field name="id" validators={{ onChange: schemas.data.id }} children={(field) => <Field.String field={field} heading="ID" />} />
@@ -58,9 +63,7 @@ function Component({ initial, onSubmit }: Props) {
 				children={(canSubmit) => {
 					return (
 						<Fragment>
-							<Button disabled={!canSubmit} onClick={() => handleSubmit(F.state.values)}>
-								Submit
-							</Button>
+							<Button disabled={!canSubmit}>Submit</Button>
 						</Fragment>
 					);
 				}}

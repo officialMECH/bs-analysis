@@ -17,7 +17,7 @@ interface Props<T> {
 	onDelete?: (ids: string[]) => void;
 }
 
-function Component<T>({ table, ids, onSubmit, onDelete, ...rest }: Props<T>) {
+function Component<T>({ table, ids, onSubmit, onDelete }: Props<T>) {
 	const { key } = useParams("/:key");
 	const { state, dispatch } = useDataset(key);
 	if (!state) throw Error("The dataset does not exist.");
@@ -68,7 +68,7 @@ function Component<T>({ table, ids, onSubmit, onDelete, ...rest }: Props<T>) {
 				icon: faPencil,
 				render: (Icon, { ...rest }) => {
 					return (
-						<Dialog render={({ close }) => <ManualDataForm initial={shared} onSubmit={(x) => handleSubmit(x, close)} disable={disable} />}>
+						<Dialog title="Edit Entry" render={({ close }) => <ManualDataForm initial={shared} onSubmit={(x) => handleSubmit(x, close)} disable={disable} />}>
 							<Icon {...rest} title="Edit" variant="primary" />
 						</Dialog>
 					);

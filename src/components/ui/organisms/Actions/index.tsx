@@ -1,12 +1,12 @@
 import { Icon } from "$/components/ui/atoms";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { ExoticComponent, Fragment, HTMLAttributes, PropsWithChildren, ReactNode, useMemo } from "react";
+import { ComponentProps, Fragment, PropsWithChildren, ReactNode, useMemo } from "react";
 import { hstack } from "styled-system/patterns";
 
 interface Item {
 	icon: IconProp;
 	condition?: () => boolean;
-	render: <Props = HTMLAttributes<HTMLElement>>(icon: ExoticComponent<Props>, props: Props) => ReactNode;
+	render: (icon: typeof Icon, props: ComponentProps<typeof Icon>) => ReactNode;
 }
 interface Props {
 	items: Record<string, Item>;
@@ -19,7 +19,7 @@ function Component({ items, spacing = 2 }: PropsWithChildren<Props>) {
 		<div className={cn.row} style={{ gap: `${spacing / 4}em` }}>
 			{entries.map(([key, { icon, render, condition }]) => {
 				if (condition && !condition()) return;
-				return <Fragment key={key}>{render(Icon, { key, icon: icon })}</Fragment>;
+				return <Fragment key={key}>{render(Icon, { icon: icon })}</Fragment>;
 			})}
 		</div>
 	);

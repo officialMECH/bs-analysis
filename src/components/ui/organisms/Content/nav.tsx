@@ -87,7 +87,7 @@ export default function Nav({ layout = "basic" }: Props) {
 			<div className={cn.row}>
 				{layout !== "level" && (
 					<Fragment>
-						<Dialog render={({ close }) => <ManualDatasetForm onSubmit={() => close()} />}>
+						<Dialog title="Create Dataset" render={({ close }) => <ManualDatasetForm onSubmit={() => close()} />}>
 							<Icon icon={faAdd} variant="primary" title="Create Dataset" className={cx(cn.icon)} />
 						</Dialog>
 						<Input asChild type="file" id="file" accept="application/json,text/plain" onChange={handleImport} multiple>

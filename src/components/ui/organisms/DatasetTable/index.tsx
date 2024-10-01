@@ -103,12 +103,12 @@ function Component({ id, data }: Props) {
 			<ToggleRow table={table} fields={fields.dataset} />
 			<Pagination id={id} table={table} />
 			<div className={cn.row}>
-				<Dialog render={({ close }) => <ManualDataForm onSubmit={(x) => handleSubmit([x], close)} />}>
+				<Dialog title="Add Entry" render={({ close }) => <ManualDataForm onSubmit={(x) => handleSubmit([x], close)} />}>
 					<Button title="Add Entry">
 						<Icon icon={faAdd} />
 					</Button>
 				</Dialog>
-				<Dialog render={({ close }) => <ArchiveDataForm onSubmit={(x) => handleSubmit(x, close)} />}>
+				<Dialog title="Import from Archive" render={({ close }) => <ArchiveDataForm onSubmit={(x) => handleSubmit(x, close)} />}>
 					<Button title="Import from Archive">
 						<Icon icon={faArchive} />
 					</Button>

@@ -1,4 +1,4 @@
-import { ObjectEntries, ObjectSchema, array, isoTimestamp, maxValue, merge, minValue, number, object, partial, record, string, variant } from "valibot";
+import { ObjectEntries, ObjectSchema, array, isoTimestamp, maxValue, minValue, number, object, partial, pipe, record, string, variant } from "valibot";
 import shared from "../shared";
 
 const metadata = {
@@ -8,16 +8,16 @@ const metadata = {
 			description: string(),
 			color: string(),
 			contributors: array(string()),
-			updated: string([isoTimestamp()]),
+			updated: pipe(string(), isoTimestamp()),
 		}),
 	),
 	entry: partial(
 		object({
 			title: string(),
 			pack: string(),
-			released: string([isoTimestamp()]),
-			bpm: number([minValue(10), maxValue(1000)]),
-			length: number([minValue(0)]),
+			released: pipe(string(), isoTimestamp()),
+			bpm: pipe(number(), minValue(10), maxValue(1000)),
+			length: pipe(number(), minValue(0)),
 			colorNotes: shared.data.entity({}),
 			bombNotes: shared.data.entity({}),
 			obstacles: shared.data.entity({}),
@@ -39,20 +39,20 @@ const metadata = {
 			lighters: array(string()),
 		}),
 	),
-} satisfies Record<string, ObjectSchema<ObjectEntries>>;
+} satisfies Record<string, ObjectSchema<ObjectEntries, undefined>>;
 
-const entry = merge([
-	object({
+const entry = object({
+	...object({
 		id: shared.data.id,
 		characteristic: shared.beatmap.characteristic,
 		difficulty: shared.beatmap.difficulty,
-	}),
-	metadata.entry,
-]);
+	}).entries,
+	...metadata.entry.entries,
+});
 
 const dataset = variant("data", [
-	merge([metadata.dataset, object({ data: array(entry) })]),
-	merge([metadata.dataset, object({ data: record(entry) })]),
+	object({ ...metadata.dataset.entries, ...object({ data: array(entry) }).entries }),
+	object({ ...metadata.dataset.entries, ...object({ data: record(string(), entry) }).entries }),
 	//
 ]);
 

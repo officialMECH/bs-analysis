@@ -42,7 +42,7 @@ function Component({ id }: PropsWithChildren<Props>) {
 	);
 
 	const handleDownload = useCallback(
-		(event: MouseEvent<HTMLButtonElement>) => {
+		(event: MouseEvent<SVGSVGElement>) => {
 			if (!state) return;
 			event.preventDefault();
 			let data: IEntry[] | Record<string, IEntry> = state.data;
@@ -67,42 +67,42 @@ function Component({ id }: PropsWithChildren<Props>) {
 		return {
 			edit: {
 				icon: faPencil,
-				render: (Icon, { ...rest }) => {
+				render: (Icon, { key, ...rest }) => {
 					return (
-						<Dialog render={({ close }) => <ManualDatasetForm initial={{ id, ...state }} onSubmit={() => close()} />}>
-							<Icon {...rest} title="Edit" variant="primary" />
+						<Dialog title="Edit Dataset" render={({ close }) => <ManualDatasetForm initial={{ id, ...state }} onSubmit={() => close()} />}>
+							<Icon key={key} {...rest} title="Edit" variant="primary" />
 						</Dialog>
 					);
 				},
 			},
 			overwrite: {
 				icon: faFileImport,
-				render: (Icon, { ...rest }) => {
+				render: (Icon, { key, ...rest }) => {
 					return (
 						<Input asChild type="file" id="file" accept="application/json,text/plain" onChange={handleOverwrite}>
-							<Icon {...rest} title="Overwrite" variant="primary" />
+							<Icon key={key} {...rest} title="Overwrite" variant="primary" />
 						</Input>
 					);
 				},
 			},
 			download: {
 				icon: faDownload,
-				render: (Icon, { ...rest }) => {
-					return <Icon {...rest} title="Download" variant="primary" onClick={handleDownload} />;
+				render: (Icon, { key, ...rest }) => {
+					return <Icon key={key} {...rest} title="Download" variant="primary" onClick={handleDownload} />;
 				},
 			},
 			delete: {
 				icon: faTrash,
 				condition: () => !isInternal,
-				render: (Icon, { ...rest }) => {
-					return <Icon {...rest} title="Delete" variant="danger" onClick={handleDelete} />;
+				render: (Icon, { key, ...rest }) => {
+					return <Icon key={key} {...rest} title="Delete" variant="danger" onClick={handleDelete} />;
 				},
 			},
 			refresh: {
 				icon: faRefresh,
 				condition: () => isInternal,
-				render: (Icon, { ...rest }) => {
-					return <Icon {...rest} title="Refresh" variant="primary" onClick={handleRefresh} />;
+				render: (Icon, { key, ...rest }) => {
+					return <Icon key={key} {...rest} title="Refresh" variant="primary" onClick={handleRefresh} />;
 				},
 			},
 		};

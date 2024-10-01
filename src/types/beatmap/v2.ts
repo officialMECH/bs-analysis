@@ -1,4 +1,4 @@
-import { array, number, object, string, unknown } from "valibot";
+import { array, number, object, optional, string, unknown } from "valibot";
 import shared from "../shared";
 
 export default {
@@ -24,9 +24,9 @@ export default {
 		_version: string(),
 		_notes: array(object({ _type: number() })),
 		_obstacles: array(unknown()),
-		_sliders: array(unknown()),
+		_sliders: optional(array(unknown())),
 		_events: array(object({ _type: number() })),
-		_waypoints: array(unknown()),
-		_specialEventsKeywordFilters: object({ _keywords: array(object({ _specialEvents: array(number()) })) }),
+		_waypoints: optional(array(unknown())),
+		_specialEventsKeywordFilters: optional(object({ _keywords: optional(array(object({ _specialEvents: array(number()) }))) })),
 	}),
 };

@@ -1,5 +1,5 @@
 import { characteristics, difficulties } from "$/constants/beatmap";
-import { Characteristic, Difficulty, IEntry, schemas } from "$/types";
+import { Characteristic, Difficulty, Entry, IEntry, schemas } from "$/types";
 import { omit, predicates } from "$/utils";
 import { is } from "valibot";
 
@@ -15,22 +15,17 @@ export function resolveLevelIndex(value: number) {
 	return { characteristic: characteristics[c], difficulty: difficulties[d] };
 }
 
-interface FileEntry<T> {
-	name: string;
-	contents: T;
-}
-
 interface BeatmapEntry {
 	name: string;
 	contents: {
-		audio?: FileEntry<unknown>;
-		beatmap?: FileEntry<unknown>;
-		lightshow?: FileEntry<unknown>;
+		audio?: Entry<unknown>;
+		beatmap?: Entry<unknown>;
+		lightshow?: Entry<unknown>;
 	};
 	data: Partial<IEntry>;
 }
 
-export function fromEntries(entries: FileEntry<unknown>[], filenames = { info: "Info.dat", audio: "BPMInfo.dat" }): BeatmapEntry[] {
+export function fromEntries(entries: Entry<unknown>[], filenames = { info: "Info.dat", audio: "BPMInfo.dat" }): BeatmapEntry[] {
 	const info = entries.find((e) => e.name.toLowerCase() === filenames.info.toLowerCase());
 	if (!info) throw Error();
 	if (is(schemas.v2.info, info.contents)) {
