@@ -1,9 +1,9 @@
 import { difficulties } from "$/constants/beatmap";
-import { css } from "$/styles/css";
-import { hstack, vstack } from "$/styles/patterns";
 import { IDataset, IEntry } from "$/types";
 import { omit, predicates } from "$/utils";
 import { EChartsOption } from "echarts";
+import { css } from "styled-system/css";
+import { hstack, vstack } from "styled-system/patterns";
 
 export interface ChartProps {
 	id: string;

@@ -16,7 +16,7 @@ const remap = Object.entries(tsv.indices).reduce(
 	(record, [key, [index, transformer]]) => {
 		return { indices: { ...record.indices, [key]: index }, transformers: { ...record.transformers, [key]: transformer } };
 	},
-	{ indices: {}, transformers: {} }
+	{ indices: {}, transformers: {} },
 );
 
 const transformers = {
@@ -41,7 +41,7 @@ const sids = await Promise.all(
 			return rid;
 		}
 		return id;
-	})
+	}),
 );
 
 const dataset = await lines.reduce(async (record, line) => {

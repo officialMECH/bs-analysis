@@ -1,10 +1,10 @@
 import { Icon } from "$/components/ui/atoms";
 import { Checkbox, Popover } from "$/components/ui/molecules";
-import { cva, cx } from "$/styles/css";
-import { center } from "$/styles/patterns";
 import { faCaretDown, faCaretUp, faFilter, faSort } from "@fortawesome/free-solid-svg-icons";
 import { Header, SortDirection, Table } from "@tanstack/react-table";
 import { Fragment, MouseEvent } from "react";
+import { cva, cx } from "styled-system/css";
+import { center } from "styled-system/patterns";
 import Filter from "./filter";
 
 interface Props<D> {

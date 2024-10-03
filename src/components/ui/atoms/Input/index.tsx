@@ -1,9 +1,9 @@
-import { cx } from "$/styles/css";
-import { interactable } from "$/styles/patterns";
 import { AsChildProps } from "$/types";
 import { Slot } from "@radix-ui/react-slot";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { ComponentPropsWithoutRef, ElementRef, Fragment, forwardRef, useRef } from "react";
+import { cx } from "styled-system/css";
+import { interactable } from "styled-system/patterns";
 
 interface Props<T extends string | number> {
 	value?: T;

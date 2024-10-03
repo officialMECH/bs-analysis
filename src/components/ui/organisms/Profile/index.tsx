@@ -1,5 +1,5 @@
-import { hstack, vstack } from "$/styles/patterns";
 import { Fragment } from "react";
+import { hstack, vstack } from "styled-system/patterns";
 
 interface Props {
 	name: string;

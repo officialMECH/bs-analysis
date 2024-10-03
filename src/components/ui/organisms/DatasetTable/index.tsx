@@ -4,12 +4,12 @@ import { ArchiveDataForm, ManualDataForm, tables } from "$/components/ui/templat
 import { fields } from "$/constants";
 import { formatters, sort } from "$/helpers";
 import { useDataset } from "$/hooks";
-import { hstack, vstack } from "$/styles/patterns";
 import { Characteristic, Difficulty, IEntry } from "$/types";
 import { faAdd, faArchive } from "@fortawesome/free-solid-svg-icons";
 import { ColumnFiltersState, RowSelectionState, SortingState, getCoreRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { hstack, vstack } from "styled-system/patterns";
 import Pagination from "./pagination";
 import ToggleRow from "./toggle";
 
@@ -103,12 +103,12 @@ function Component({ id, data }: Props) {
 			<ToggleRow table={table} fields={fields.dataset} />
 			<Pagination id={id} table={table} />
 			<div className={cn.row}>
-				<Dialog render={({ close }) => <ManualDataForm onSubmit={(x) => handleSubmit([x], close)} />}>
+				<Dialog title="Add Entry" render={({ close }) => <ManualDataForm onSubmit={(x) => handleSubmit([x], close)} />}>
 					<Button title="Add Entry">
 						<Icon icon={faAdd} />
 					</Button>
 				</Dialog>
-				<Dialog render={({ close }) => <ArchiveDataForm onSubmit={(x) => handleSubmit(x, close)} />}>
+				<Dialog title="Import from Archive" render={({ close }) => <ArchiveDataForm onSubmit={(x) => handleSubmit(x, close)} />}>
 					<Button title="Import from Archive">
 						<Icon icon={faArchive} />
 					</Button>

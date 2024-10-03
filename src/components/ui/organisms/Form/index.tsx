@@ -1,7 +1,7 @@
 import { Heading } from "$/components/ui/atoms";
-import { cva } from "$/styles/css";
-import { vstack } from "$/styles/patterns";
 import { FormHTMLAttributes, Fragment, PropsWithChildren } from "react";
+import { cva } from "styled-system/css";
+import { vstack } from "styled-system/patterns";
 
 interface Props {
 	title?: string;

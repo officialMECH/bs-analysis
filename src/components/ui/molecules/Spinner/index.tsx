@@ -1,7 +1,7 @@
 import { Icon } from "$/components/ui/atoms";
-import { css, cx } from "$/styles/css";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { PropsWithChildren } from "react";
+import { css, cx } from "styled-system/css";
 
 interface Props extends PropsWithChildren {
 	loading?: boolean;

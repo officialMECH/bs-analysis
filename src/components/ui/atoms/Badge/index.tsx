@@ -1,6 +1,6 @@
 import { createDynamicPrimitive } from "$/components/primitives";
-import { cva, cx } from "$/styles/css";
-import { RecipeVariantProps } from "$/styles/types";
+import { cva, cx } from "styled-system/css";
+import { RecipeVariantProps } from "styled-system/types";
 
 const Component = createDynamicPrimitive<"a", RecipeVariantProps<typeof cn.root>>(
 	({ href }) => (href ? "a" : "span"),
@@ -10,7 +10,7 @@ const Component = createDynamicPrimitive<"a", RecipeVariantProps<typeof cn.root>
 				{children}
 			</Element>
 		);
-	}
+	},
 );
 
 const cn = {
@@ -24,7 +24,7 @@ const cn = {
 			"&[href]": {
 				backgroundColor: "link",
 				transition: "background-color 0.25s",
-				"&:not([disabled]):hover": {
+				_hover: {
 					backgroundColor: "indigo.400",
 				},
 			},

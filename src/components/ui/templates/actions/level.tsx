@@ -39,7 +39,7 @@ function Component({ id, onSubmit, onDelete }: Props) {
 			if (onSubmit) onSubmit(update);
 			close();
 		},
-		[dispatch, entry, key, onSubmit, state]
+		[dispatch, entry, key, onSubmit, state],
 	);
 
 	const handleDelete = useCallback(
@@ -52,17 +52,17 @@ function Component({ id, onSubmit, onDelete }: Props) {
 			dispatch({ type: "UPDATE", payload: { id: key, dataset: { ...state, data }, overwrite: true } });
 			if (onDelete) onDelete(id);
 		},
-		[dispatch, key, onDelete, state]
+		[dispatch, key, onDelete, state],
 	);
 
 	const items = useMemo<Record<string, ActionItem>>(() => {
 		return {
 			edit: {
 				icon: faPencil,
-				render: (Icon, { ...rest }) => {
+				render: (Icon, { key, ...rest }) => {
 					return (
-						<Dialog render={({ close }) => <ManualDataForm initial={{ ...entry.data, ...omit(entry, "data") }} onSubmit={(x) => handleSubmit(x, close)} />}>
-							<Icon {...rest} title="Edit" variant="primary" />
+						<Dialog title="Edit Entry" render={({ close }) => <ManualDataForm initial={{ ...entry.data, ...omit(entry, "data") }} onSubmit={(x) => handleSubmit(x, close)} />}>
+							<Icon key={key} {...rest} title="Edit" variant="primary" />
 						</Dialog>
 					);
 				},
@@ -70,8 +70,8 @@ function Component({ id, onSubmit, onDelete }: Props) {
 			delete: {
 				icon: faTrash,
 				condition: () => !!entry.data,
-				render: (Icon, { ...rest }) => {
-					return <Icon {...rest} title="Delete" variant="danger" onClick={() => handleDelete(id)} />;
+				render: (Icon, { key, ...rest }) => {
+					return <Icon key={key} {...rest} title="Delete" variant="danger" onClick={() => handleDelete(id)} />;
 				},
 			},
 		};

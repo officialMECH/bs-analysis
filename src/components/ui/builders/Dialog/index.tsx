@@ -1,6 +1,6 @@
 import { createPrimitive } from "$/components/primitives";
-import { css, cx } from "$/styles/css";
 import * as Primitive from "@radix-ui/react-dialog";
+import { css, cx } from "styled-system/css";
 
 const Root = Primitive.Root;
 
@@ -15,6 +15,8 @@ const Content = createPrimitive<typeof Primitive.Content>(Primitive.Content, (El
 		</Primitive.Portal>
 	);
 });
+
+const Title = Primitive.Title;
 
 const cn = {
 	portal: css({
@@ -32,4 +34,4 @@ const cn = {
 	content: css({}),
 };
 
-export { Content, Root, Trigger };
+export { Content, Root, Title, Trigger };

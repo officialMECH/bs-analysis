@@ -1,7 +1,7 @@
 import { Heading, Icon } from "$/components/ui/atoms";
-import { hstack, vstack } from "$/styles/patterns";
 import { IconLookup, IconProp } from "@fortawesome/fontawesome-svg-core";
 import { PropsWithChildren } from "react";
+import { hstack, vstack } from "styled-system/patterns";
 
 interface Props {
 	title: string;

@@ -2,8 +2,8 @@ import { Content, DatasetTable } from "$/components/ui/organisms";
 import { DatasetActions } from "$/components/ui/templates";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
-import { cva } from "$/styles/css";
 import { Fragment } from "react";
+import { cva } from "styled-system/css";
 
 export default function Data() {
 	const { key } = useParams("/:key");
@@ -13,7 +13,7 @@ export default function Data() {
 	function Title() {
 		return (
 			<Fragment>
-				<span className={cn.name({ exists: !!dataset?.name })}>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
+				<span className={cn.name({ exists: !!dataset?.name })}>{dataset ? (dataset.name ?? key) : "Unknown Dataset"}</span>
 				<DatasetActions id={key} />
 			</Fragment>
 		);

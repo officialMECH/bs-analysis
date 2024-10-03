@@ -12,18 +12,18 @@ const { details, input, metadata, output, minify } = await config(false, [
 const source = input.startsWith("http") ? await fetch(input).then((r) => r.arrayBuffer()) : readFileSync(input.replaceAll('"', "")).buffer;
 const entries = await extract(source);
 
-const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(entries[0].contents.title) });
+const id = prompt({ name: "sid", type: "text", message: "ID", initial: slugify(entries[0].data.title) });
 
 const dataset = await entries.reduce(async (record, entry) => {
 	const {
 		contents: { audio, beatmap, lightshow },
-		data: metadata,
+		data: meta,
 	} = entry;
-	const bid = createLevelIndex({ characteristic: contents.characteristic, difficulty: contents.difficulty });
+	const bid = createLevelIndex({ characteristic: meta.characteristic, difficulty: meta.difficulty });
 	const { sid } = await id;
 	const data = {
 		id: sid,
-		...metadata,
+		...meta,
 		...resolveAudioStats(audio?.contents ?? {}, details),
 		...resolveBeatmapStats(beatmap?.contents ?? {}, details),
 		...resolveLightshowStats(lightshow?.contents ?? {}, details),

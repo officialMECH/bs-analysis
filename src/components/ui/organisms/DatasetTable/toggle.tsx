@@ -1,8 +1,8 @@
 import { Toggle } from "$/components/ui/molecules";
-import { cva } from "$/styles/css";
-import { center, wrap } from "$/styles/patterns";
 import { IField } from "$/types";
 import { Table } from "@tanstack/react-table";
+import { cva } from "styled-system/css";
+import { center, wrap } from "styled-system/patterns";
 
 interface Props<T> {
 	table: Table<T>;
@@ -36,7 +36,7 @@ const cn = {
 			height: 8,
 			padding: 0,
 			color: "white",
-			"&:focus": {
+			_focus: {
 				borderColor: "white",
 			},
 		}),

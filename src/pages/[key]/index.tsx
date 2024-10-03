@@ -4,9 +4,9 @@ import { DatasetActions, LevelCharts, PieCharts, TimeCharts } from "$/components
 import { formatters } from "$/helpers";
 import { useDark, useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
-import { cva } from "$/styles/css";
-import { flex, stack, vstack } from "$/styles/patterns";
 import { Fragment, useState } from "react";
+import { cva } from "styled-system/css";
+import { flex, stack, vstack } from "styled-system/patterns";
 
 export default function Overview() {
 	const [show, setShow] = useState(false);
@@ -18,7 +18,7 @@ export default function Overview() {
 	function Title() {
 		return (
 			<Fragment>
-				<span className={cn.name({ exists: !!dataset?.name })}>{dataset ? dataset.name ?? key : "Unknown Dataset"}</span>
+				<span className={cn.name({ exists: !!dataset?.name })}>{dataset ? (dataset.name ?? key) : "Unknown Dataset"}</span>
 				<DatasetActions id={key} />
 			</Fragment>
 		);

@@ -5,6 +5,7 @@ import { DeepKeys, DeepValue } from "@tanstack/react-form";
 import { Children, PropsWithChildren, useEffect, useState } from "react";
 import { Props, Component as Wrapper } from "./wrapper";
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames: valid as direct export
 const String = <T, K extends DeepKeys<T>>({ field, disabled, ...wrapper }: Props<T, K>) => {
 	const [value, setValue] = useState(field?.state.value ?? "");
 	useEffect(() => {
@@ -58,6 +59,7 @@ const Enum = <T, K extends DeepKeys<T>>({ field, disabled, children, ...wrapper 
 		</Wrapper>
 	);
 };
+// biome-ignore lint/suspicious/noShadowRestrictedNames: valid as direct export
 const Array = <T, K extends DeepKeys<T>>({ field, disabled, ...wrapper }: Props<T, K>) => {
 	const [value, setValue] = useState(field?.getValue());
 	useEffect(() => {

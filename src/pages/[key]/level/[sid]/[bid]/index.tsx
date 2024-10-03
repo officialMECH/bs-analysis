@@ -5,12 +5,12 @@ import { LevelActions, callouts } from "$/components/ui/templates";
 import { resolveLevelIndex } from "$/helpers";
 import { useDataset, useTitle } from "$/hooks";
 import { useParams } from "$/router";
-import { css, cva } from "$/styles/css";
-import { hstack } from "$/styles/patterns";
-import { token } from "$/styles/tokens";
 import { IEntry } from "$/types";
 import { predicates } from "$/utils";
 import { Fragment } from "react";
+import { css, cva } from "styled-system/css";
+import { hstack } from "styled-system/patterns";
+import { token } from "styled-system/tokens";
 
 export default function Page() {
 	const { key, sid, bid } = useParams("/:key/level/:sid/:bid");
@@ -41,7 +41,7 @@ export default function Page() {
 		return (
 			<Fragment>
 				<div className={cn.title.wrapper}>
-					<span className={cn.title.name({ exists: !!data?.title })}>{data ? data.title ?? data.id : "Unknown Level"}</span>
+					<span className={cn.title.name({ exists: !!data?.title })}>{data ? (data.title ?? data.id) : "Unknown Level"}</span>
 					{data && (
 						<Fragment>
 							<div className={cn.level}>

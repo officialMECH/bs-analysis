@@ -1,8 +1,8 @@
 import { Details as Builder } from "$/components/ui/builders";
-import { css, cx } from "$/styles/css";
-import { interactable } from "$/styles/patterns";
 import { RenderProps } from "$/types";
 import { ComponentPropsWithoutRef } from "react";
+import { css, cx } from "styled-system/css";
+import { interactable } from "styled-system/patterns";
 
 interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
 
@@ -32,13 +32,15 @@ const cn = {
 		"&::-webkit-details-marker": {
 			display: "none",
 		},
-		"&::after": {
+		_open: {
+			_after: {
+				fontFamily: "system",
+				content: '"▼"',
+			},
+		},
+		_after: {
 			fontFamily: "system",
 			content: '"▶"',
-		},
-		"&[data-state='open']::after": {
-			fontFamily: "system",
-			content: '"▼"',
 		},
 	}),
 	content: css({

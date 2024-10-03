@@ -1,5 +1,5 @@
 import { characteristics, difficulties } from "$/constants/beatmap";
-import { Characteristic, Difficulty, IEntry, schemas } from "$/types";
+import { Characteristic, Difficulty, Entry, IEntry, schemas } from "$/types";
 import { omit, predicates } from "$/utils";
 import { is } from "valibot";
 
@@ -15,22 +15,17 @@ export function resolveLevelIndex(value: number) {
 	return { characteristic: characteristics[c], difficulty: difficulties[d] };
 }
 
-interface FileEntry<T> {
-	name: string;
-	contents: T;
-}
-
 interface BeatmapEntry {
 	name: string;
 	contents: {
-		audio?: FileEntry<unknown>;
-		beatmap?: FileEntry<unknown>;
-		lightshow?: FileEntry<unknown>;
+		audio?: Entry<unknown>;
+		beatmap?: Entry<unknown>;
+		lightshow?: Entry<unknown>;
 	};
 	data: Partial<IEntry>;
 }
 
-export function fromEntries(entries: FileEntry<unknown>[], filenames = { info: "Info.dat", audio: "BPMInfo.dat" }): BeatmapEntry[] {
+export function fromEntries(entries: Entry<unknown>[], filenames = { info: "Info.dat", audio: "BPMInfo.dat" }): BeatmapEntry[] {
 	const info = entries.find((e) => e.name.toLowerCase() === filenames.info.toLowerCase());
 	if (!info) throw Error();
 	if (is(schemas.v2.info, info.contents)) {
@@ -94,7 +89,7 @@ export function fromEntries(entries: FileEntry<unknown>[], filenames = { info: "
 	throw Error("The file provided is not a valid map file.");
 }
 
-export function resolveAudioStats(data: unknown, details = false) {
+export function resolveAudioStats(data: unknown, _details = false) {
 	if (is(schemas.v4.audio, data)) {
 		return {
 			bpmEvents: { total: data.bpmData?.length ?? 0 },
@@ -103,7 +98,7 @@ export function resolveAudioStats(data: unknown, details = false) {
 	return {};
 }
 
-export function resolveBeatmapStats(data: unknown, details = false) {
+export function resolveBeatmapStats(data: unknown, _details = false) {
 	if (is(schemas.v2.beatmap, data)) {
 		const colorNotes = data._notes.filter((x) => x && [0, 1].includes(x._type));
 		const bombNotes = data._notes.filter((x) => x && [3].includes(x._type));
@@ -121,7 +116,11 @@ export function resolveBeatmapStats(data: unknown, details = false) {
 			rotationEvents: { total: rotationEvents.length },
 			bpmEvents: { total: bpmEvents.length },
 			waypoints: data._waypoints ? { total: data._waypoints.length } : undefined,
-			basicEventTypesWithKeywords: data._specialEventsKeywordFilters ? { total: data._specialEventsKeywordFilters._keywords?.map((filter) => filter._specialEvents).filter(predicates.unique).length ?? 0 } : undefined,
+			basicEventTypesWithKeywords: data._specialEventsKeywordFilters
+				? {
+						total: data._specialEventsKeywordFilters._keywords?.map((filter) => filter._specialEvents).filter(predicates.unique).length ?? 0,
+					}
+				: undefined,
 		};
 	}
 	if (is(schemas.v3.beatmap, data)) {
@@ -135,12 +134,18 @@ export function resolveBeatmapStats(data: unknown, details = false) {
 			colorBoostBeatmapEvents: { total: data.colorBoostBeatmapEvents.length },
 			rotationEvents: { total: data.rotationEvents.length },
 			bpmEvents: { total: data.bpmEvents.length },
-			lightColorEventBoxGroups: { total: data.lightColorEventBoxGroups.length },
-			lightRotationEventBoxGroups: { total: data.lightRotationEventBoxGroups.length },
+			lightColorEventBoxGroups: {
+				total: data.lightColorEventBoxGroups.length,
+			},
+			lightRotationEventBoxGroups: {
+				total: data.lightRotationEventBoxGroups.length,
+			},
 			lightTranslationEventBoxGroups: data.lightTranslationEventBoxGroups ? { total: data.lightTranslationEventBoxGroups.length } : undefined,
 			vfxEventBoxGroups: data.vfxEventBoxGroups ? { total: data.vfxEventBoxGroups.length } : undefined,
 			waypoints: { total: data.waypoints.length },
-			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
+			basicEventTypesWithKeywords: {
+				total: data.basicEventTypesWithKeywords.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0,
+			},
 		};
 	}
 	if (is(schemas.v4.beatmap, data)) {
@@ -156,17 +161,27 @@ export function resolveBeatmapStats(data: unknown, details = false) {
 	return {};
 }
 
-export function resolveLightshowStats(data: unknown, details = false) {
+export function resolveLightshowStats(data: unknown, _details = false) {
 	if (is(schemas.v4.lightshow, data)) {
 		return {
 			basicBeatmapEvents: { total: data.basicEvents?.length ?? 0 },
 			colorBoostBeatmapEvents: { total: data.colorBoostEvents?.length ?? 0 },
-			lightColorEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 1).length ?? 0 },
-			lightRotationEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 2).length ?? 0 },
-			lightTranslationEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 3).length ?? 0 },
-			vfxEventBoxGroups: { total: data.eventBoxGroups?.filter((x) => x.t === 4).length ?? 0 },
+			lightColorEventBoxGroups: {
+				total: data.eventBoxGroups?.filter((x) => x.t === 1).length ?? 0,
+			},
+			lightRotationEventBoxGroups: {
+				total: data.eventBoxGroups?.filter((x) => x.t === 2).length ?? 0,
+			},
+			lightTranslationEventBoxGroups: {
+				total: data.eventBoxGroups?.filter((x) => x.t === 3).length ?? 0,
+			},
+			vfxEventBoxGroups: {
+				total: data.eventBoxGroups?.filter((x) => x.t === 4).length ?? 0,
+			},
 			waypoints: { total: data.waypoints?.length ?? 0 },
-			basicEventTypesWithKeywords: { total: data.basicEventTypesWithKeywords?.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0 },
+			basicEventTypesWithKeywords: {
+				total: data.basicEventTypesWithKeywords?.d?.map((filter) => filter.e).filter(predicates.unique).length ?? 0,
+			},
 		};
 	}
 	return {};

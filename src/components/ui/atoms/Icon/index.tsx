@@ -1,7 +1,7 @@
 import { createPrimitive } from "$/components/primitives";
-import { cva, cx } from "$/styles/css";
-import { RecipeVariantProps } from "$/styles/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { cva, cx } from "styled-system/css";
+import { RecipeVariantProps } from "styled-system/types";
 
 const Component = createPrimitive<typeof FontAwesomeIcon, RecipeVariantProps<typeof cn.root>>(FontAwesomeIcon, (Element, { asChild, tabIndex, variant, className, ...delegated }) => {
 	return <Element tabIndex={tabIndex ?? -1} className={cx(cn.root({ variant }), className)} {...delegated} />;
@@ -12,7 +12,7 @@ const cn = {
 		base: {
 			cursor: "pointer",
 			userSelect: "none",
-			"&:focus": {
+			_focus: {
 				outline: "none",
 			},
 		},
@@ -23,7 +23,7 @@ const cn = {
 				danger: { color: "danger" },
 				link: {
 					color: "link",
-					"&:not([disabled]):hover": {
+					_hover: {
 						color: "indigo.400",
 					},
 				},

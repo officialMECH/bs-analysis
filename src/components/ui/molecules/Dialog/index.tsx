@@ -1,15 +1,21 @@
 import { Dialog as Builder } from "$/components/ui/builders";
-import { css } from "$/styles/css";
 import { RenderProps } from "$/types";
 import { ComponentPropsWithoutRef } from "react";
+import { css } from "styled-system/css";
+import { visuallyHidden } from "styled-system/patterns";
 
-interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
+interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {
+	title: string;
+}
 
-function Component({ render, children, ...rest }: Props & RenderProps<{ close: (props?: Props) => void }>) {
+function Component({ title, render, children, ...rest }: Props & RenderProps<{ close: (props?: Props) => void }>) {
 	return (
 		<Builder.Root {...rest}>
 			<Builder.Trigger asChild>{children}</Builder.Trigger>
-			<Builder.Content className={cn.content}>{render({ close })}</Builder.Content>
+			<Builder.Content className={cn.content}>
+				<Builder.Title className={visuallyHidden()}>{title}</Builder.Title>
+				{render({ close })}
+			</Builder.Content>
 		</Builder.Root>
 	);
 }

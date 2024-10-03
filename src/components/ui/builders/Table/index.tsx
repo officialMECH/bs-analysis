@@ -1,6 +1,6 @@
 import { createPrimitive } from "$/components/primitives";
-import { css, cx } from "$/styles/css";
-import { scrollable } from "$/styles/patterns";
+import { css, cx } from "styled-system/css";
+import { scrollable } from "styled-system/patterns";
 
 const Root = createPrimitive("table", (Element, { asChild, ...rest }) => {
 	return (

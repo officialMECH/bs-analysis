@@ -1,4 +1,4 @@
-import { Output } from "valibot";
+import { InferOutput } from "valibot";
 import { default as beatmap } from "./beatmap";
 import { default as data } from "./data";
 
@@ -7,7 +7,7 @@ export default {
 	data,
 };
 
-export type Characteristic = Output<typeof beatmap.characteristic>;
-export type Difficulty = Output<typeof beatmap.difficulty>;
+export type Characteristic = "Standard" | "NoArrows" | "OneSaber" | "Legacy" | "360Degree" | "90Degree" | "Lightshow" | "Lawless";
+export type Difficulty = "Easy" | "Normal" | "Hard" | "Expert" | "ExpertPlus";
 
-export type IEntity = Output<ReturnType<typeof data.entity>>;
+export type IEntity = InferOutput<ReturnType<typeof data.entity>>;

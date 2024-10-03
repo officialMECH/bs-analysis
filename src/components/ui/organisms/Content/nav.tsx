@@ -5,12 +5,12 @@ import { metadata } from "$/constants";
 import { parsers } from "$/helpers";
 import { useDatasets } from "$/hooks";
 import { Link, Path, useNavigate } from "$/router";
-import { css, cva, cx } from "$/styles/css";
-import { hstack, scrollable, wrap } from "$/styles/patterns";
 import { IDataset } from "$/types";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faAdd, faCircleInfo, faHome, faTable, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { ChangeEvent, Fragment, useState } from "react";
+import { css, cva, cx } from "styled-system/css";
+import { hstack, scrollable, wrap } from "styled-system/patterns";
 
 interface Props {
 	layout?: "home" | "basic" | "data" | "level";
@@ -87,7 +87,7 @@ export default function Nav({ layout = "basic" }: Props) {
 			<div className={cn.row}>
 				{layout !== "level" && (
 					<Fragment>
-						<Dialog render={({ close }) => <ManualDatasetForm onSubmit={() => close()} />}>
+						<Dialog title="Create Dataset" render={({ close }) => <ManualDatasetForm onSubmit={() => close()} />}>
 							<Icon icon={faAdd} variant="primary" title="Create Dataset" className={cx(cn.icon)} />
 						</Dialog>
 						<Input asChild type="file" id="file" accept="application/json,text/plain" onChange={handleImport} multiple>
@@ -133,7 +133,7 @@ const cn = {
 		paddingX: 4,
 		cursor: "pointer",
 		transition: "background-color 0.25s",
-		"&:not([disabled]):hover": {
+		_hover: {
 			backgroundColor: "indigo.400",
 		},
 	}),

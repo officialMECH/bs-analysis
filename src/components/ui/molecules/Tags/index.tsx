@@ -1,8 +1,8 @@
 import { Icon } from "$/components/ui/atoms";
 import { Tags as Builder } from "$/components/ui/builders";
-import { center, flex, wrap } from "$/styles/patterns";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ComponentPropsWithoutRef } from "react";
+import { center, flex, wrap } from "styled-system/patterns";
 
 interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
 

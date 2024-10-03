@@ -1,9 +1,9 @@
 import { Icon } from "$/components/ui/atoms";
 import { Checkbox as Builder } from "$/components/ui/builders";
-import { css, cx } from "$/styles/css";
-import { center, interactable } from "$/styles/patterns";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { ComponentPropsWithoutRef } from "react";
+import { css, cx } from "styled-system/css";
+import { center, interactable } from "styled-system/patterns";
 
 interface Props extends ComponentPropsWithoutRef<typeof Builder.Root> {}
 
@@ -25,7 +25,7 @@ const cn = {
 			height: "1em",
 			backgroundColor: "light",
 			borderRadius: "xs",
-		})
+		}),
 	),
 	indicator: css({
 		position: "relative",

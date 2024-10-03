@@ -45,7 +45,7 @@ const storage = Object.entries(localStorage).reduce((record: State, [key, value]
 		const valid = parse(schemas.dataset, serializable);
 		if (!valid) throw value;
 		return { ...record, [key]: valid as T };
-	} catch (e) {
+	} catch (_e) {
 		console.error(`An invalid value was set for the "${key}" dataset:`, value);
 		return record;
 	}

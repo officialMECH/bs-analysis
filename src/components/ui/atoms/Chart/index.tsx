@@ -1,5 +1,5 @@
 import { ECharts, EChartsOption, SetOptionOpts, getInstanceByDom, init } from "echarts";
-import { CSSProperties, useEffect, useRef } from "react";
+import { CSSProperties, JSX, useEffect, useRef } from "react";
 
 interface Props {
 	option: EChartsOption;
