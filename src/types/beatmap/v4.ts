@@ -40,6 +40,7 @@ export default {
 		chains: optional(array(object({}))),
 		arcs: optional(array(object({}))),
 		spawnRotations: optional(array(object({}))),
+		njsEvents: optional(array(object({}))),
 	}),
 	lightshow: object({
 		version: string(),

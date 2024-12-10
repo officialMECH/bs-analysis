@@ -1,7 +1,31 @@
 import { Icon } from "$/components/ui/atoms";
 import { IField } from "$/types";
 import { faClock as farClock, faUser as farUser } from "@fortawesome/free-regular-svg-icons";
-import { faBolt, faCalendarDays, faCompass, faCube, faExternalLink, faFolderOpen, faGauge, faKey, faLeftRight, faLightbulb, faList, faLocation, faRotate, faRuler, faStar, faStopwatch, faT, faTimeline, faUpDownLeftRight, faVideo, faClock as fasClock, faUser as fasUser } from "@fortawesome/free-solid-svg-icons";
+import {
+	faBolt,
+	faCalendarDays,
+	faCompass,
+	faCube,
+	faExternalLink,
+	faFolderOpen,
+	faGauge,
+	faGaugeSimple,
+	faKey,
+	faLeftRight,
+	faLightbulb,
+	faList,
+	faLocation,
+	faRotate,
+	faRuler,
+	faStar,
+	faStopwatch,
+	faT,
+	faTimeline,
+	faUpDownLeftRight,
+	faVideo,
+	faClock as fasClock,
+	faUser as fasUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { createElement } from "react";
 
 function createIcon(type: "image" | "icon" | "text", src?: any) {
@@ -31,7 +55,7 @@ export const dataset = {
 	},
 	length: {
 		label: "Length",
-		icon: createIcon("icon", fasClock),
+		icon: createIcon("icon", farClock),
 	},
 	released: {
 		label: "Release Date",
@@ -69,6 +93,18 @@ export const dataset = {
 		label: "Chains",
 		icon: createIcon("image", import.meta.env.BASE_URL + "images/chain.png"),
 	},
+	rotationEvents: {
+		label: "Rotation Events",
+		icon: createIcon("icon", faCompass),
+	},
+	bpmEvents: {
+		label: "BPM Changes",
+		icon: createIcon("icon", fasClock),
+	},
+	njsEvents: {
+		label: "NJS Events",
+		icon: createIcon("icon", faGauge),
+	},
 	basicBeatmapEvents: {
 		label: "Basic Events",
 		icon: createIcon("icon", faCube),
@@ -76,14 +112,6 @@ export const dataset = {
 	colorBoostBeatmapEvents: {
 		label: "Color Boost Events",
 		icon: createIcon("icon", faBolt),
-	},
-	rotationEvents: {
-		label: "Rotation Events",
-		icon: createIcon("icon", faCompass),
-	},
-	bpmEvents: {
-		label: "BPM Changes",
-		icon: createIcon("icon", farClock),
 	},
 	lightColorEventBoxGroups: {
 		label: "Light Color Event Box Groups",
@@ -111,7 +139,7 @@ export const dataset = {
 	},
 	jumpSpeed: {
 		label: "Jump Speed",
-		icon: createIcon("icon", faGauge),
+		icon: createIcon("icon", faGaugeSimple),
 	},
 	jumpOffset: {
 		label: "Jump Offset",
