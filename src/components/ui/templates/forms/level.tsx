@@ -35,10 +35,11 @@ function Component({ initial, disable = {}, onSubmit }: Props) {
 			obstacles: initial?.obstacles?.total ?? undefined,
 			sliders: initial?.sliders?.total ?? undefined,
 			burstSliders: initial?.burstSliders?.total ?? undefined,
-			basicBeatmapEvents: initial?.basicBeatmapEvents?.total ?? undefined,
-			colorBoostBeatmapEvents: initial?.colorBoostBeatmapEvents?.total ?? undefined,
 			rotationEvents: initial?.rotationEvents?.total ?? undefined,
 			bpmEvents: initial?.bpmEvents?.total ?? undefined,
+			njsEvents: initial?.njsEvents?.total ?? undefined,
+			basicBeatmapEvents: initial?.basicBeatmapEvents?.total ?? undefined,
+			colorBoostBeatmapEvents: initial?.colorBoostBeatmapEvents?.total ?? undefined,
 			lightColorEventBoxGroups: initial?.lightColorEventBoxGroups?.total ?? undefined,
 			lightRotationEventBoxGroups: initial?.lightRotationEventBoxGroups?.total ?? undefined,
 			lightTranslationEventBoxGroups: initial?.lightTranslationEventBoxGroups?.total ?? undefined,
@@ -60,10 +61,11 @@ function Component({ initial, disable = {}, onSubmit }: Props) {
 				obstacles: parse(schemas.artificial.entity(schemas.entry.entries.obstacles.wrapped.entries.total), value.obstacles),
 				sliders: parse(schemas.artificial.entity(schemas.entry.entries.sliders.wrapped.entries.total), value.sliders),
 				burstSliders: parse(schemas.artificial.entity(schemas.entry.entries.burstSliders.wrapped.entries.total), value.burstSliders),
-				basicBeatmapEvents: parse(schemas.artificial.entity(schemas.entry.entries.basicBeatmapEvents.wrapped.entries.total), value.basicBeatmapEvents),
-				colorBoostBeatmapEvents: parse(schemas.artificial.entity(schemas.entry.entries.colorBoostBeatmapEvents.wrapped.entries.total), value.colorBoostBeatmapEvents),
 				rotationEvents: parse(schemas.artificial.entity(schemas.entry.entries.rotationEvents.wrapped.entries.total), value.rotationEvents),
 				bpmEvents: parse(schemas.artificial.entity(schemas.entry.entries.bpmEvents.wrapped.entries.total), value.bpmEvents),
+				njsEvents: parse(schemas.artificial.entity(schemas.entry.entries.njsEvents.wrapped.entries.total), value.njsEvents),
+				basicBeatmapEvents: parse(schemas.artificial.entity(schemas.entry.entries.basicBeatmapEvents.wrapped.entries.total), value.basicBeatmapEvents),
+				colorBoostBeatmapEvents: parse(schemas.artificial.entity(schemas.entry.entries.colorBoostBeatmapEvents.wrapped.entries.total), value.colorBoostBeatmapEvents),
 				lightColorEventBoxGroups: parse(schemas.artificial.entity(schemas.entry.entries.lightColorEventBoxGroups.wrapped.entries.total), value.lightColorEventBoxGroups),
 				lightRotationEventBoxGroups: parse(schemas.artificial.entity(schemas.entry.entries.lightRotationEventBoxGroups.wrapped.entries.total), value.lightRotationEventBoxGroups),
 				lightTranslationEventBoxGroups: parse(schemas.artificial.entity(schemas.entry.entries.lightTranslationEventBoxGroups.wrapped.entries.total), value.lightTranslationEventBoxGroups),
@@ -135,6 +137,7 @@ function Component({ initial, disable = {}, onSubmit }: Props) {
 				/>
 				<F.Field name="rotationEvents" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.rotationEvents.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.rotationEvents.icon} disabled={disable[field.name as keyof IEntry]} />} />
 				<F.Field name="bpmEvents" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.bpmEvents.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.bpmEvents.icon} disabled={disable[field.name as keyof IEntry]} />} />
+				<F.Field name="njsEvents" validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.njsEvents.wrapped.entries.total) }} children={(field) => <Field.Number center field={field} heading={fields.dataset.njsEvents.icon} disabled={disable[field.name as keyof IEntry]} />} />
 				<F.Field
 					name="lightColorEventBoxGroups"
 					validators={{ onChange: schemas.artificial.entity(schemas.entry.entries.lightColorEventBoxGroups.wrapped.entries.total) }}

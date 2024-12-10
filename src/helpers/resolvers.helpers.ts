@@ -156,6 +156,7 @@ export function resolveBeatmapStats(data: unknown, _details = false) {
 			sliders: { total: data.arcs?.length ?? 0 },
 			burstSliders: { total: data.chains?.length ?? 0 },
 			rotationEvents: { total: data.spawnRotations?.length ?? 0 },
+			njsEvents: { total: data.njsEvents?.length ?? 0 },
 		};
 	}
 	return {};

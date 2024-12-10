@@ -27,6 +27,7 @@ const metadata = {
 			colorBoostBeatmapEvents: shared.data.entity({}),
 			rotationEvents: shared.data.entity({}),
 			bpmEvents: shared.data.entity({}),
+			njsEvents: shared.data.entity({}),
 			lightColorEventBoxGroups: shared.data.entity({}),
 			lightRotationEventBoxGroups: shared.data.entity({}),
 			lightTranslationEventBoxGroups: shared.data.entity({}),

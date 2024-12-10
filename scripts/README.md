@@ -110,10 +110,11 @@ The `tsv` field provides the necessary parameters to parse each cell of the tabl
 | obstacles                      | entity   |
 | sliders                        | entity   |
 | burstSliders                   | entity   |
-| basicBeatmapEvents             | entity   |
-| colorBoostBeatmapEvents        | entity   |
 | rotationEvents                 | entity   |
 | bpmEvents                      | entity   |
+| njsEvents                      | entity   |
+| basicBeatmapEvents             | entity   |
+| colorBoostBeatmapEvents        | entity   |
 | lightColorEventBoxGroups       | entity   |
 | lightRotationEventBoxGroups    | entity   |
 | lightTranslationEventBoxGroups | entity   |
